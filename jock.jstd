@@ -1,0 +1,5 @@
+load:
+  - lib/jasmine-1.2.0/*.js
+  - lib/jstestdriver/JasmineAdapter.js
+  - src/main/javascript/jock/*.js
+  - src/test/javascript/jock/*.js
