@@ -40,7 +40,7 @@ jock.event.Observer = (function(){
             this._blackList = 0;
         },
         attach: function(observer, mask){
-            // TODO (Simon) : Implement Option tyoe so we don't have to deal with null.
+            // TODO (Simon) : Implement Option type so we don't have to deal with null.
             var node = find(this._observers, observer);
             if(node) {
                 node.mask |= mask;
