@@ -1,5 +1,12 @@
+"use strict";
+
 var jock = {};
 jock.Jock = function() {
-    "use strict";
-    this.VERSION = "0.0.1";
+    this.init.apply(this, arguments);
+};
+jock.Jock.prototype = {
+    VERSION: "0.0.1",
+    init: function(){
+
+    }
 };
