@@ -65,7 +65,7 @@ describe("Observer", function() {
         observer.attach(function(){
             called = true;
         }, 1);
-        observer.notify(0);
+        observer.notify(2);
 
         expect(called).toBeFalsy();
     });
@@ -164,6 +164,20 @@ describe("Observer", function() {
             calledNum++;
         }, 2);
         observer.notify(1 | 2);
+
+        expect(calledNum).toBe(2);
+    });
+
+    it("should calling attach with two observables, call all mask should call observables", function(){
+        var calledNum = 0;
+
+        observer.attach(function(){
+            calledNum++;
+        }, 1);
+        observer.attach(function(){
+            calledNum++;
+        }, 2);
+        observer.notify(0);
 
         expect(calledNum).toBe(2);
     });

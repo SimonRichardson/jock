@@ -67,7 +67,7 @@ jock.event.Observer = (function(){
             var index = this._observers.length;
             while(--index > -1){
                 var node = this._observers[index];
-                if((node.mask & mask) > 0){
+                if(mask == 0 || (node.mask & mask) > 0){
                     node.observer();
                 }
             }
