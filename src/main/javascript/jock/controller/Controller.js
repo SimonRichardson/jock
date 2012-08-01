@@ -2,11 +2,17 @@ jock.controller = jock.controller || {};
 jock.controller.Controller = (function () {
     "use strict";
 
+    var ControllerNodeType = {
+        COMMAND: 1,
+        ANON_FUNCTION: 2
+    };
+
     var ControllerNode = function () {
         this.init.apply(this, arguments);
     };
     ControllerNode.prototype = {
-        init:function (command, mask) {
+        init:function (type, command, mask) {
+            this.type = type;
             this.command = command;
             this.mask = mask;
         },
@@ -16,13 +22,13 @@ jock.controller.Controller = (function () {
     };
 
     // NOTE (Simon) : This is a private static method, to prevent overriding.
-    var find = function (commands, command) {
+    var find = function (type, commands, command) {
         var result = null;
 
         var index = commands.length;
         while (--index > -1) {
             var node = commands[index];
-            if (node.command === command) {
+            if (node.type == type && node.command === command) {
                 result = node;
                 break;
             }
@@ -30,6 +36,16 @@ jock.controller.Controller = (function () {
 
         return result;
     };
+    var findType = function (command) {
+        var type;
+        if(command.prototype instanceof jock.controller.Command)
+            type = ControllerNodeType.COMMAND;
+        else if(typeof command === "function")
+            type = ControllerNodeType.ANON_FUNCTION;
+        else
+            throw new Error("Argument should be either be a Command of Function");
+        return type;
+    }
 
     var ControllerImpl = function () {
         this.init.apply(this, arguments);
@@ -40,19 +56,15 @@ jock.controller.Controller = (function () {
             this._commands = [];
         },
         add:function (command, mask) {
-            if (!(command.prototype instanceof jock.controller.Command)) {
-                throw new Error("Command should be an instance of jock.controller.Command");
-            }
-
             // TODO (Simon) : Implement Option type so we don't have to deal with null.
-            var node = find(this._commands, command);
+            var type = findType(command);
+            var node = find(type, this._commands, command);
 
             if (node) node.mask |= mask;
-            else this._commands.push(new ControllerNode(command, mask));
+            else this._commands.push(new ControllerNode(type, command, mask));
         },
         remove:function (command, mask) {
             var index = this._commands.length;
-
             while (--index > -1) {
                 var node = this._commands[index];
                 if(node.command === command){

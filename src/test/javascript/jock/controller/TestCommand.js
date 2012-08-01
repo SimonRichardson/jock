@@ -1,45 +1,59 @@
 describe("Command", function() {
-    var create = jock.controller.Command.create;
+    var extend = jock.controller.Command.extend;
 
     it("should create a new instance of command", function(){
-        expect(create({})).not.toBeNull();
+        expect(extend(function(){})).not.toBeNull();
     });
 
-    it("should throw an error if no methods are passed", function(){
+    it("should throw an error if no function is passed", function(){
         expect(function(){
-            create();
-        }).toThrow("Overridden methods can not be null");
+            extend();
+        }).toThrow("Function can not be null");
+    });
+
+    it("should throw an error if invalid argument is passed", function(){
+        expect(function(){
+            extend({});
+        }).toThrow("Argument must be a function");
     });
 
     it("should pass a class with the prototype of the type Command", function(){
-        expect(create({}).prototype instanceof jock.controller.Command).toBeTruthy();
+        expect(extend(function(){}).prototype instanceof jock.controller.Command).toBeTruthy();
     });
 
     it("should creating a new instance of class is the type Command", function(){
-        expect(new (create({}))() instanceof jock.controller.Command).toBeTruthy();
+        expect(new (extend(function(){}))() instanceof jock.controller.Command).toBeTruthy();
     });
 
-    it("should have undefined init method when created without passed init", function(){
-        var c = new (create({}))();
-        expect(c.init).toBeUndefined();
-    });
-
-    it("should have undefined execute method when created without passed execute", function(){
-        var c = new (create({}))();
-        expect(c.execute).toBeUndefined();
-    });
-
-    it("should have valid init method when created with passed init", function(){
-        var c = new (create({init: function(){
-
-        }}))();
-        expect(c.init).not.toBeUndefined();
-    });
-
-    it("should have valid execute method when created with passed execute", function(){
-        var c = new (create({execute: function(){
-
-        }}))();
+    it("should not have undefined execute method when created without passed init", function(){
+        var c = new (extend(function(){}))();
         expect(c.execute).not.toBeUndefined();
+    });
+
+    it("should have valid execute method when created with passed init", function(){
+        function CommandMock(){
+        };
+        CommandMock.prototype = {
+            execute: function(){
+            }
+        };
+        var c = new (extend(CommandMock))();
+        expect(c.execute).not.toBeUndefined();
+    });
+
+    it("should call execute method when initialised", function(){
+        var called = false;
+
+        function CommandMock(){};
+        CommandMock.prototype = {
+            execute: function(){
+                called = true;
+            }
+        };
+
+        var c = new (extend(CommandMock))();
+        c.execute();
+
+        expect(called).toBeTruthy();
     });
 });
