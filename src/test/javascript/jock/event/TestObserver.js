@@ -22,6 +22,13 @@ describe("Observer", function() {
         expect(observer.size()).toBe(1);
     });
 
+    it("should attach an observable with multiple masks and have a size of 1", function(){
+        observer.attach(function(){
+        }, 1 | 2);
+
+        expect(observer.size()).toBe(1);
+    });
+
     it("should attach two observables and have size of 2", function(){
         observer.attach(function(){
         }, 1);
@@ -62,6 +69,16 @@ describe("Observer", function() {
         expect(observer.size()).toBe(1);
     });
 
+    it("should dettach both attached commands using the all mask and size should be 0", function(){
+        var observable;
+        observer.attach(observable = function(){
+        }, 1);
+        observer.attach(observable, 2);
+        observer.dettach(observable, 1 | 2);
+
+        expect(observer.size()).toBe(0);
+    });
+
     it("should not accept negative mask in notify", function(){
         expect(function(){
             observer.notify(-1);
@@ -86,6 +103,16 @@ describe("Observer", function() {
         observer.notify(2);
 
         expect(called).toBeFalsy();
+    });
+
+    it("should notify an observable if attached with multiple masks", function(){
+        var called = false;
+        observer.attach(function(){
+            called = true;
+        }, 1 | 2);
+        observer.notify(2);
+
+        expect(called).toBeTruthy();
     });
 
     it("calling mute should prevent observer with correct mask", function(){
@@ -206,5 +233,14 @@ describe("Observer", function() {
         observer.clear();
 
         expect(observer.size()).toBe(0);
+    });
+
+    it("should calling dettach with a different observable should have size of 1", function(){
+        var a = function(){};
+        var b = function(){};
+        observer.attach(a, 1);
+        observer.dettach(b, 1);
+
+        expect(observer.size()).toBe(1);
     });
 });
