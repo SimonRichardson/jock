@@ -94,4 +94,8 @@ describe("Controller", function() {
 
         expect(controller.size()).toBe(1);
     });
+
+    it("should notify and execute command with the same mask", function(){
+
+    });
 });

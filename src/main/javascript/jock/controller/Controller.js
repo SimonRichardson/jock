@@ -86,4 +86,4 @@ jock.controller.Controller = (function () {
         }
     };
     return ControllerImpl;
-})();
+}).call(this);

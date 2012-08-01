@@ -26,4 +26,4 @@ jock.controller.Command = (function () {
         return command;
     };
     return CommandImpl;
-})();
+}).call(this);

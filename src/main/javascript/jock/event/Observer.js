@@ -102,4 +102,4 @@ jock.event.Observer = (function () {
         }
     };
     return ObserverImpl;
-})();
+}).call(this);

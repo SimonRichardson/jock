@@ -12,4 +12,4 @@ jock.Jock = (function(){
         }
     }
     return JockImpl;
-})();
+}).call(this);
