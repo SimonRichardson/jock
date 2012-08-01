@@ -11,6 +11,9 @@ jock.event.Observer = (function(){
         init: function(observer, mask){
             this.observer = observer;
             this.mask = mask;
+        },
+        dispose: function(){
+            this.observer = null;
         }
     };
 
@@ -39,14 +42,25 @@ jock.event.Observer = (function(){
             this._observers = [];
             this._blackList = 0;
         },
+        clear: function(){
+            var index = this._observers.length;
+            while(--index > -1){
+                var node = this._observers.pop();
+                node.dispose();
+            }
+        },
         attach: function(observer, mask){
+            if(mask < 0) throw new Error("Mask can not be less than zero.");
+
             // TODO (Simon) : Implement Option type so we don't have to deal with null.
             var node = find(this._observers, observer);
-            if(node) {
-                node.mask |= mask;
-            } else this._observers.push(new ObserverNode(observer, mask));
+
+            if(node) node.mask |= mask;
+            else this._observers.push(new ObserverNode(observer, mask));
         },
         dettach: function(observer, mask){
+            if(mask < 0) throw new Error("Mask can not be less than zero.");
+
             var index = this._observers.length;
             while(--index > -1){
                 var node = this._observers[index];
@@ -55,14 +69,16 @@ jock.event.Observer = (function(){
                 }
 
                 if(node.mask == 0) {
-                    this._observers.splice(index, 1);
+                    // Note (Simon) : Instead of dispose, place back into the pool.
+                    var nodes = this._observers.splice(index, 1);
+                    nodes.pop().dispose();
                 }
             }
         },
         notify: function(mask){
-            if((this._blackList & mask) > 0){
-                return;
-            }
+            if(mask < 0) throw new Error("Mask can not be less than zero.");
+
+            if((this._blackList & mask) > 0) return;
 
             var index = this._observers.length;
             while(--index > -1){

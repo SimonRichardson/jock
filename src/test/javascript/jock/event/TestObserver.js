@@ -9,6 +9,12 @@ describe("Observer", function() {
         expect(observer.size()).toBe(0);
     });
 
+    it("should not accept negative mask in attach", function(){
+        expect(function(){
+            observer.attach(function(){}, -1);
+        }).toThrow("Mask can not be less than zero.");
+    });
+
     it("should attach an observable and have size of 1", function(){
         observer.attach(function(){
         }, 1);
@@ -23,6 +29,12 @@ describe("Observer", function() {
         }, 1);
 
         expect(observer.size()).toBe(2);
+    });
+
+    it("should not accept negative mask in dettach", function(){
+        expect(function(){
+            observer.dettach(function(){}, -1);
+        }).toThrow("Mask can not be less than zero.");
     });
 
     it("should calling dettach on empty observable", function(){
@@ -48,6 +60,12 @@ describe("Observer", function() {
         observer.dettach(observable, 2);
 
         expect(observer.size()).toBe(1);
+    });
+
+    it("should not accept negative mask in notify", function(){
+        expect(function(){
+            observer.notify(-1);
+        }).toThrow("Mask can not be less than zero.");
     });
 
     it("should notify an observable once it's been added with correct mask", function(){
@@ -180,5 +198,13 @@ describe("Observer", function() {
         observer.notify(0);
 
         expect(calledNum).toBe(2);
+    });
+
+    it("should calling clear, remove all the observables", function(){
+        observer.attach(function(){}, 1);
+        observer.attach(function(){}, 2);
+        observer.clear();
+
+        expect(observer.size()).toBe(0);
     });
 });

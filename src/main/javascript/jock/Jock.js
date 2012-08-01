@@ -8,7 +8,7 @@ jock.Jock = (function(){
     JockImpl.prototype = {
         VERSION: "0.0.1",
         init: function(){
-
+            this.commands = new jock.controller.Command();
         }
     }
     return JockImpl;
