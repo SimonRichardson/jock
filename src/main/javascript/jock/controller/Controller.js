@@ -1,9 +1,9 @@
 jock.controller = jock.controller || {};
-jock.controller.Command = (function () {
-    var CommandImpl = function () {
+jock.controller.Controller = (function () {
+    var ControllerImpl = function () {
         this.init.apply(this, arguments);
     };
-    CommandImpl.prototype = {
+    ControllerImpl.prototype = {
         init: function(){
 
         },
@@ -11,5 +11,5 @@ jock.controller.Command = (function () {
             return 0;
         }
     };
-    return CommandImpl;
+    return ControllerImpl;
 })();
