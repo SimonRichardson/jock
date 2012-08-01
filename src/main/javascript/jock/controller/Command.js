@@ -7,6 +7,8 @@ jock.controller.Command = (function () {
         }
         // TODO (Simon) : Implements injects and intercepts.
     };
+
+    // Static method to help create commands from functions.
     CommandImpl.extend = function (func) {
         if(!func) throw new Error("Function can not be null");
         if(typeof func !== "function") throw new Error("Argument must be a function");

@@ -36,6 +36,7 @@ jock.controller.Controller = (function () {
 
         return result;
     };
+
     var findType = function (command) {
         var type;
         if(command.prototype instanceof jock.controller.Command)
@@ -45,7 +46,7 @@ jock.controller.Controller = (function () {
         else
             throw new Error("Argument should be either be a Command of Function");
         return type;
-    }
+    };
 
     var ControllerImpl = function () {
         this.init.apply(this, arguments);
@@ -56,6 +57,8 @@ jock.controller.Controller = (function () {
             this._commands = [];
         },
         add:function (command, mask) {
+            if (mask < 0) throw new Error("Mask can not be less than zero.");
+
             // TODO (Simon) : Implement Option type so we don't have to deal with null.
             var type = findType(command);
             var node = find(type, this._commands, command);
@@ -64,6 +67,8 @@ jock.controller.Controller = (function () {
             else this._commands.push(new ControllerNode(type, command, mask));
         },
         remove:function (command, mask) {
+            if (mask < 0) throw new Error("Mask can not be less than zero.");
+
             var index = this._commands.length;
             while (--index > -1) {
                 var node = this._commands[index];
@@ -78,6 +83,25 @@ jock.controller.Controller = (function () {
                         nodes.pop().dispose();
                     }
                     break;
+                }
+            }
+        },
+        notify:function (mask) {
+            if (mask < 0) throw new Error("Mask can not be less than zero.");
+
+            var index = this._commands.length;
+            while (--index > -1) {
+                var node = this._commands[index];
+                if (mask == 0 || (node.mask & mask) > 0) {
+                    switch(node.type){
+                        case ControllerNodeType.COMMAND:
+                            var c = new (node.command)();
+                            c.execute();
+                            break;
+                        case ControllerNodeType.ANON_FUNCTION:
+                            node.command();
+                            break;
+                    }
                 }
             }
         },

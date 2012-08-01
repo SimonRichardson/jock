@@ -96,6 +96,84 @@ describe("Controller", function() {
     });
 
     it("should notify and execute command with the same mask", function(){
+        var called = false;
+        controller.add(extend(function(){
+            this.execute = function(){
+                called = true;
+            }
+        }), 1);
+        controller.notify(1);
 
+        expect(called).toBeTruthy();
+    });
+
+    it("should notify and call function with the same mask", function(){
+        var called = false;
+        controller.add(function(){
+            called = true;
+        }, 1);
+        controller.notify(1);
+
+        expect(called).toBeTruthy();
+    });
+
+    it("should not notify and execute command with a different mask", function(){
+        var called = false;
+        controller.add(extend(function(){
+            this.execute = function(){
+                called = true;
+            }
+        }), 1);
+        controller.notify(2);
+
+        expect(called).toBeFalsy();
+    });
+
+    it("should not notify and call function with a different mask", function(){
+        var called = false;
+        controller.add(function(){
+            called = true;
+        }, 1);
+        controller.notify(2);
+
+        expect(called).toBeFalsy();
+    });
+
+    it("should notify and execute command with the all mask", function(){
+        var called = false;
+        controller.add(function(){
+            called = true;
+        }, 1);
+        controller.notify(0);
+
+        expect(called).toBeTruthy();
+    });
+
+    it("should notify and call function with the all mask", function(){
+        var called = false;
+        controller.add(function(){
+            called = true;
+        }, 1);
+        controller.notify(0);
+
+        expect(called).toBeTruthy();
+    });
+
+    it("should not accept negative mask in add", function(){
+        expect(function(){
+            controller.add(function(){}, -1);
+        }).toThrow("Mask can not be less than zero.");
+    });
+
+    it("should not accept negative mask in remove", function(){
+        expect(function(){
+            controller.remove(function(){}, -1);
+        }).toThrow("Mask can not be less than zero.");
+    });
+
+    it("should not accept negative mask in notify", function(){
+        expect(function(){
+            controller.notify(-1);
+        }).toThrow("Mask can not be less than zero.");
     });
 });
