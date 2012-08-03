@@ -1,10 +1,12 @@
 describe("When", function () {
 
-    var when = jock.option.When;
+    var None = jock.option.None,
+        Some = jock.option.Some,
+        When = jock.option.When;
 
     it("should throw an error if passing null", function () {
         expect(function () {
-            when(null, {
+            When(null, {
                 none:function () {
                     fail();
                 },
@@ -12,12 +14,12 @@ describe("When", function () {
                     fail();
                 }
             });
-        }).toBeThrown(new funk.error.TypeError());
+        }).toThrow(new jock.errors.TypeError());
     });
 
     it("should throw an error if passing {}", function () {
         expect(function () {
-            when({}, {
+            When({}, {
                 none:function () {
                     fail();
                 },
@@ -25,12 +27,12 @@ describe("When", function () {
                     fail();
                 }
             });
-        }).toBeThrown(new funk.error.TypeError());
+        }).toThrow(new funk.error.TypeError());
     });
 
     describe("when calling none", function () {
         it("should return false when none", function () {
-            expect(when(none(), {
+            expect(When(None(), {
                 none:function () {
                     return false;
                 },
@@ -43,7 +45,7 @@ describe("When", function () {
 
     describe("when calling some", function () {
         it("should return true", function () {
-            expect(when(some(true), {
+            expect(When(Some(true), {
                 none:function () {
                     fail();
                 },
@@ -55,20 +57,20 @@ describe("When", function () {
 
         it("should return the same value as passed in", function () {
             var value = {};
-            expect(when(some(value), {
+            expect(When(Some(value), {
                 none:function () {
                     fail();
                 },
                 some:function (value) {
                     return value;
                 }
-            })).toBeStrictlyEqualTo(value);
+            })).toEqual(value);
         });
     });
 
     describe("when calling default state (any)", function () {
         it("should return true", function () {
-            expect(when(some(true), {
+            expect(When(Some(true), {
                 any:function () {
                     return true;
                 }
@@ -77,31 +79,31 @@ describe("When", function () {
 
         it("should return the same value as passed in", function () {
             var value = {};
-            expect(when(some(value), {
+            expect(When(Some(value), {
                 any:function (value) {
                     return value;
                 }
-            })).toBeStrictlyEqualTo(value);
+            })).toEqual(value);
         });
 
         it("should throw an error if passing null", function () {
             expect(function () {
-                when(null, {
+                When(null, {
                     any:function (value) {
                         fail();
                     }
                 });
-            }).toBeThrown(new funk.error.TypeError());
+            }).toThrow(new jock.errors.TypeError());
         });
 
         it("should throw an error if passing {}", function () {
             expect(function () {
-                when({}, {
+                When({}, {
                     any:function (value) {
                         fail();
                     }
                 });
-            }).toBeThrown(new funk.error.TypeError());
+            }).toThrow(new jock.errors.TypeError());
         });
     });
 });

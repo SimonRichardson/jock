@@ -2,8 +2,14 @@ load:
   - lib/jasmine-1.2.0/*.js
   - lib/jstestdriver/JasmineAdapter.js
   - src/main/javascript/jock/*.js
-  - src/main/javascript/jock/controller/*.js
-  - src/main/javascript/jock/event/*.js
+  - src/main/javascript/jock/errors/*.js
+  - src/main/javascript/jock/utils/*.js
+  - src/main/javascript/jock/product/*.js
+  - src/main/javascript/jock/option/Option.js
+  - src/main/javascript/jock/option/None.js
+  - src/main/javascript/jock/option/Some.js
+  - src/test/javascript/jasmine/matchers/*.js
+  - src/test/javascript/jasmine/utils/*.js
   - src/test/javascript/jock/*.js
-  - src/test/javascript/jock/controller/*.js
-  - src/test/javascript/jock/event/*.js
+  - src/test/javascript/jock/option/*.js
+  - src/test/javascript/jock/product/*.js

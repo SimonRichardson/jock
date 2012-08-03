@@ -1,20 +1,22 @@
 describe("Some", function () {
     "use strict";
 
-    var Some = jock.option.Some;
+    var None = jock.option.None,
+        Some = jock.option.Some,
+        identity = jock.utils.identity;
 
     it("should be defined", function () {
-        expect(Some({}).isDefined).toBeTruthy();
+        expect(Some({}).isDefined()).toBeTruthy();
     });
 
     it("should be empty", function () {
-        expect(Some({}).isEmpty).toBeFalsy();
+        expect(Some({}).isEmpty()).toBeFalsy();
     });
 
     it("should actual value match expected value", function () {
         var value = {};
 
-        expect(Some(value).get()).toStrictlyEqual(value);
+        expect(Some(value).get()).toEqual(value);
     });
 
     it("should expected value be undefined if actual value is undefined", function () {
@@ -32,7 +34,7 @@ describe("Some", function () {
 
             expect(Some(value).getOrElse(function () {
                 fail();
-            })).toStrictlyEqual(value);
+            })).toEqual(value);
         });
     });
 
@@ -41,7 +43,7 @@ describe("Some", function () {
         it("should pass the same instance as an argument", function () {
             var value = {};
             Some(value).filter(function (v) {
-                expect(value).toStrictlyEqual(v);
+                expect(value).toEqual(v);
             });
         });
 
@@ -51,7 +53,7 @@ describe("Some", function () {
                 return v === value;
             });
 
-            expect(value).toStrictlyEqual(actual.get());
+            expect(value).toEqual(actual.get());
         });
 
         it("should return a invalid option", function () {
@@ -60,7 +62,7 @@ describe("Some", function () {
                 return v !== value;
             });
 
-            expect(None()).not.toStrictlyEqual(actual);
+            expect(None()).not.toEqual(actual);
         });
     });
 
@@ -70,7 +72,7 @@ describe("Some", function () {
             var value = {};
 
             Some(value).filter(function (v) {
-                expect(value).toStrictlyEqual(v);
+                expect(value).toEqual(v);
             });
         });
 
@@ -92,7 +94,7 @@ describe("Some", function () {
             var value = {};
 
             Some(value).flatMap(function (v) {
-                expect(value).toStrictlyEqual(v);
+                expect(value).toEqual(v);
                 return Some(v);
             });
         });
@@ -104,7 +106,7 @@ describe("Some", function () {
                 return Some(v);
             });
 
-            expect(value).toStrictlyEqual(actual.get());
+            expect(value).toEqual(actual.get());
         });
 
         it("should result in an TypeError if invalid result", function () {
@@ -112,8 +114,8 @@ describe("Some", function () {
 
             expect(
                 function () {
-                    Some(value).flatMap(indentity);
-                }).toBeThrown(new funk.error.TypeError());
+                    Some(value).flatMap(identity);
+                }).toThrow(new jock.errors.TypeError());
         });
     });
 
@@ -125,7 +127,7 @@ describe("Some", function () {
                 return x.toString();
             }
 
-            expect(Some(value).map(func).get()).toStrictlyEqual(func(value));
+            expect(Some(value).map(func).get()).toEqual(func(value));
         });
 
         it("should map be called multiple times should be the same value", function () {
@@ -134,7 +136,7 @@ describe("Some", function () {
                 return x.toString();
             }
 
-            expect(Some(value).map(func).get()).toStrictlyEqual(some(value).map(func).get());
+            expect(Some(value).map(func).get()).toEqual(Some(value).map(func).get());
         });
 
         it("should map result equal the value entered in some", function () {
@@ -143,7 +145,7 @@ describe("Some", function () {
                 return x.toString();
             }
 
-            expect(Some(func(value)).equals(some(value).map(func))).toBeTruthy();
+            expect(Some(func(value)).equals(Some(value).map(func))).toBeTruthy();
         });
     });
 
@@ -163,96 +165,96 @@ describe("Some", function () {
 
             expect(op.orElse(function () {
                 fail();
-            })).toStrictlyEqual(op);
+            })).toEqual(op);
         });
     });
 
     describe("when equals on some", function () {
 
         it("should some value 1 equal another some value 1", function () {
-            expect(some(1).equals(some(1))).toBeTruthy();
+            expect(Some(1).equals(Some(1))).toBeTruthy();
         });
 
         it("should some value null equal another some value null", function () {
-            expect(some(null).equals(some(null))).toBeTruthy();
+            expect(Some(null).equals(Some(null))).toBeTruthy();
         });
 
         it("should some value undefined equal another some value undefined", function () {
-            expect(some(undefined).equals(some(undefined))).toBeTruthy();
+            expect(Some(undefined).equals(Some(undefined))).toBeTruthy();
         });
 
         it("should some value {} equal same some value {}", function () {
             var value = {};
-            expect(some(value).equals(some(value))).toBeTruthy();
+            expect(Some(value).equals(Some(value))).toBeTruthy();
         });
 
         it("should some value {} not equal another some value {}", function () {
-            expect(some({}).equals(some({}))).toBeFalsy();
+            expect(Some({}).equals(Some({}))).toBeFalsy();
         });
 
         it("should some nested be equal to some nested", function () {
-            expect(some(some(1)).equals(some(some(1)))).toBeTruthy();
+            expect(Some(Some(1)).equals(Some(Some(1)))).toBeTruthy();
         });
 
         it("should some equal match native object match", function () {
-            expect(some(1).equals(some("1"))).toEqual(Object(1) == Object("1"));
+            expect(Some(1).equals(Some("1"))).toEqual(Object(1) == Object("1"));
         });
     });
 
     describe("when toString on some", function () {
 
         it("should some value be null", function () {
-            expect(some(null).toString()).toEqual("Some(null)");
+            expect(Some(null).toString()).toEqual("Some(null)");
         });
 
         it("should some value be undefined", function () {
-            expect(some(undefined).toString()).toEqual("Some(undefined)");
+            expect(Some(undefined).toString()).toEqual("Some(undefined)");
         });
 
         it("should some value be Array (1,2,3)", function () {
-            expect(some([1, 2, 3]).toString()).toEqual("Some(1,2,3)");
+            expect(Some([1, 2, 3]).toString()).toEqual("Some(1,2,3)");
         });
 
         it("should some value be 1", function () {
-            expect(some(1).toString()).toEqual("Some(1)");
+            expect(Some(1).toString()).toEqual("Some(1)");
         });
 
         it("should some value be 1 (as a string)", function () {
-            expect(some("1").toString()).toEqual("Some(1)");
+            expect(Some("1").toString()).toEqual("Some(1)");
         });
 
         it("should some value be {}", function () {
-            expect(some({}).toString()).toEqual("Some([object Object])");
+            expect(Some({}).toString()).toEqual("Some([object Object])");
         });
 
         it("should some value be true", function () {
-            expect(some(true).toString()).toEqual("Some(true)");
+            expect(Some(true).toString()).toEqual("Some(true)");
         });
 
         it("should some value be false", function () {
-            expect(some(false).toString()).toEqual("Some(false)");
+            expect(Some(false).toString()).toEqual("Some(false)");
         });
     });
 
     describe("when product on some", function () {
 
         it("should have product arity of 1", function () {
-            expect(some(true).productArity()).toStrictlyEqual(1);
+            expect(Some(true).productArity()).toEqual(1);
         });
 
         it("should have product prefix of Some", function () {
-            expect(some(true).productPrefix()).toStrictlyEqual("Some");
+            expect(Some(true).productPrefix()).toEqual("Some");
         });
 
         it("should have product element at 0 of true", function () {
-            expect(some(true).productElement(0)).toBeTruthy();
+            expect(Some(true).productElement(0)).toBeTruthy();
         });
 
         it("should throw RangeError for product element at 1", function () {
             expect(
                 function () {
-                    some(true).productElement(1)
-                }).toBeThrown(new funk.error.RangeError());
+                    Some(true).productElement(1)
+                }).toThrow(new jock.errors.RangeError());
         });
     });
 });

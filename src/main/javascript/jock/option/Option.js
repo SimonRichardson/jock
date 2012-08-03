@@ -3,9 +3,9 @@ jock.option.Option = (function(){
     "use strict";
 
     var Impl = function(){
-        jock.Product.call(this);
+        jock.product.Product.call(this);
     };
-    Impl.prototype = new jock.Product();
+    Impl.prototype = new jock.product.Product();
     Impl.prototype.constructor = Impl;
     Impl.prototype.name = "Option";
     return Impl;

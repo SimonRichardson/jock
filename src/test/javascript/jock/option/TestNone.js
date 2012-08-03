@@ -1,7 +1,9 @@
 describe("None", function () {
     "use strict";
 
-    var None = jock.option.None;
+    var None = jock.option.None,
+        Some = jock.option.Some,
+        identity = jock.utils.identity;
 
     it("should not accept any arguments", function () {
         expect(
@@ -11,24 +13,24 @@ describe("None", function () {
     });
 
     it("should be defined", function () {
-        expect(None().isDefined).toBeFalsy();
+        expect(None().isDefined()).toBeFalsy();
     });
 
     it("should be empty", function () {
-        expect(None().isEmpty).toBeTruthy();
+        expect(None().isEmpty()).toBeTruthy();
     });
 
     it("should have no value", function () {
         expect(
             function () {
                 None().get()
-            }).toBeThrown(new jock.errors.NoSuchElementError());
+            }).toThrow(new jock.errors.NoSuchElementError());
     });
 
     describe("when getOrElse on none", function () {
 
         it("should result in undefined if pass result back", function () {
-            expect(None().getOrElse(indentity)).toBeUndefined();
+            expect(None().getOrElse(identity)).toBeUndefined();
         });
 
         it("should return some value", function () {
@@ -36,7 +38,7 @@ describe("None", function () {
 
             expect(None().getOrElse(function () {
                 return value;
-            })).toStrictlyEqual(value);
+            })).toEqual(value);
         });
     });
 
@@ -80,22 +82,22 @@ describe("None", function () {
 
         it("should none value be some", function () {
             expect(None().orElse(function () {
-                return some(true);
-            })).toBeType(funk.option.Some);
+                return Some(true);
+            })).toBeType(jock.option.Some);
         });
 
         it("should none value be false", function () {
             expect(None().orElse(
                 function () {
-                    return some(false);
+                    return Some(false);
                 }).get()).toBeFalsy();
         });
 
         it("should none be equal to expected orElse call", function () {
             var func = function () {
-                return some(false);
+                return Some(false);
             }
-            expect(func().equals(none().orElse(func))).toBeTruthy();
+            expect(func().equals(None().orElse(func))).toBeTruthy();
         });
     });
 
@@ -106,11 +108,11 @@ describe("None", function () {
         });
 
         it("some null should not equal none", function () {
-            expect(some(null).equals(None())).toBeFalsy();
+            expect(Some(null).equals(None())).toBeFalsy();
         });
 
         it("some undefined should not equal none", function () {
-            expect(some(undefined).equals(None())).toBeFalsy();
+            expect(Some(undefined).equals(None())).toBeFalsy();
         });
     });
 
@@ -124,18 +126,18 @@ describe("None", function () {
     describe("when product on some", function () {
 
         it("should have product arity of 0", function () {
-            expect(None().productArity()).toStrictlyEqual(0);
+            expect(None().productArity()).toEqual(0);
         });
 
         it("should have product prefix of None", function () {
-            expect(None().productPrefix()).toStrictlyEqual("None");
+            expect(None().productPrefix()).toEqual("None");
         });
 
         it("should throw RangeError for product element at 0", function () {
             expect(
                 function () {
                     None().productElement(1)
-                }).toBeThrown(new funk.error.RangeError());
+                }).toThrow(new jock.errors.RangeError());
         });
     });
 });

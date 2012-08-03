@@ -9,7 +9,7 @@ jock.option.When = function (option, cases) {
                 if (cases["any"]) return cases["any"]();
                 else throw new jock.errors.NoSuchElementError("Expected none in cases");
             }
-        } else if (option instanceof  jock.option.Some) {
+        } else if (option instanceof jock.option.Some) {
             if (cases["some"]) return cases["some"](option.get());
             else {
                 if (cases["any"]) return cases["any"](option.get());
