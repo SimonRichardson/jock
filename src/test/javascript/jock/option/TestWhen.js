@@ -14,7 +14,7 @@ describe("When", function () {
                     fail();
                 }
             });
-        }).toThrow(new jock.errors.TypeError());
+        }).toThrow(new jock.errors.ArgumentError("Option can not be null or undefined"));
     });
 
     it("should throw an error if passing {}", function () {
@@ -27,7 +27,7 @@ describe("When", function () {
                     fail();
                 }
             });
-        }).toThrow(new funk.error.TypeError());
+        }).toThrow(new jock.errors.TypeError("Expected: funk.option.Option"));
     });
 
     describe("when calling none", function () {
@@ -93,7 +93,7 @@ describe("When", function () {
                         fail();
                     }
                 });
-            }).toThrow(new jock.errors.TypeError());
+            }).toThrow(new jock.errors.ArgumentError("Option can not be null or undefined"));
         });
 
         it("should throw an error if passing {}", function () {
@@ -103,7 +103,7 @@ describe("When", function () {
                         fail();
                     }
                 });
-            }).toThrow(new jock.errors.TypeError());
+            }).toThrow(new jock.errors.TypeError("Expected: funk.option.Option"));
         });
     });
 });

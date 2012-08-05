@@ -62,7 +62,7 @@ describe("Some", function () {
                 return v !== value;
             });
 
-            expect(None()).not.toEqual(actual);
+            expect(actual).toEqual(None());
         });
     });
 

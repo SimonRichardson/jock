@@ -80,10 +80,10 @@ describe("None", function () {
 
     describe("when orElse on none", function () {
 
-        it("should none value be some", function () {
+        it("should calling orElse return a valid option type", function () {
             expect(None().orElse(function () {
                 return Some(true);
-            })).toBeType(jock.option.Some);
+            })).toBeType(jock.option.Option);
         });
 
         it("should none value be false", function () {

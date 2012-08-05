@@ -20,7 +20,7 @@ jock.option.Some = (function () {
         },
         equals:function (that) {
             if (that instanceof jock.option.Option) {
-                if (that.isDefined)
+                if (that.isDefined())
                     return jock.utils.eq(this.get(), that.get());
             }
             return false;
@@ -32,10 +32,10 @@ jock.option.Some = (function () {
             f(this.get());
         },
         flatMap:function (f) {
-            return f(this.get());
+            return jock.utils.verifiedType(f(this.get()), jock.option.Option);
         },
         map:function (f) {
-            return jock.option.some(f(this.get()));
+            return jock.option.Some(f(this.get()));
         },
         get:function () {
             return this._value;
@@ -47,10 +47,10 @@ jock.option.Some = (function () {
             return 1;
         },
         productElement:function (index) {
-            if (index == 0) {
+            if (index == 0)
                 return this.get();
-            }
-            throw new jock.error.RangeError();
+
+            throw new jock.errors.RangeError();
         },
         isEmpty:function () {
             return false;

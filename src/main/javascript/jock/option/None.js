@@ -18,7 +18,7 @@ jock.option.None = (function () {
         },
         equals:function (that) {
             if (that instanceof jock.option.Option)
-                return !that.isDefined;
+                return !that.isDefined();
             return false;
         },
         filter:function (f) {

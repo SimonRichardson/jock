@@ -25,8 +25,11 @@ describe("Product", function () {
         expect(product.productPrefix()).toEqual("");
     });
 
-    it("should pass a valid product iterator", function () {
-        expect(product.getIterator()).not.toBeNull();
+    it("should throw abstract method error when calling getIterator", function () {
+        expect(
+            function () {
+                product.getIterator();
+            }).toThrow(new jock.errors.AbstractMethodError());
     });
 
     xit("should passing null to equals should be false", function () {
