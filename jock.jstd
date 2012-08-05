@@ -8,6 +8,7 @@ load:
   - src/main/javascript/jock/option/Option.js
   - src/main/javascript/jock/option/None.js
   - src/main/javascript/jock/option/Some.js
+  - src/main/javascript/jock/option/When.js
   - src/test/javascript/jasmine/matchers/*.js
   - src/test/javascript/jasmine/utils/*.js
   - src/test/javascript/jock/*.js

@@ -3,7 +3,7 @@ jock.option.None = (function () {
     "use strict";
 
     var Impl = function () {
-        jock.option.Option.apply(this, arguments);
+        jock.option.Option.call(this);
     };
     Impl.prototype = new jock.option.Option();
     Impl.prototype.constructor = Impl;
@@ -54,12 +54,10 @@ jock.option.None = (function () {
 
     jock.utils.extends(Impl, Methods);
 
-    var Instance = new Impl();
-
-    return function(){
-        if(arguments.length > 0)
+    return function () {
+        if (arguments.length > 0)
             throw new jock.errors.ArgumentError('Unexpected arguments');
 
-        return Instance;
-    };
+        return new Impl();
+    }
 }).call(this);

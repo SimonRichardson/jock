@@ -27,11 +27,12 @@ describe("When", function () {
                     fail();
                 }
             });
-        }).toThrow(new jock.errors.TypeError("Expected: funk.option.Option"));
+        }).toThrow(new jock.errors.TypeError("Expected: jock.option.Option"));
     });
 
     describe("when calling none", function () {
         it("should return false when none", function () {
+
             expect(When(None(), {
                 none:function () {
                     return false;
@@ -103,7 +104,7 @@ describe("When", function () {
                         fail();
                     }
                 });
-            }).toThrow(new jock.errors.TypeError("Expected: funk.option.Option"));
+            }).toThrow(new jock.errors.TypeError("Expected: jock.option.Option"));
         });
     });
 });
