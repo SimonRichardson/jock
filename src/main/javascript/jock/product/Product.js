@@ -7,8 +7,7 @@ jock.product.Product = (function () {
 
         var buffer = "";
         for (var i = 0; i < total; i++) {
-            var element = product.productElement(i);
-            buffer += element;
+            buffer += product.productElement(i);
 
             if (i < total - 1) buffer += separator;
         }

@@ -7,6 +7,8 @@ jock.errors.ArgumentError = (function(){
 
         if(typeof message !== "undefined")
             this.message = message;
+        else
+            this.message = "";
     };
     Impl.prototype = new Error();
     Impl.prototype.constructor = Impl;
