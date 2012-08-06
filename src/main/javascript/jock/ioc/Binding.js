@@ -13,7 +13,16 @@ jock.ioc.Binding = (function(){
 
     var Solve = function(binding){
         var type = binding._type;
-        if(type == BindType.TO_INSTANCE) {
+        if(type == BindType.TO) {
+            return When(binding._to, {
+                Some: function(value){
+                    return binding._module.getInstance(value);
+                },
+                None: function(){
+                    return new (binding._bindType)();
+                }
+            });
+        } else if(type == BindType.TO_INSTANCE) {
             return When(binding._toInstance, {
                 Some: function(value) {
                     return value;
@@ -21,7 +30,6 @@ jock.ioc.Binding = (function(){
             });
         }
     };
-
 
     var Impl = function(module, bindType){
         if(!module) throw new jock.errors.ArgumentError("Module can not be null/undefined");
@@ -32,6 +40,7 @@ jock.ioc.Binding = (function(){
         this._module = jock.utils.verifiedType(module, jock.ioc.AbstractModule);
         this._bindType = bindType;
 
+        this._to = None();
         this._toInstance = None();
     };
     Impl.prototype = new jock.ioc.Scope();
@@ -41,6 +50,11 @@ jock.ioc.Binding = (function(){
     var Methods = {
         bind: function(){
             return this._bindType;
+        },
+        to: function(instance){
+            this._type = BindType.TO;
+            this._to = Some(instance);
+            return this;
         },
         toInstance: function(instance){
             this._type = BindType.TO_INSTANCE;

@@ -68,4 +68,32 @@ describe("Binding", function () {
 
         expect(binding.toInstance(String).getInstance().get() == String).toBeTruthy();
     });
+
+    it("should calling to return the binding class", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.to(String) == binding).toBeTruthy();
+    });
+
+    it("should calling to with null then getInstance return a an instance of Option", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.to(null).getInstance() instanceof jock.option.Option).toBeTruthy();
+    });
+
+    it("should calling to with String then getInstance return a an instance of Option", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.to(String).getInstance() instanceof jock.option.Option).toBeTruthy();
+    });
+
+    it("should calling to with null then getInstance then get returns an instance of String", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.to(null).getInstance().get() instanceof bindingType).toBeTruthy();
+    });
 });
