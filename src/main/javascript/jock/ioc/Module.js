@@ -20,7 +20,5 @@ jock.ioc.Module = (function(){
         }
     };
 
-    jock.utils.extends(Impl, Methods);
-
-    return Impl;
+    return jock.utils.extends(Impl, Methods);
 }).call(this);

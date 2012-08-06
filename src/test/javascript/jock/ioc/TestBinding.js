@@ -11,6 +11,18 @@ describe("Binding", function () {
     MockModule.prototype = new jock.ioc.AbstractModule();
     MockModule.prototype.constructor = MockModule;
     MockModule.prototype.name = "MockModule";
+    MockModule.prototype.configure = function(){};
+
+    var InvalidMockProvider = function(){};
+    var MockProvider = function(){
+        jock.ioc.Provider.call(this);
+    };
+    MockProvider.prototype = new jock.ioc.Provider();
+    MockProvider.prototype.constructor = MockProvider;
+    MockProvider.prototype.name = "MockProvider";
+    MockProvider.prototype.get = function(){
+
+    };
 
     it("should be an instance of Scope", function () {
         var binding = new Binding(new MockModule(), String);
@@ -48,6 +60,15 @@ describe("Binding", function () {
         expect(binding.bind() === bindingType).toBeTruthy();
     });
 
+    it("should calling toInstance with null will throw ArgumentError", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(function(){
+            binding.toInstance(null);
+        }).toThrow(new jock.errors.ArgumentError("Instance can not be null/undefined"));
+    });
+
     it("should calling toInstance return the binding class", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
@@ -76,24 +97,67 @@ describe("Binding", function () {
         expect(binding.to(String) == binding).toBeTruthy();
     });
 
-    it("should calling to with null then getInstance return a an instance of Option", function () {
+    it("should calling to with null should throw ArgumentError", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 
-        expect(binding.to(null).getInstance() instanceof jock.option.Option).toBeTruthy();
+        expect(function(){
+            binding.to(null);
+        }).toThrow(new jock.errors.ArgumentError("Instance can not be null/undefined"));
     });
 
     it("should calling to with String then getInstance return a an instance of Option", function () {
+        var module = new MockModule();
+        module.initialize();
+
         var bindingType = String;
-        var binding = new Binding(new MockModule(), bindingType);
+        var binding = new Binding(module, bindingType);
 
         expect(binding.to(String).getInstance() instanceof jock.option.Option).toBeTruthy();
     });
 
-    it("should calling to with null then getInstance then get returns an instance of String", function () {
+    it("should calling to with String then getInstance return a valid String", function () {
+        var module = new MockModule();
+        module.initialize();
+
+        var bindingType = String;
+        var binding = new Binding(module, bindingType);
+
+        expect(binding.to(String).getInstance().get() instanceof String).toBeTruthy();
+    });
+
+    it("should calling to with String then getInstance return a empty String", function () {
+        var module = new MockModule();
+        module.initialize();
+
+        var bindingType = String;
+        var binding = new Binding(module, bindingType);
+
+        expect(binding.to(String).getInstance().get()).toEqual("");
+    });
+
+    it("should calling toProvider with null should throw ArgumentError", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 
-        expect(binding.to(null).getInstance().get() instanceof bindingType).toBeTruthy();
+        expect(function(){
+            binding.toProvider(null);
+        }).toThrow(new jock.errors.ArgumentError("Provider can not be null/undefined"));
+    });
+
+    it("should calling toProvider with InvalidProvider should throw TypeError", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(function(){
+            binding.toProvider(InvalidMockProvider);
+        }).toThrow(new jock.errors.TypeError());
+    });
+
+    it("should calling toProvider with valid Provider should return binding", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.toProvider(MockProvider) == binding).toBeTruthy();
     });
 });

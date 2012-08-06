@@ -21,7 +21,5 @@ jock.product.ProductIterator = (function () {
         }
     };
 
-    jock.utils.extends(Impl, Methods);
-
-    return Impl;
+    return jock.utils.extends(Impl, Methods);
 }).call(this);

@@ -4,7 +4,8 @@ jock.ioc.Binding = (function(){
 
     var BindType = {
         TO: 1,
-        TO_INSTANCE: 2
+        TO_INSTANCE: 2,
+        TO_PROVIDER: 3
     };
 
     var None = jock.option.None,
@@ -28,7 +29,17 @@ jock.ioc.Binding = (function(){
                     return value;
                 }
             });
+        } else if(type == BindType.TO_PROVIDER) {
+            var bindingProvider = When(binding._toProvider, {
+                Some: function(value) {
+                    return value;
+                }
+            });
+            var provider = binding._module.getInstance(bindingProvider);
+            return jock.utils.verifiedType(provider.get(), jock.ioc.Provider);
         }
+
+        throw new jock.ioc.errors.BindingError("Unexpected binding type");
     };
 
     var Impl = function(module, bindType){
@@ -52,13 +63,26 @@ jock.ioc.Binding = (function(){
             return this._bindType;
         },
         to: function(instance){
+            if(!instance) throw new jock.errors.ArgumentError("Instance can not be null/undefined");
+
             this._type = BindType.TO;
             this._to = Some(instance);
             return this;
         },
         toInstance: function(instance){
+            if(!instance) throw new jock.errors.ArgumentError("Instance can not be null/undefined");
+
             this._type = BindType.TO_INSTANCE;
             this._toInstance = Some(instance);
+            return this;
+        },
+        toProvider: function(provider){
+            if(!provider) throw new jock.errors.ArgumentError("Provider can not be null/undefined");
+
+            if(jock.utils.verifiedType(provider.prototype, jock.ioc.Provider)) {
+                this._type = BindType.TO_PROVIDER;
+                this._toProvider = Some(provider);
+            }
             return this;
         },
         getInstance: function(){
@@ -66,7 +90,5 @@ jock.ioc.Binding = (function(){
         }
     };
 
-    jock.utils.extends(Impl, Methods);
-
-    return Impl;
+    return jock.utils.extends(Impl, Methods);
 }).call(this);

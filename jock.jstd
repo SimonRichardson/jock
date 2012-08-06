@@ -12,6 +12,7 @@ load:
   - src/main/javascript/jock/ioc/Scope.js
   - src/main/javascript/jock/ioc/Binding.js
   - src/main/javascript/jock/ioc/Module.js
+  - src/main/javascript/jock/ioc/Provider.js
   - src/main/javascript/jock/ioc/AbstractModule.js
   - src/test/javascript/jasmine/matchers/*.js
   - src/test/javascript/jasmine/utils/*.js

@@ -4,6 +4,7 @@ jock.ioc.AbstractModule = (function(){
 
     var None = jock.option.None,
         Some = jock.option.Some,
+        When = jock.option.When,
         Injector = jock.ioc.Injector;
 
     var FindByBind = function(bindings, value) {
@@ -40,11 +41,24 @@ jock.ioc.AbstractModule = (function(){
             if(!this._initialized) throw new jock.ioc.errors.BindingError("Modules have to be created using Injector.");
 
             var binding = FindByBind(this._bindings, value);
-            return binding.getInstance();
+            return When(binding, {
+                Some: function(bindingValue){
+                    var instance = bindingValue.getInstance();
+                    return When(instance, {
+                        Some: function(instanceValue){
+                            return instanceValue;
+                        },
+                        None: function(){
+                            return new value();
+                        }
+                    });
+                },
+                None: function(){
+                     return new value();
+                }
+            });
         }
     };
 
-    jock.utils.extends(Impl, Methods);
-
-    return Impl;
+    return jock.utils.extends(Impl, Methods);
 }).call(this);
