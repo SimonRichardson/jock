@@ -7,10 +7,10 @@ describe("When", function () {
     it("should throw an error if passing null", function () {
         expect(function () {
             When(null, {
-                none:function () {
+                None:function () {
                     fail();
                 },
-                some:function () {
+                Some:function () {
                     fail();
                 }
             });
@@ -20,10 +20,10 @@ describe("When", function () {
     it("should throw an error if passing {}", function () {
         expect(function () {
             When({}, {
-                none:function () {
+                None:function () {
                     fail();
                 },
-                some:function () {
+                Some:function () {
                     fail();
                 }
             });
@@ -34,10 +34,10 @@ describe("When", function () {
         it("should return false when none", function () {
 
             expect(When(None(), {
-                none:function () {
+                None:function () {
                     return false;
                 },
-                some:function (value) {
+                Some:function (value) {
                     fail();
                 }
             })).toBeFalsy();
@@ -47,10 +47,10 @@ describe("When", function () {
     describe("when calling some", function () {
         it("should return true", function () {
             expect(When(Some(true), {
-                none:function () {
+                None:function () {
                     fail();
                 },
-                some:function (value) {
+                Some:function (value) {
                     return true;
                 }
             })).toBeTruthy();
@@ -59,10 +59,10 @@ describe("When", function () {
         it("should return the same value as passed in", function () {
             var value = {};
             expect(When(Some(value), {
-                none:function () {
+                None:function () {
                     fail();
                 },
-                some:function (value) {
+                Some:function (value) {
                     return value;
                 }
             })).toEqual(value);
@@ -72,7 +72,7 @@ describe("When", function () {
     describe("when calling default state (any)", function () {
         it("should return true", function () {
             expect(When(Some(true), {
-                any:function () {
+                Any:function () {
                     return true;
                 }
             })).toBeTruthy();
@@ -81,7 +81,7 @@ describe("When", function () {
         it("should return the same value as passed in", function () {
             var value = {};
             expect(When(Some(value), {
-                any:function (value) {
+                Any:function (value) {
                     return value;
                 }
             })).toEqual(value);
@@ -90,7 +90,7 @@ describe("When", function () {
         it("should throw an error if passing null", function () {
             expect(function () {
                 When(null, {
-                    any:function (value) {
+                    Any:function (value) {
                         fail();
                     }
                 });
@@ -100,7 +100,7 @@ describe("When", function () {
         it("should throw an error if passing {}", function () {
             expect(function () {
                 When({}, {
-                    any:function (value) {
+                    Any:function (value) {
                         fail();
                     }
                 });

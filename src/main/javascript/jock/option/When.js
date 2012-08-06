@@ -5,24 +5,30 @@ jock.option.When = function (option, cases) {
     if (typeof cases !== "object")
         throw new jock.errors.ArgumentError("Expected cases to be an Object");
 
+    var OptionTypes = {
+        NONE: "None",
+        SOME: "Some",
+        ANY: "Any"
+    };
+
     if (option instanceof jock.option.Option) {
         if (option.isEmpty()) {
-            if (cases["none"])
-                return cases["none"]();
+            if (cases[OptionTypes.NONE])
+                return cases[OptionTypes.NONE]();
             else {
-                if (cases["any"])
-                    return cases["any"]();
+                if (cases[OptionTypes.ANY])
+                    return cases[OptionTypes.ANY]();
                 else
-                    throw new jock.errors.NoSuchElementError("Expected none in cases");
+                    throw new jock.errors.NoSuchElementError("Expected " + OptionTypes.NONE + " in cases");
             }
         } else if (option.isDefined()) {
-            if (cases["some"])
-                return cases["some"](option.get());
+            if (cases[OptionTypes.SOME])
+                return cases[OptionTypes.SOME](option.get());
             else {
-                if (cases["any"])
-                    return cases["any"](option.get());
+                if (cases[OptionTypes.ANY])
+                    return cases[OptionTypes.ANY](option.get());
                 else
-                    throw new jock.errors.NoSuchElementError("Expected some in cases");
+                    throw new jock.errors.NoSuchElementError("Expected " + OptionTypes.SOME + " in cases");
             }
         }
     }
