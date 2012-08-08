@@ -31,4 +31,12 @@ describe("AbstractModule", function () {
             abstractModule.getInstance({});
         }).toThrow(new jock.ioc.errors.BindingError("Modules have to be created using Injector."));
     });
+
+    it("should calling binds with null should return false", function () {
+        expect(abstractModule.binds(null)).toBeFalsy();
+    });
+
+    it("should calling binds with {} should return false", function () {
+        expect(abstractModule.binds({})).toBeFalsy();
+    });
 });

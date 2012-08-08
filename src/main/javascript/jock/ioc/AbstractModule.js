@@ -1,5 +1,5 @@
 jock.ioc = jock.ioc || {};
-jock.ioc.AbstractModule = (function(){
+jock.ioc.AbstractModule = (function () {
     "use strict";
 
     var None = jock.option.None,
@@ -7,18 +7,20 @@ jock.ioc.AbstractModule = (function(){
         When = jock.option.When,
         Injector = jock.ioc.Injector;
 
-    var FindByBind = function(bindings, value) {
-        var index = bindings.length;
-        while(--index > -1) {
-            var item = bindings[index];
-            if(item == jock.utils.verifiedType(value, jock.ioc.Binding)) {
-                return value === item ? Some(value) : None();
+    var FindByBinding = function (bindings, value) {
+        if(value) {
+            var index = bindings.length;
+            while (--index > -1) {
+                var item = bindings[index];
+                if(item.bind() === value) {
+                    return Some(item);
+                }
             }
         }
         return None();
     };
 
-    var Impl = function(){
+    var Impl = function () {
         jock.ioc.Module.call(this);
 
         this._bindings = [];
@@ -29,34 +31,44 @@ jock.ioc.AbstractModule = (function(){
     Impl.prototype.name = "AbstractModule";
 
     var Methods = {
-        initialize: function(){
+        initialize:function () {
             this.configure();
             this._initialized = true;
         },
-        configure: function(){
+        configure:function () {
             throw new jock.errors.AbstractMethodError();
         },
-        getInstance: function(value){
-            if(!value) throw new jock.errors.ArgumentError("Value can not be null/undefined");
-            if(!this._initialized) throw new jock.ioc.errors.BindingError("Modules have to be created using Injector.");
+        bind:function (value) {
+            if (!value) throw new jock.errors.ArgumentError("Value can not be null/undefined");
 
-            var binding = FindByBind(this._bindings, value);
+            var binding = new jock.ioc.Binding(this, value);
+            this._bindings.push(binding);
+            return binding;
+        },
+        getInstance:function (value) {
+            if (!value) throw new jock.errors.ArgumentError("Value can not be null/undefined");
+            if (!this._initialized) throw new jock.ioc.errors.BindingError("Modules have to be created using Injector.");
+
+            var binding = FindByBinding(this._bindings, value);
             return When(binding, {
-                Some: function(bindingValue){
+                Some:function (bindingValue) {
                     var instance = bindingValue.getInstance();
                     return When(instance, {
-                        Some: function(instanceValue){
+                        Some:function (instanceValue) {
                             return instanceValue;
                         },
-                        None: function(){
+                        None:function () {
                             return new value();
                         }
                     });
                 },
-                None: function(){
-                     return new value();
+                None:function () {
+                    return new value();
                 }
             });
+        },
+        binds:function (value) {
+            return FindByBinding(this._bindings, value).isDefined();
         }
     };
 

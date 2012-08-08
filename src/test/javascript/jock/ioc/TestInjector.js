@@ -111,4 +111,19 @@ describe("Injector", function () {
         injector.popScope();
         expect(injector.currentScope().get() == module0).toBeTruthy();
     });
+
+    it("should calling clearAll with nothing should not have a defined scope", function () {
+        injector.clearAll();
+        expect(injector.currentScope().isEmpty()).toBeTruthy();
+    });
+
+    it("should calling clearAll should not have a defined scope", function () {
+        var module0 = new MockModule();
+        var module1 = new MockModule();
+        injector.pushScope(module0);
+        injector.pushScope(module1);
+        injector.popScope();
+        injector.clearAll();
+        expect(injector.currentScope().isEmpty()).toBeTruthy();
+    });
 });
