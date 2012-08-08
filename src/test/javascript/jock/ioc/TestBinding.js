@@ -13,6 +13,8 @@ describe("Binding", function () {
     MockModule.prototype.name = "MockModule";
     MockModule.prototype.configure = function(){};
 
+    var MockObject = function(){};
+
     var InvalidMockProvider = function(){};
     var MockProvider = function(){
         jock.ioc.Provider.call(this);
@@ -21,7 +23,7 @@ describe("Binding", function () {
     MockProvider.prototype.constructor = MockProvider;
     MockProvider.prototype.name = "MockProvider";
     MockProvider.prototype.get = function(){
-
+        return new MockObject();
     };
 
     it("should be an instance of Scope", function () {
@@ -154,10 +156,38 @@ describe("Binding", function () {
         }).toThrow(new jock.errors.TypeError());
     });
 
-    it("should calling toProvider with valid Provider should return binding", function () {
+    it("should calling getInstance without adding a type should throw a BindingError", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 
-        expect(binding.toProvider(MockProvider) == binding).toBeTruthy();
+        expect(function(){
+            binding.getInstance();
+        }).toThrow(new jock.ioc.errors.BindingError("Unexpected binding type"));
+    });
+
+    it("should calling asSingleton should not throw AbstractMethodError", function(){
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        binding.asSingleton();
+    });
+
+    it("should calling asSingleton should return same binding instance", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.asSingleton() == binding).toBeTruthy();
+    });
+
+    it("should calling asSingleton, to and getInstance should return same instance", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        binding.toInstance(MockObject).asSingleton();
+
+        var a = binding.getInstance();
+        var b = binding.getInstance();
+
+        expect(a === b).toBeTruthy();
     });
 });
