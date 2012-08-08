@@ -109,3 +109,7 @@ jock.ioc.Injector = (function () {
 
     return jock.utils.extends(Impl, Methods);
 }).call(this);
+
+jock.ioc.Injectors = {
+    DEFAULT: new jock.ioc.Injector()
+};

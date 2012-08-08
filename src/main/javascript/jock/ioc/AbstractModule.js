@@ -20,9 +20,10 @@ jock.ioc.AbstractModule = (function () {
         return None();
     };
 
-    var Impl = function () {
+    var Impl = function (injector) {
         jock.ioc.Module.call(this);
 
+        this._injector = injector || jock.ioc.Injectors.DEFAULT;
         this._bindings = [];
         this._initialized = false;
     };
@@ -50,22 +51,27 @@ jock.ioc.AbstractModule = (function () {
             if (!this._initialized) throw new jock.ioc.errors.BindingError("Modules have to be created using Injector.");
 
             var binding = FindByBinding(this._bindings, value);
-            return When(binding, {
-                Some:function (bindingValue) {
-                    var instance = bindingValue.getInstance();
-                    return When(instance, {
-                        Some:function (instanceValue) {
-                            return instanceValue;
-                        },
-                        None:function () {
-                            return new value();
-                        }
-                    });
-                },
-                None:function () {
-                    return new value();
-                }
-            });
+            try {
+                this._injector.pushScope();
+                return When(binding, {
+                    Some:function (bindingValue) {
+                        var instance = bindingValue.getInstance();
+                        return When(instance, {
+                            Some:function (instanceValue) {
+                                return instanceValue;
+                            },
+                            None:function () {
+                                return new value();
+                            }
+                        });
+                    },
+                    None:function () {
+                        return new value();
+                    }
+                });
+            } finally {
+                this._injector.popScope();
+            }
         },
         binds:function (value) {
             return FindByBinding(this._bindings, value).isDefined();
