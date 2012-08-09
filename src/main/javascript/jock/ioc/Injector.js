@@ -82,7 +82,7 @@ jock.ioc.Injector = (function () {
                 }
             }
 
-            if(module.isEmpty()){
+            if(result.isEmpty()){
                 throw new jock.ioc.errors.BindingError("No binding could be found");
             }
 

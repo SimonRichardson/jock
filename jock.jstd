@@ -16,6 +16,8 @@ load:
   - src/main/javascript/jock/ioc/Provider.js
   - src/main/javascript/jock/ioc/AbstractModule.js
   - src/main/javascript/jock/ioc/errors/BindingError.js
+  - src/main/javascript/jock/ioc/inject.js
+  - src/main/javascript/jock/ioc/injectIn.js
   - src/test/javascript/jasmine/matchers/*.js
   - src/test/javascript/jasmine/utils/*.js
   - src/test/javascript/jock/*.js
