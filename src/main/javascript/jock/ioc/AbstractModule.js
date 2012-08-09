@@ -52,7 +52,7 @@ jock.ioc.AbstractModule = (function () {
 
             var binding = FindByBinding(this._bindings, value);
             try {
-                this._injector.pushScope();
+                this._injector.pushScope(this);
                 return When(binding, {
                     Some:function (bindingValue) {
                         var instance = bindingValue.getInstance();
@@ -61,12 +61,12 @@ jock.ioc.AbstractModule = (function () {
                                 return instanceValue;
                             },
                             None:function () {
-                                return new value();
+                                return new (value)();
                             }
                         });
                     },
                     None:function () {
-                        return new value();
+                        return new (value)();
                     }
                 });
             } finally {
