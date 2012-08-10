@@ -7,7 +7,8 @@ jock.product.Product = (function () {
 
         var buffer = "";
         for (var i = 0; i < total; i++) {
-            buffer += product.productElement(i);
+            var element = product.productElement(i);
+            buffer += element && element.hasOwnProperty("toString") ? element.toString() : element;
 
             if (i < total - 1) buffer += separator;
         }

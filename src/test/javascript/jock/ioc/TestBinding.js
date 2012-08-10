@@ -147,13 +147,11 @@ describe("Binding", function () {
         }).toThrow(new jock.errors.ArgumentError("Provider can not be null/undefined"));
     });
 
-    it("should calling toProvider with InvalidProvider should throw TypeError", function () {
+    it("should calling toProvider with InvalidProvider should not throw TypeError", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 
-        expect(function(){
-            binding.toProvider(InvalidMockProvider);
-        }).toThrow(new jock.errors.TypeError());
+        expect(binding.toProvider(InvalidMockProvider) == binding).toBeTruthy();
     });
 
     it("should calling getInstance without adding a type should return an Option", function () {
@@ -170,7 +168,7 @@ describe("Binding", function () {
         expect(binding.getInstance().isDefined()).toBeTruthy();
     });
 
-    it("should calling getInstance without adding a type should return a valid string", function () {
+    it("should calling getInstance without adding a type should return Some", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 

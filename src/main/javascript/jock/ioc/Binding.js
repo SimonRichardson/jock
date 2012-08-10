@@ -36,7 +36,7 @@ jock.ioc.Binding = (function () {
                 }
             });
             var provider = binding._module.getInstance(bindingProvider);
-            return jock.utils.verifiedType(provider.get(), jock.ioc.Provider);
+            return jock.utils.verifiedType(provider, jock.ioc.Provider).get();
         }
 
         throw new jock.ioc.errors.BindingError("Unexpected binding type");
@@ -85,10 +85,8 @@ jock.ioc.Binding = (function () {
         toProvider:function (provider) {
             if (!provider) throw new jock.errors.ArgumentError("Provider can not be null/undefined");
 
-            if (jock.utils.verifiedType(provider.prototype, jock.ioc.Provider)) {
-                this._type = BindType.TO_PROVIDER;
-                this._toProvider = Some(provider);
-            }
+            this._type = BindType.TO_PROVIDER;
+            this._toProvider = Some(provider);
             return this;
         },
         getInstance:function () {

@@ -2,6 +2,7 @@ describe("Injector", function () {
     "use strict";
 
     var Injector = jock.ioc.Injectors.DEFAULT,
+        Provider = jock.ioc.Provider,
         inject = jock.ioc.inject;
 
     var MockModule = function(){
@@ -220,6 +221,67 @@ describe("Injector", function () {
                 this.singleton = inject(MockSingleton);
             });
             expect(MockSingleton.numInstances).toEqual(1);
+        });
+    });
+
+
+
+
+
+    describe("when injecting a Provider", function(){
+        var module;
+
+        var IMockProvider = function(){};
+        var IMockProviderObject = function(){};
+
+        var ProvidedObject = function(){};
+
+        var MockProvider = function(){
+            Provider.call(this);
+        };
+        MockProvider.prototype = new Provider();
+        MockProvider.prototype.constructor = MockProvider;
+        MockProvider.prototype.name = "MockProvider";
+        MockProvider.prototype.get = function(){
+            return new ProvidedObject();
+        };
+
+        beforeEach(function(){
+            module = new MockModule();
+            module.configure = function() {
+                this.bind(IMockProviderObject).toProvider(IMockProvider);
+                this.bind(IMockProvider).to(MockProvider);
+            };
+
+            module = Injector.initialize(module);
+        });
+
+        afterEach(function(){
+            Injector.clearAll();
+        });
+
+        it("should object not be null", function(){
+            var object = module.getInstance(function(){
+                this.provider = inject(IMockProviderObject);
+            });
+            expect(object.provider).not.toBeNull();
+        });
+
+        it("should object be instance of ProvidedObject", function(){
+            var object = module.getInstance(function(){
+                this.provider = inject(IMockProviderObject);
+            });
+            expect(object.provider).toBeType(ProvidedObject);
+        });
+
+        it("should object be instance of ProvidedObject", function(){
+            var object0 = module.getInstance(function(){
+                this.provider = inject(IMockProviderObject);
+            });
+            var object1 = module.getInstance(function(){
+                this.provider = inject(IMockProviderObject);
+            });
+            expect(object0.provider === object1.provider).toBeFalsy();
         });
     });
 });
