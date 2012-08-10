@@ -63,10 +63,10 @@ jock.ioc.Injector = (function () {
                     module = Some(jock.utils.verifiedType(head, jock.ioc.Module));
                 }
             }
-            this._currentScope = module;
+            this._currentScope = jock.utils.verifiedType(module, jock.option.Option);
         },
         currentScope:function () {
-            return this._currentScope;
+            return jock.utils.verifiedType(this._currentScope, jock.option.Option);
         },
         scopeOf:function (value) {
             var result = None();

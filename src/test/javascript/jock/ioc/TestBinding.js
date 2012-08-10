@@ -156,13 +156,25 @@ describe("Binding", function () {
         }).toThrow(new jock.errors.TypeError());
     });
 
-    it("should calling getInstance without adding a type should throw a BindingError", function () {
+    it("should calling getInstance without adding a type should return an Option", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 
-        expect(function(){
-            binding.getInstance();
-        }).toThrow(new jock.ioc.errors.BindingError("Unexpected binding type"));
+        expect(binding.getInstance() instanceof jock.option.Option).toBeTruthy();
+    });
+
+    it("should calling getInstance without adding a type should return Some", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.getInstance().isDefined()).toBeTruthy();
+    });
+
+    it("should calling getInstance without adding a type should return a valid string", function () {
+        var bindingType = String;
+        var binding = new Binding(new MockModule(), bindingType);
+
+        expect(binding.getInstance().get() instanceof String).toBeTruthy();
     });
 
     it("should calling asSingleton should not throw AbstractMethodError", function(){

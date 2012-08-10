@@ -3,7 +3,6 @@ jock.ioc.Binding = (function () {
     "use strict";
 
     var BindType = {
-        NIL:0,
         TO:1,
         TO_INSTANCE:2,
         TO_PROVIDER:3
@@ -52,7 +51,7 @@ jock.ioc.Binding = (function () {
         this._module = jock.utils.verifiedType(module, jock.ioc.AbstractModule);
         this._bindType = bindType;
 
-        this._type = BindType.NIL;
+        this._type = BindType.TO;
 
         this._to = None();
         this._toInstance = None();
