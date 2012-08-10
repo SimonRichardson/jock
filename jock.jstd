@@ -15,6 +15,7 @@ load:
   - src/main/javascript/jock/ioc/Injector.js
   - src/main/javascript/jock/ioc/Provider.js
   - src/main/javascript/jock/ioc/AbstractModule.js
+  - src/main/javascript/jock/ioc/InjectionPoint.js
   - src/main/javascript/jock/ioc/errors/BindingError.js
   - src/main/javascript/jock/ioc/inject.js
   - src/main/javascript/jock/ioc/injectIn.js

@@ -65,14 +65,14 @@ describe("Injector", function () {
 
         it("should string not be null", function(){
             var object = module.getInstance(function(){
-                this.string = inject(String);
+                this.string = inject(String).get();
             });
             expect(object.string).not.toBeNull();
         });
 
         it("should string be equal to \"Test\"", function(){
             var object = module.getInstance(function(){
-                this.string = inject(String);
+                this.string = inject(String).get();
             });
             expect(object.string).toEqual(value);
         });
@@ -80,7 +80,7 @@ describe("Injector", function () {
         it("should string not be null with a new module", function(){
             var object = new MockModule();
             object.configure = function(){
-                this.string = inject(String);
+                this.string = inject(String).get();
             };
             expect(object.string).not.toBeNull();
         });
@@ -88,17 +88,17 @@ describe("Injector", function () {
         it("should string be equal to \"Test\" with a new module", function(){
             var object = new MockModule();
             object.configure = function(){
-                this.string = inject(String);
+                this.string = inject(String).get();
             };
             expect(object.string).toBeUndefined();
         });
 
         it("should string be equal to \"Test\" when getting two instances", function(){
             var object0 = module.getInstance(function(){
-                this.string = inject(String);
+                this.string = inject(String).get();
             });
             var object1 = module.getInstance(function(){
-                this.string = inject(String);
+                this.string = inject(String).get();
             });
             expect(object0.string).toEqual(object1.string);
         });
@@ -123,14 +123,14 @@ describe("Injector", function () {
 
         it("should object not be null", function(){
             var object = module.getInstance(function(){
-                this.object = inject(Object);
+                this.object = inject(Object).get();
             });
             expect(object.object).not.toBeNull();
         });
 
         it("should object be equal to \"Test\"", function(){
             var object = module.getInstance(function(){
-                this.object = inject(Object);
+                this.object = inject(Object).get();
             });
             expect(object.object).toEqual(value);
         });
@@ -138,7 +138,7 @@ describe("Injector", function () {
         it("should object not be null with a new module", function(){
             var object = new MockModule();
             object.configure = function(){
-                this.object = inject(Object);
+                this.object = inject(Object).get();
             };
             expect(object.object).not.toBeNull();
         });
@@ -153,10 +153,10 @@ describe("Injector", function () {
 
         it("should object be equal to same object when getting two instances", function(){
             var object0 = module.getInstance(function(){
-                this.object = inject(Object);
+                this.object = inject(Object).get();
             });
             var object1 = module.getInstance(function(){
-                this.object = inject(Object);
+                this.object = inject(Object).get();
             });
             expect(object0.object).toEqual(object1.object);
         });
@@ -182,7 +182,7 @@ describe("Injector", function () {
 
         it("should object not be null", function(){
             var object = module.getInstance(function(){
-                this.singleton = inject(MockSingleton);
+                this.singleton = inject(MockSingleton).get();
             });
             expect(object.singleton).not.toBeNull();
         });
@@ -190,7 +190,7 @@ describe("Injector", function () {
         it("should object not be null with a new module", function(){
             var object = new MockModule();
             object.configure = function(){
-                this.singleton = inject(MockSingleton);
+                this.singleton = inject(MockSingleton).get();
             };
             expect(object.singleton).not.toBeNull();
         });
@@ -198,27 +198,27 @@ describe("Injector", function () {
         it("should object be equal to undefined with a new module", function(){
             var object = new MockModule();
             object.configure = function(){
-                this.singleton = inject(MockSingleton);
+                this.singleton = inject(MockSingleton).get();
             };
             expect(object.singleton).toBeUndefined();
         });
 
         it("should object be equal to object when getting two instances", function(){
             var object0 = module.getInstance(function(){
-                this.singleton = inject(MockSingleton);
+                this.singleton = inject(MockSingleton).get();
             });
             var object1 = module.getInstance(function(){
-                this.singleton = inject(MockSingleton);
+                this.singleton = inject(MockSingleton).get();
             });
             expect(object0.singleton).toEqual(object1.singleton);
         });
 
         it("should numInstances be equal to 1 when getting two instances", function(){
             module.getInstance(function(){
-                this.singleton = inject(MockSingleton);
+                this.singleton = inject(MockSingleton).get();
             });
             module.getInstance(function(){
-                this.singleton = inject(MockSingleton);
+                this.singleton = inject(MockSingleton).get();
             });
             expect(MockSingleton.numInstances).toEqual(1);
         });
@@ -258,24 +258,24 @@ describe("Injector", function () {
 
         it("should object not be null", function(){
             var object = module.getInstance(function(){
-                this.provider = inject(IMockProviderObject);
+                this.provider = inject(IMockProviderObject).get();
             });
             expect(object.provider).not.toBeNull();
         });
 
         it("should object be instance of ProvidedObject", function(){
             var object = module.getInstance(function(){
-                this.provider = inject(IMockProviderObject);
+                this.provider = inject(IMockProviderObject).get();
             });
             expect(object.provider).toBeType(ProvidedObject);
         });
 
         it("should object be instance of ProvidedObject", function(){
             var object0 = module.getInstance(function(){
-                this.provider = inject(IMockProviderObject);
+                this.provider = inject(IMockProviderObject).get();
             });
             var object1 = module.getInstance(function(){
-                this.provider = inject(IMockProviderObject);
+                this.provider = inject(IMockProviderObject).get();
             });
             expect(object0.provider === object1.provider).toBeFalsy();
         });

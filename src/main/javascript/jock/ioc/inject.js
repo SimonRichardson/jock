@@ -2,10 +2,11 @@ jock.ioc = jock.ioc || {};
 jock.ioc.inject = function (type, injector) {
     if (!type) throw new jock.errors.ArgumentError("Given type must not be null.");
 
-    var When = jock.option.When;
+    var InjectionPoint = jock.ioc.InjectionPoint,
+        When = jock.option.When;
 
     var defaultInjector = injector || jock.ioc.Injectors.DEFAULT;
-    return When(defaultInjector.currentScope(), {
+    var result = When(defaultInjector.currentScope(), {
         None:function () {
             return When(defaultInjector.scopeOf(type), {
                 None:function () {
@@ -20,4 +21,6 @@ jock.ioc.inject = function (type, injector) {
             return value.getInstance(type);
         }
     });
+
+    return new InjectionPoint(result);
 };
