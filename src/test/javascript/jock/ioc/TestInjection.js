@@ -224,10 +224,6 @@ describe("Injector", function () {
         });
     });
 
-
-
-
-
     describe("when injecting a Provider", function(){
         var module;
 
