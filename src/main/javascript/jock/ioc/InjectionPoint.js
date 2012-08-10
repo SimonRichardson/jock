@@ -2,8 +2,10 @@ jock.ioc = jock.ioc || {};
 jock.ioc.InjectionPoint = (function () {
     "use strict";
 
+    var Aspect = jock.aop.Aspect;
+
     var Impl = function (value) {
-        this._value = value;
+        this._aspect = new Aspect(value);
     };
     Impl.prototype = {};
     Impl.prototype.constructor = Impl;
@@ -11,10 +13,10 @@ jock.ioc.InjectionPoint = (function () {
 
     var Methods = {
         get:function () {
-            return this._value;
+            return this._aspect.get();
         },
         intercept:function () {
-
+            return this._aspect;
         }
     };
 

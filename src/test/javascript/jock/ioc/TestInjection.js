@@ -3,6 +3,7 @@ describe("Injector", function () {
 
     var Injector = jock.ioc.Injectors.DEFAULT,
         Provider = jock.ioc.Provider,
+        InjectionPoint = jock.ioc.InjectionPoint,
         inject = jock.ioc.inject;
 
     var MockModule = function(){
@@ -278,6 +279,81 @@ describe("Injector", function () {
                 this.provider = inject(IMockProviderObject).get();
             });
             expect(object0.provider === object1.provider).toBeFalsy();
+        });
+    });
+
+    describe("when injecting", function(){
+        var value = "Test";
+        var module;
+
+        beforeEach(function(){
+            module = new MockModule();
+            module.configure = function() {
+                this.bind(String).toInstance(value);
+            };
+
+            module = Injector.initialize(module);
+        });
+
+        afterEach(function(){
+            Injector.clearAll();
+        });
+
+        it("should return an InjectionPoint even for a none prepared injected type", function(){
+            var object = module.getInstance(function(){
+                this.point = inject(Date);
+            });
+
+            expect(object.point instanceof InjectionPoint).toBeTruthy();
+        });
+
+        it("should return an InjectionPoint", function(){
+            var object = module.getInstance(function(){
+                this.point = inject(String);
+            });
+
+            expect(object.point instanceof InjectionPoint).toBeTruthy();
+        });
+    });
+
+    describe("when injecting and then intercepting", function(){
+        var module;
+
+        var Dog = function(){
+        };
+        Dog.prototype = {
+            type: function(){
+                return "Dog";
+            },
+            toString: function(){
+                return "DOG";
+            }
+        };
+        var value = new Dog();
+
+        beforeEach(function(){
+            module = new MockModule();
+            module.configure = function() {
+                this.bind(Dog).toInstance(value);
+            };
+
+            module = Injector.initialize(module);
+        });
+
+        afterEach(function(){
+            Injector.clearAll();
+        });
+
+        it("should return an InjectionPoint even for a none prepared injected type", function(){
+            var object = module.getInstance(function(){
+                this.name = inject(Dog).intercept().around({
+                    type: function(){
+                        return "Cat";
+                    }
+                }).get();
+            });
+
+            expect(object.name.type()).toEqual("Cat");
         });
     });
 });

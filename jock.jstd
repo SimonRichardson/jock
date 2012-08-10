@@ -9,6 +9,8 @@ load:
   - src/main/javascript/jock/option/None.js
   - src/main/javascript/jock/option/Some.js
   - src/main/javascript/jock/option/When.js
+  - src/main/javascript/jock/aop/Aspect.js
+  - src/main/javascript/jock/aop/errors/AspectError.js
   - src/main/javascript/jock/ioc/Scope.js
   - src/main/javascript/jock/ioc/Binding.js
   - src/main/javascript/jock/ioc/Module.js

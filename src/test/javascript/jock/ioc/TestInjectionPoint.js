@@ -11,4 +11,13 @@ describe("InjectionPoint", function () {
             expect(point.get() === value).toBeTruthy();
         });
     });
+
+    describe("when giving a value", function(){
+
+        it("should return the same value", function(){
+            var value = {};
+            var point = new InjectionPoint(value);
+            expect(point instanceof InjectionPoint).toBeTruthy();
+        });
+    });
 });
