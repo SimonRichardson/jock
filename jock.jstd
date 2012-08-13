@@ -24,6 +24,7 @@ load:
   - src/test/javascript/jasmine/matchers/*.js
   - src/test/javascript/jasmine/utils/*.js
   - src/test/javascript/jock/*.js
+  - src/test/javascript/jock/aop/*.js
   - src/test/javascript/jock/ioc/*.js
   - src/test/javascript/jock/option/*.js
   - src/test/javascript/jock/product/*.js
