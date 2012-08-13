@@ -2,21 +2,22 @@ jock.aop = jock.aop || {};
 jock.aop.Aspect = (function () {
 
     var AspectType = {
-        BEFORE: 1,
-        AFTER: 2,
-        AROUND: 3
+        BEFORE:1,
+        AFTER:2,
+        AROUND:3,
+        PREVENT:4
     };
 
-    var Solve = function(type, name, source, override, scope) {
-        if(source[name]) {
+    var Solve = function (type, name, source, override, scope) {
+        if (source[name]) {
             var origin = source[name];
-            if(origin && typeof origin === "function" && override && typeof override === "function") {
-                source[name] = function(){
+            if (origin && typeof origin === "function" && override && typeof override === "function") {
+                source[name] = function () {
 
                     var args = Array.prototype.slice.call(arguments);
 
                     var result = null;
-                    switch(type) {
+                    switch (type) {
                         case AspectType.BEFORE:
                             override.apply(scope, args);
                             result = origin.apply(scope, args);
@@ -28,9 +29,13 @@ jock.aop.Aspect = (function () {
                             break;
 
                         case AspectType.AROUND:
-                            result = override.apply(scope, [function(){
+                            result = override.apply(scope, [function () {
                                 origin.apply(scope, args);
                             }, args]);
+                            break;
+
+                        case AspectType.PREVENT:
+                            result = override.apply(scope, args);
                             break;
 
                         default:
@@ -45,8 +50,7 @@ jock.aop.Aspect = (function () {
             throw new jock.aop.errors.AspectError("Unable to bind method");
         }
 
-        var type = !source[name] ? "unknown" : "native";
-        throw new jock.aop.errors.AspectError("Cannot bind " + type + " method");
+        throw new jock.aop.errors.AspectError("Cannot bind unknown method");
     };
 
     var Impl = function (source) {
@@ -56,25 +60,49 @@ jock.aop.Aspect = (function () {
     Impl.prototype.constructor = Impl;
     Impl.prototype.name = "Aspect";
 
+    // TODO (Simon) : Fix the code duplication bellow.
+
     var Methods = {
-        get:function() {
+        get:function () {
             return this._source;
         },
         after:function (methods) {
-            for(var i in methods) {
-                Solve(AspectType.AFTER, i, this._source, methods[i], this);
+            if (!methods)
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i))
+                    Solve(AspectType.AFTER, i, this._source, methods[i], this);
             }
             return this;
         },
         before:function (methods) {
-            for(var i in methods) {
-                Solve(AspectType.BEFORE, i, this._source, methods[i], this);
+            if (!methods)
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i))
+                    Solve(AspectType.BEFORE, i, this._source, methods[i], this);
             }
             return this;
         },
         around:function (methods) {
-            for(var i in methods) {
-                Solve(AspectType.AROUND, i, this._source, methods[i], this);
+            if (!methods)
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i))
+                    Solve(AspectType.AROUND, i, this._source, methods[i], this);
+            }
+            return this;
+        },
+        prevent:function (methods) {
+            if (!methods)
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i))
+                    Solve(AspectType.PREVENT, i, this._source, methods[i], this);
             }
             return this;
         }
