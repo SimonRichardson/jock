@@ -315,45 +315,4 @@ describe("Injector", function () {
             expect(object.point instanceof InjectionPoint).toBeTruthy();
         });
     });
-
-    describe("when injecting and then intercepting", function(){
-        var module;
-
-        var Dog = function(){
-        };
-        Dog.prototype = {
-            type: function(){
-                return "Dog";
-            },
-            toString: function(){
-                return "DOG";
-            }
-        };
-        var value = new Dog();
-
-        beforeEach(function(){
-            module = new MockModule();
-            module.configure = function() {
-                this.bind(Dog).toInstance(value);
-            };
-
-            module = Injector.initialize(module);
-        });
-
-        afterEach(function(){
-            Injector.clearAll();
-        });
-
-        it("should return an InjectionPoint even for a none prepared injected type", function(){
-            var object = module.getInstance(function(){
-                this.name = inject(Dog).intercept().around({
-                    type: function(){
-                        return "Cat";
-                    }
-                }).get();
-            });
-
-            expect(object.name.type()).toEqual("Cat");
-        });
-    });
 });

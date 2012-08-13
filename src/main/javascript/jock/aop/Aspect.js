@@ -31,7 +31,7 @@ jock.aop.Aspect = (function () {
                         case AspectType.AROUND:
                             result = override.apply(scope, [function () {
                                 origin.apply(scope, args);
-                            }, args]);
+                            }].concat(args));
                             break;
 
                         case AspectType.PREVENT:
