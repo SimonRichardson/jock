@@ -54,6 +54,9 @@ jock.aop.Aspect = (function () {
     };
 
     var Impl = function (source) {
+        if (!source)
+            throw new jock.errors.ArgumentError("Source can not be null/undefined");
+
         this._source = source;
     };
     Impl.prototype = {};
