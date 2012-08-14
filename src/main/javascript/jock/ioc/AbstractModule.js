@@ -50,7 +50,8 @@ jock.ioc.AbstractModule = (function () {
             if (!value) throw new jock.errors.ArgumentError("Value can not be null/undefined");
             if (!this._initialized) throw new jock.ioc.errors.BindingError("Modules have to be created using Injector.");
 
-            var binding = findByBinding(this._bindings, value);
+            var Ctor = value,
+                binding = findByBinding(this._bindings, value);
             try {
                 this._injector.pushScope(this);
                 return When(binding, {
@@ -61,12 +62,12 @@ jock.ioc.AbstractModule = (function () {
                                 return instanceValue;
                             },
                             None:function () {
-                                return new (value)();
+                                return new Ctor();
                             }
                         });
                     },
                     None:function () {
-                        return new (value)();
+                        return new Ctor();
                     }
                 });
             } finally {
