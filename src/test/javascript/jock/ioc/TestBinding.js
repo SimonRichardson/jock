@@ -161,14 +161,14 @@ describe("Binding", function () {
         expect(binding.getInstance() instanceof jock.option.Option).toBeTruthy();
     });
 
-    it("should calling getInstance without adding a type should return Some", function () {
+    it("should calling getInstance without adding a type should return some", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 
         expect(binding.getInstance().isDefined()).toBeTruthy();
     });
 
-    it("should calling getInstance without adding a type should return Some", function () {
+    it("should calling getInstance without adding a type should return some", function () {
         var bindingType = String;
         var binding = new Binding(new MockModule(), bindingType);
 

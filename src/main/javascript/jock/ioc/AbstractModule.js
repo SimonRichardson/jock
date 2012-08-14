@@ -2,9 +2,9 @@ jock.ioc = jock.ioc || {};
 jock.ioc.AbstractModule = (function () {
     "use strict";
 
-    var None = jock.option.None,
-        Some = jock.option.Some,
-        When = jock.option.When,
+    var none = jock.option.none,
+        some = jock.option.some,
+        when = jock.option.when,
         Injector = jock.ioc.Injector;
 
     var findByBinding = function (bindings, value) {
@@ -13,11 +13,11 @@ jock.ioc.AbstractModule = (function () {
             while (--index > -1) {
                 var item = bindings[index];
                 if(item.bind() === value) {
-                    return Some(item);
+                    return some(item);
                 }
             }
         }
-        return None();
+        return none();
     };
 
     var Impl = function (injector) {
@@ -54,19 +54,19 @@ jock.ioc.AbstractModule = (function () {
                 binding = findByBinding(this._bindings, value);
             try {
                 this._injector.pushScope(this);
-                return When(binding, {
-                    Some:function (bindingValue) {
+                return when(binding, {
+                    some:function (bindingValue) {
                         var instance = bindingValue.getInstance();
-                        return When(instance, {
-                            Some:function (instanceValue) {
+                        return when(instance, {
+                            some:function (instanceValue) {
                                 return instanceValue;
                             },
-                            None:function () {
+                            none:function () {
                                 return new Ctor();
                             }
                         });
                     },
-                    None:function () {
+                    none:function () {
                         return new Ctor();
                     }
                 });

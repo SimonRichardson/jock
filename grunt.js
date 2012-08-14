@@ -5,9 +5,9 @@ module.exports = function(grunt) {
 				'src/main/javascript/jock/utils/*.js',
 				'src/main/javascript/jock/product/*.js',
 				'src/main/javascript/jock/option/*.js',
-				'src/main/javascript/jock/ioc/errors.js',
+				'src/main/javascript/jock/ioc/errors/*.js',
 				'src/main/javascript/jock/ioc/*.js',
-				'src/main/javascript/jock/aop/errors.js',
+				'src/main/javascript/jock/aop/errors/*.js',
 				'src/main/javascript/jock/aop/*.js']
 	};
 	
@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 		min: {
 			dist: {
 				src: ['bin/jock.concat.0.0.1.js'],
-				dest: 'bin/jock.min.0.0.1.js',
+				dest: 'bin/jock.min.0.0.1.js'
 			}
 		}
 	});

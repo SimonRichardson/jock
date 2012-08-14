@@ -1,16 +1,16 @@
-describe("When", function () {
+describe("when", function () {
 
-    var None = jock.option.None,
-        Some = jock.option.Some,
-        When = jock.option.When;
+    var none = jock.option.none,
+        some = jock.option.some,
+        when = jock.option.when;
 
     it("should throw an error if passing null", function () {
         expect(function () {
-            When(null, {
-                None:function () {
+            when(null, {
+                none:function () {
                     fail();
                 },
-                Some:function () {
+                some:function () {
                     fail();
                 }
             });
@@ -19,11 +19,11 @@ describe("When", function () {
 
     it("should throw an error if passing {}", function () {
         expect(function () {
-            When({}, {
-                None:function () {
+            when({}, {
+                none:function () {
                     fail();
                 },
-                Some:function () {
+                some:function () {
                     fail();
                 }
             });
@@ -33,11 +33,11 @@ describe("When", function () {
     describe("when calling none", function () {
         it("should return false when none", function () {
 
-            expect(When(None(), {
-                None:function () {
+            expect(when(none(), {
+                none:function () {
                     return false;
                 },
-                Some:function (value) {
+                some:function (value) {
                     fail();
                 }
             })).toBeFalsy();
@@ -46,11 +46,11 @@ describe("When", function () {
 
     describe("when calling some", function () {
         it("should return true", function () {
-            expect(When(Some(true), {
-                None:function () {
+            expect(when(some(true), {
+                none:function () {
                     fail();
                 },
-                Some:function (value) {
+                some:function (value) {
                     return true;
                 }
             })).toBeTruthy();
@@ -58,11 +58,11 @@ describe("When", function () {
 
         it("should return the same value as passed in", function () {
             var value = {};
-            expect(When(Some(value), {
-                None:function () {
+            expect(when(some(value), {
+                none:function () {
                     fail();
                 },
-                Some:function (value) {
+                some:function (value) {
                     return value;
                 }
             })).toEqual(value);
@@ -71,8 +71,8 @@ describe("When", function () {
 
     describe("when calling default state (any)", function () {
         it("should return true", function () {
-            expect(When(Some(true), {
-                Any:function () {
+            expect(when(some(true), {
+                any:function () {
                     return true;
                 }
             })).toBeTruthy();
@@ -80,8 +80,8 @@ describe("When", function () {
 
         it("should return the same value as passed in", function () {
             var value = {};
-            expect(When(Some(value), {
-                Any:function (value) {
+            expect(when(some(value), {
+                any:function (value) {
                     return value;
                 }
             })).toEqual(value);
@@ -89,8 +89,8 @@ describe("When", function () {
 
         it("should throw an error if passing null", function () {
             expect(function () {
-                When(null, {
-                    Any:function (value) {
+                when(null, {
+                    any:function (value) {
                         fail();
                     }
                 });
@@ -99,8 +99,8 @@ describe("When", function () {
 
         it("should throw an error if passing {}", function () {
             expect(function () {
-                When({}, {
-                    Any:function (value) {
+                when({}, {
+                    any:function (value) {
                         fail();
                     }
                 });

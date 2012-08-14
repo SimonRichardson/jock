@@ -7,12 +7,12 @@ jock.ioc.injectIn = function(type, module, injector) {
 
     var defaultInjector = injector || jock.ioc.Injectors.DEFAULT;
 
-    var When = jock.option.When;
-    return When(defaultInjector.moduleOf(module), {
-        None: function(){
+    var when = jock.option.when;
+    return when(defaultInjector.moduleOf(module), {
+        none: function(){
             throw new jock.ioc.errors.BindingError();
         },
-        Some: function(value){
+        some: function(value){
             return value.getInstance(type);
         }
     });

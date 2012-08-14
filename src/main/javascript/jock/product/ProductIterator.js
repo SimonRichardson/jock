@@ -16,8 +16,8 @@ jock.product.ProductIterator = (function () {
             return this._index < this._arity;
         },
         next:function () {
-            if (this.hasNext()) return jock.option.Some(this._product.productElement(this._index++));
-            else return jock.option.None();
+            if (this.hasNext()) return jock.option.some(this._product.productElement(this._index++));
+            else return jock.option.none();
         }
     };
 

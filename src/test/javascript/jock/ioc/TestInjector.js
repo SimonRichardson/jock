@@ -66,7 +66,7 @@ describe("Injector", function () {
         expect(injector.currentScope() instanceof jock.option.Option).toBeTruthy();
     });
 
-    it("should calling currentScope should return None", function () {
+    it("should calling currentScope should return none", function () {
         var module = new MockModule();
         injector.initialize(module);
 
@@ -80,7 +80,7 @@ describe("Injector", function () {
         expect(injector.currentScope() instanceof jock.option.Option).toBeTruthy();
     });
 
-    it("should calling popScope with 1 valid module should return None", function () {
+    it("should calling popScope with 1 valid module should return none", function () {
         var module = new MockModule();
         injector.pushScope(module);
         injector.popScope();
@@ -95,7 +95,7 @@ describe("Injector", function () {
         expect(injector.currentScope() instanceof jock.option.Option).toBeTruthy();
     });
 
-    it("should calling popScope with 2 valid modules should return Some", function () {
+    it("should calling popScope with 2 valid modules should return some", function () {
         var module = new MockModule();
         injector.pushScope(module);
         injector.pushScope(module);

@@ -2,8 +2,8 @@ jock.ioc = jock.ioc || {};
 jock.ioc.Injector = (function () {
     "use strict";
 
-    var None = jock.option.None,
-        Some = jock.option.Some;
+    var none = jock.option.none,
+        some = jock.option.some;
 
     var findByType = function(map, type) {
         if(type){
@@ -11,11 +11,11 @@ jock.ioc.Injector = (function () {
             while(--index > -1) {
                 var node = map[index];
                 if(node.type == type) {
-                    return Some(node.module);
+                    return some(node.module);
                 }
             }
         }
-        return None();
+        return none();
     };
 
     var Node = function(type, module) {
@@ -27,7 +27,7 @@ jock.ioc.Injector = (function () {
         this._map = [];
         this._scopes = [];
         this._modules = [];
-        this._currentScope = None();
+        this._currentScope = none();
     };
     Impl.prototype = {};
     Impl.prototype.constructor = Impl;
@@ -45,22 +45,22 @@ jock.ioc.Injector = (function () {
             this._map.length = 0;
             this._scopes.length = 0;
             this._modules.length = 0;
-            this._currentScope = None();
+            this._currentScope = none();
         },
         pushScope:function (module) {
             if (jock.utils.verifiedType(module, jock.ioc.Module)) {
-                this._currentScope = Some(module);
+                this._currentScope = some(module);
                 this._scopes.push(module);
             }
             return module;
         },
         popScope:function () {
-            var module = None();
+            var module = none();
             if (this._scopes.length > 0) {
                 this._scopes.pop();
                 if (this._scopes.length > 0) {
                     var head = this._scopes[this._scopes.length - 1];
-                    module = Some(jock.utils.verifiedType(head, jock.ioc.Module));
+                    module = some(jock.utils.verifiedType(head, jock.ioc.Module));
                 }
             }
             this._currentScope = jock.utils.verifiedType(module, jock.option.Option);
@@ -69,7 +69,7 @@ jock.ioc.Injector = (function () {
             return jock.utils.verifiedType(this._currentScope, jock.option.Option);
         },
         scopeOf:function (value) {
-            var result = None();
+            var result = none();
             var index = this._modules.length;
             while(--index > -1) {
                 var module = this._modules[index];
@@ -78,7 +78,7 @@ jock.ioc.Injector = (function () {
                         throw new jock.ioc.errors.BindingError("More than one module binds with the value");
                     }
 
-                    result = Some(module);
+                    result = some(module);
                 }
             }
 
@@ -99,11 +99,11 @@ jock.ioc.Injector = (function () {
                 var module = this._modules[index];
                 if(module instanceof value) {
                     this._map.push(new Node(value, module));
-                    return Some(module);
+                    return some(module);
                 }
             }
 
-            return None();
+            return none();
         }
     };
 

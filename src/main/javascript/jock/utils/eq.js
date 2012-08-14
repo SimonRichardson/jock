@@ -16,7 +16,7 @@ jock.utils.eq = function (a, b) {
             var opt = a1 ? a : b;
             var val = a1 ? b : a;
 
-            return jock.option.When(opt, {
+            return jock.option.when(opt, {
                 none: function(){
                     return jock.utils.eq(false, val);
                 },

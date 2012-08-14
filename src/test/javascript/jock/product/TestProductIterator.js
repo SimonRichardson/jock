@@ -23,7 +23,7 @@ describe("Product", function () {
         expect(productIterator.hasNext()).toBeFalsy();
     });
 
-    it("should calling next return None for product instance", function () {
-        expect(productIterator.next()).toEqual(jock.option.None());
+    it("should calling next return none for product instance", function () {
+        expect(productIterator.next()).toEqual(jock.option.none());
     });
 });
