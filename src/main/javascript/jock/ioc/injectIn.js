@@ -1,8 +1,8 @@
 jock.ioc = jock.ioc || {};
 jock.ioc.injectIn = function(type, module, injector) {
-    if(type == null)
+    if(!type)
         throw new jock.errors.ArgumentError("Given type must not be null.");
-    if(module == null)
+    if(!module)
         throw new jock.errors.ArgumentError("Given module must not be null.");
 
     var defaultInjector = injector || jock.ioc.Injectors.DEFAULT;

@@ -47,7 +47,7 @@ jock.option.Some = (function () {
             return 1;
         },
         productElement:function (index) {
-            if (index == 0)
+            if (index === 0)
                 return this.get();
 
             throw new jock.errors.RangeError();

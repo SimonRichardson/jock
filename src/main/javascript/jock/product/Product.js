@@ -30,7 +30,7 @@ jock.product.Product = (function () {
         },
         equals:function (value) {
             if (value instanceof jock.product.Product) {
-                if (this.productArity() == value.productArity()) {
+                if (this.productArity() === value.productArity()) {
                     var index = this.productArity();
                     while (--index > -1) {
                         if (jock.utils.ne(this.productElement(index), value.productElement(index)))
@@ -48,7 +48,7 @@ jock.product.Product = (function () {
             return new jock.product.ProductIterator(this);
         },
         toString:function () {
-            if (0 == this.productArity()) return this.productPrefix();
+            if (0 === this.productArity()) return this.productPrefix();
             else return this.productPrefix() + "(" + MakeString(this, ", ") + ")";
         }
     };
