@@ -60,7 +60,7 @@ jock.option.Some = (function () {
         }
     };
 
-    jock.utils.extends(Impl, Methods);
+    jock.utils.extend(Impl, Methods);
 
     return function (value) {
         return new Impl(value);

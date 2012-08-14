@@ -111,5 +111,5 @@ jock.aop.Aspect = (function () {
         }
     };
 
-    return jock.utils.extends(Impl, Methods);
+    return jock.utils.extend(Impl, Methods);
 }).call(this);

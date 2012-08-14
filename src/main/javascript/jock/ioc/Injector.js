@@ -107,7 +107,7 @@ jock.ioc.Injector = (function () {
         }
     };
 
-    return jock.utils.extends(Impl, Methods);
+    return jock.utils.extend(Impl, Methods);
 }).call(this);
 
 jock.ioc.Injectors = {

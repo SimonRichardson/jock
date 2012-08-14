@@ -52,7 +52,7 @@ jock.option.None = (function () {
         }
     };
 
-    jock.utils.extends(Impl, Methods);
+    jock.utils.extend(Impl, Methods);
 
     return function () {
         if (arguments.length > 0)
