@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 			dist: {
 				src: src.main.slice(),
 				dest: 'bin/jock.concat.0.0.1.js',
-				separator: '\n'
+				separator: '\n\r\n\r'
 			}
 		},
 		
