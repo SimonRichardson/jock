@@ -7,7 +7,7 @@ jock.ioc.AbstractModule = (function () {
         When = jock.option.When,
         Injector = jock.ioc.Injector;
 
-    var FindByBinding = function (bindings, value) {
+    var findByBinding = function (bindings, value) {
         if(value) {
             var index = bindings.length;
             while (--index > -1) {
@@ -50,7 +50,7 @@ jock.ioc.AbstractModule = (function () {
             if (!value) throw new jock.errors.ArgumentError("Value can not be null/undefined");
             if (!this._initialized) throw new jock.ioc.errors.BindingError("Modules have to be created using Injector.");
 
-            var binding = FindByBinding(this._bindings, value);
+            var binding = findByBinding(this._bindings, value);
             try {
                 this._injector.pushScope(this);
                 return When(binding, {
@@ -74,7 +74,7 @@ jock.ioc.AbstractModule = (function () {
             }
         },
         binds:function (value) {
-            return FindByBinding(this._bindings, value).isDefined();
+            return findByBinding(this._bindings, value).isDefined();
         }
     };
 

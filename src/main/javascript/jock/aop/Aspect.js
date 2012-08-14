@@ -8,7 +8,7 @@ jock.aop.Aspect = (function () {
         PREVENT:4
     };
 
-    var Solve = function (type, name, source, override, scope) {
+    var solve = function (type, name, source, override, scope) {
         if (source[name]) {
             var origin = source[name];
             if (origin && typeof origin === "function" && override && typeof override === "function") {
@@ -75,7 +75,7 @@ jock.aop.Aspect = (function () {
 
             for (var i in methods) {
                 if (methods.hasOwnProperty(i))
-                    Solve(AspectType.AFTER, i, this._source, methods[i], this);
+                    solve(AspectType.AFTER, i, this._source, methods[i], this);
             }
             return this;
         },
@@ -85,7 +85,7 @@ jock.aop.Aspect = (function () {
 
             for (var i in methods) {
                 if (methods.hasOwnProperty(i))
-                    Solve(AspectType.BEFORE, i, this._source, methods[i], this);
+                    solve(AspectType.BEFORE, i, this._source, methods[i], this);
             }
             return this;
         },
@@ -95,7 +95,7 @@ jock.aop.Aspect = (function () {
 
             for (var i in methods) {
                 if (methods.hasOwnProperty(i))
-                    Solve(AspectType.AROUND, i, this._source, methods[i], this);
+                    solve(AspectType.AROUND, i, this._source, methods[i], this);
             }
             return this;
         },
@@ -105,7 +105,7 @@ jock.aop.Aspect = (function () {
 
             for (var i in methods) {
                 if (methods.hasOwnProperty(i))
-                    Solve(AspectType.PREVENT, i, this._source, methods[i], this);
+                    solve(AspectType.PREVENT, i, this._source, methods[i], this);
             }
             return this;
         }

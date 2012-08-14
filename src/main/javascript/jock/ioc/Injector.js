@@ -5,7 +5,7 @@ jock.ioc.Injector = (function () {
     var None = jock.option.None,
         Some = jock.option.Some;
 
-    var FindByType = function(map, type) {
+    var findByType = function(map, type) {
         if(type){
             var index = map.length;
             while(--index > -1) {
@@ -89,7 +89,7 @@ jock.ioc.Injector = (function () {
             return result;
         },
         moduleOf:function (value) {
-           var possibleResult = FindByType(this._map, value);
+           var possibleResult = findByType(this._map, value);
 
             if(possibleResult.isDefined())
                 return possibleResult.get();

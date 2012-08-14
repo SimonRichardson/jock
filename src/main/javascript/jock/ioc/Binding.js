@@ -12,7 +12,7 @@ jock.ioc.Binding = (function () {
         Some = jock.option.Some,
         When = jock.option.When;
 
-    var Solve = function (binding) {
+    var solve = function (binding) {
         var type = binding._type;
         if (type == BindType.TO) {
             return When(binding._to, {
@@ -94,11 +94,11 @@ jock.ioc.Binding = (function () {
                 if (this._singletonEvaluated) {
                     return jock.utils.verifiedType(this._value, jock.option.Option);
                 }
-                this._value = Some(Solve(this));
+                this._value = Some(solve(this));
                 this._singletonEvaluated = true;
                 return this._value;
             } else {
-                return Some(Solve(this));
+                return Some(solve(this));
             }
         },
         asSingleton:function () {

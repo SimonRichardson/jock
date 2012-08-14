@@ -2,7 +2,7 @@ jock.product = jock.product || {};
 jock.product.Product = (function () {
     "use strict";
 
-    var MakeString = function (product, separator) {
+    var makeString = function (product, separator) {
         var total = product.productArity();
 
         var buffer = "";
@@ -49,7 +49,7 @@ jock.product.Product = (function () {
         },
         toString:function () {
             if (0 === this.productArity()) return this.productPrefix();
-            else return this.productPrefix() + "(" + MakeString(this, ", ") + ")";
+            else return this.productPrefix() + "(" + makeString(this, ", ") + ")";
         }
     };
 
