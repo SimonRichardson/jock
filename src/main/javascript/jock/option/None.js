@@ -59,5 +59,5 @@ jock.option.None = (function () {
             throw new jock.errors.ArgumentError('Unexpected arguments');
 
         return new Impl();
-    }
+    };
 }).call(this);
