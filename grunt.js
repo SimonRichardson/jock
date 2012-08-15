@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
 	var src = {
+        version: "0.0.1",
 		main : [
                 'src/main/javascript/jock/Jock.js',
 				'src/main/javascript/jock/errors/*.js',
@@ -29,13 +30,13 @@ module.exports = function(grunt) {
         concat: {
             dist: {
                 src: src.main.slice(),
-                dest: 'bin/jock.concat.0.0.1.js',
+                dest: 'bin/jock.concat.' + src.version + '.js',
                 separator: '\n\r\n\r'
             }
         },
 
 		lint: {
-			dest: ['bin/jock.concat.0.0.1.js']
+			dest: ['bin/jock.concat.' + src.version + '.js']
 		},
 
         jasmine: {
@@ -47,8 +48,8 @@ module.exports = function(grunt) {
 		
 		min: {
 			dist: {
-				src: ['bin/jock.concat.0.0.1.js'],
-				dest: 'bin/jock.min.0.0.1.js'
+				src: ['bin/jock.concat.' + src.version + '.js'],
+				dest: 'bin/jock.min.' + src.version + '.js'
 			}
 		}
 	});
