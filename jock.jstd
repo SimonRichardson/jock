@@ -21,9 +21,11 @@ load:
   - src/main/javascript/jock/ioc/errors/BindingError.js
   - src/main/javascript/jock/ioc/inject.js
   - src/main/javascript/jock/ioc/injectIn.js
+  - src/main/javascript/jock/tuple/*.js
   - src/test/javascript/jasmine/matchers/*.js
   - src/test/javascript/jasmine/utils/*.js
   - src/test/javascript/jock/*.js
   - src/test/javascript/jock/ioc/*.js
   - src/test/javascript/jock/option/*.js
   - src/test/javascript/jock/product/*.js
+  - src/test/javascript/jock/tuple/*.js
