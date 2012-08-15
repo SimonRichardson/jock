@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Jasmine Spec Runner</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../lib/jasmine-1.2.0/jasmine.css">
+
+    <script type="text/javascript" src="../../../../lib/jasmine-1.2.0/jasmine.js"></script>
+    <script type="text/javascript" src="../../../../lib/jasmine-1.2.0/jasmine-html.js"></script>
+
+    <!-- include source files here... -->
+    <script type="text/javascript" src="../../../../bin/jock.concat.0.0.1.js"></script>
+
+    <!-- include spec files here... -->
+    <script type="text/javascript" src="../../javascript/jock/TestJock.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/aop/TestAspect.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestAbstractModule.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestBinding.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestInjection.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestInjectionPoint.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestInjectionWithInterception.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestInjector.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestModule.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestProvider.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/ioc/TestScope.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/option/TestNone.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/option/TestSome.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/option/TestWhen.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/product/TestProduct.js"></script>
+    <script type="text/javascript" src="../../javascript/jock/product/TestProductIterator.js"></script>
+
+    <!-- include helpers files here... -->
+
+    <script type="text/javascript" src="../../javascript/jasmine/matchers/TypeEquality.js"></script>
+    <script type="text/javascript" src="../../javascript/jasmine/utils/fail.js"></script>
+
+    <script type="text/javascript">
+        (function() {
+            var jasmineEnv = jasmine.getEnv();
+            jasmineEnv.updateInterval = 1000;
+
+            var htmlReporter = new jasmine.HtmlReporter();
+
+            jasmineEnv.addReporter(htmlReporter);
+
+            jasmineEnv.specFilter = function(spec) {
+                return htmlReporter.specFilter(spec);
+            };
+
+            var currentWindowOnload = window.onload;
+
+            window.onload = function() {
+                if (currentWindowOnload) {
+                    currentWindowOnload();
+                }
+                execJasmine();
+            };
+
+            function execJasmine() {
+                jasmineEnv.execute();
+            }
+
+        })();
+    </script>
+
+</head>
+
+<body>
+</body>
+</html>

@@ -1,6 +1,7 @@
 # Project specific
 .idea
 bin
+node_modules
 
 # OSX Fail
 .DS_Store
