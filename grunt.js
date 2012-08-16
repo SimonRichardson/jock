@@ -22,7 +22,8 @@ module.exports = function(grunt) {
                 'src/main/javascript/jock/ioc/InjectionPoint.js',
                 'src/main/javascript/jock/ioc/errors/BindingError.js',
                 'src/main/javascript/jock/ioc/inject.js',
-                'src/main/javascript/jock/ioc/injectIn.js']
+                'src/main/javascript/jock/ioc/injectIn.js',
+                'src/main/javascript/jock/tuple/*.js']
 	};
 	
 	grunt.initConfig({
