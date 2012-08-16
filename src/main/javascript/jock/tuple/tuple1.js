@@ -18,17 +18,15 @@ jock.tuple.tuple1 = (function () {
             return 1;
         },
         productElement: function(index){
-            switch(index) {
-                case 0: return this._1();
-                default: throw new jock.errors.RangeError();
-            }
+            if(index === 0) return this._1();
+            else throw new jock.errors.RangeError();
         },
         productPrefix: function() {
             return "Tuple1";
         }
     };
 
-    jock.utils.extends(Impl, Methods);
+    jock.utils.extend(Impl, Methods);
 
     return function(_1){
         return new Impl(_1);

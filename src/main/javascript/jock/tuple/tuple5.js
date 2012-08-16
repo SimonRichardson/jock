@@ -44,11 +44,11 @@ jock.tuple.tuple5 = (function () {
             }
         },
         productPrefix: function() {
-            return "Tuple4";
+            return "Tuple5";
         }
     };
 
-    jock.utils.extends(Impl, Methods);
+    jock.utils.extend(Impl, Methods);
 
     return function(_1, _2, _3, _4, _5){
         return new Impl(_1, _2, _3, _4, _5);

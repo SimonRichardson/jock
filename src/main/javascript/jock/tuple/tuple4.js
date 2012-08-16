@@ -43,7 +43,7 @@ jock.tuple.tuple4 = (function () {
         }
     };
 
-    jock.utils.extends(Impl, Methods);
+    jock.utils.extend(Impl, Methods);
 
     return function(_1, _2, _3, _4){
         return new Impl(_1, _2, _3, _4);

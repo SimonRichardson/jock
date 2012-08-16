@@ -17,7 +17,7 @@ jock.either.right = (function () {
         }
     };
 
-    jock.utils.extends(Impl, Methods);
+    jock.utils.extend(Impl, Methods);
 
     return function () {
         return new Impl();

@@ -38,7 +38,7 @@ jock.tuple.tuple3 = (function () {
         }
     };
 
-    jock.utils.extends(Impl, Methods);
+    jock.utils.extend(Impl, Methods);
 
     return function(_1, _2, _3){
         return new Impl(_1, _2, _3);
