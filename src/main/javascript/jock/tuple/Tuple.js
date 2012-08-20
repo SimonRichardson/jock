@@ -2,11 +2,8 @@ jock.tuple = jock.tuple || {};
 jock.tuple.Tuple = (function () {
     "use strict";
 
-    var Impl = function () {
-        jock.product.Product.call(this);
-    };
-    Impl.prototype = new jock.product.Product();
-    Impl.prototype.name = "Tuple";
+    var Impl = function () {};
+    Impl = jock.utils.mixin(Impl, jock.product.Product);
 
     var Methods = {
         productPrefix: function(){

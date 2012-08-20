@@ -2,11 +2,7 @@ jock.option = jock.option || {};
 jock.option.Option = (function(){
     "use strict";
 
-    var Impl = function(){
-        jock.product.Product.call(this);
-    };
-    Impl.prototype = new jock.product.Product();
-    Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "Option";
+    var Impl = function(){};
+    Impl = jock.utils.mixin(Impl, jock.product.Product);
     return Impl;
 }).call(this);
