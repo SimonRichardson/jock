@@ -108,9 +108,10 @@ jock.template.Template = (function () {
     var Methods = {
         init:function (str) {
             var tokens = this.parseTokens(str);
+
             this.expressions = this.parseBlock(tokens);
 
-            if (!tokens.length)
+            if (tokens.length != 0)
                 throw new Error("Unexpected '" + tokens[0].string + "'");
         },
         execute:function (context, macros) {
@@ -129,7 +130,8 @@ jock.template.Template = (function () {
             if (!!this.context[value])
                 return this.context[value];
 
-            for (var context in this.stack) {
+            for (var i in this.stack) {
+                var context = this.stack[i];
                 if (!!context[value])
                     return context[value];
             }
@@ -179,14 +181,18 @@ jock.template.Template = (function () {
         parseBlock:function (tokens) {
             var blocks = [];
             while (true) {
-                var token = tokens.shift();
-                if (token == null) break;
-                if (!token.s && (token.p == "end" || token.p == "else" || token.p.substr(0, 7) == "elseif")) break;
+                var token = tokens[0];
+
+                if (token == null || !tokens.length)
+                    break;
+                if (!token.s && (token.p == "end" || token.p == "else" || token.p.substr(0, 7) == "elseif "))
+                    break;
 
                 blocks.push(this.parse(tokens));
             }
-            if (blocks.length == 1) return blocks.shift();
-            else new OpBlock(blocks);
+
+            if (blocks.length == 1) return blocks[0];
+            else return new OpBlock(blocks);
         },
         parseExpr:function (data) {
             var expressions = [];
@@ -208,8 +214,8 @@ jock.template.Template = (function () {
             var expression;
             try {
                 expression = this.makeExpr(expressions);
-                if (expressions.length > 0)
-                    throw expressions.shift().p;
+                if (expressions.length != 0)
+                    throw expressions[0].p;
             } catch (e) {
                 if (typeof e == "string")
                     throw new Error("Unexpected '" + e.message + "' in " + expr);
@@ -225,8 +231,8 @@ jock.template.Template = (function () {
             }
         },
         parse:function (tokens) {
-            console.log(tokens);
             var token = tokens.pop();
+
             var p = token.p;
 
             if (token.s)
@@ -245,7 +251,7 @@ jock.template.Template = (function () {
                 var expr = this.parseExpr(p);
                 var exprIf = this.parseBlock(tokens);
                 var exprElse;
-                var token = tokens.shift();
+                var token = tokens[0];
                 if(token == null)
                     throw new Error("Unclosed 'if'");
 
@@ -283,7 +289,7 @@ jock.template.Template = (function () {
             return new OpVar(p);
         },
         makePath:function (fun, list) {
-            var token = list.shift();
+            var token = list[0];
             if (token == null || token.p != ".") return e;
 
             list.pop();
@@ -460,7 +466,8 @@ jock.template.Template = (function () {
                     break;
                 case ExpressionType.BLOCK:
                     for (var b in expression.block) {
-                        this.run(b);
+                        var block = expression.block[b];
+                        this.run(block);
                     }
                     break;
                 case ExpressionType.FOREACH:
@@ -469,7 +476,7 @@ jock.template.Template = (function () {
                     this.stack.push(this.context);
 
                     for (var ctx in value) {
-                        this.context = ctx;
+                        this.context = value[ctx];
                         this.run(expression.loop);
                     }
 
@@ -483,13 +490,14 @@ jock.template.Template = (function () {
                     list.push(this.resolve);
 
                     for (var p in expression.params) {
-                        switch (p.type) {
+                        var param = expression.params[p];
+                        switch (param.type) {
                             case ExpressionType.VAR:
-                                list.push(this.resolve(p.variable));
+                                list.push(this.resolve(param.variable));
                                 break;
                             default:
                                 this.buffer = new StringBuffer();
-                                this.run(p);
+                                this.run(param);
                                 list.push(this.buffer.toString());
                         }
                     }
@@ -499,9 +507,11 @@ jock.template.Template = (function () {
                         this.buffer.add(this.macros[value].apply(this.macros, list));
                     } catch (e) {
                         var possible = !!list ? list.join(",") : "???";
-                        throw new Error("Macro call " + m + " (" + possible + ") failed (" + e.message + ")");
+                        throw new Error("Macro call " + expression.name + " (" + possible + ") failed (" + e.message + ")");
                     }
                     break;
+                default:
+                    throw new Error("Unknown expression type");
             }
         }
     };
