@@ -39,9 +39,9 @@ jock.template.Template = (function () {
         }
     };
 
-    var Token = function (s, p, l) {
-        this.s = s;
+    var Token = function (p, s, l) {
         this.p = p;
+        this.s = s;
         this.l = l;
     };
 
@@ -183,7 +183,7 @@ jock.template.Template = (function () {
             while (true) {
                 var token = tokens[0];
 
-                if (token == null || !tokens.length)
+                if (token == null)
                     break;
                 if (!token.s && (token.p == "end" || token.p == "else" || token.p.substr(0, 7) == "elseif "))
                     break;
