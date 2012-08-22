@@ -225,6 +225,7 @@ jock.template.Template = (function () {
             }
         },
         parse:function (tokens) {
+            console.log(tokens);
             var token = tokens.pop();
             var p = token.p;
 
@@ -495,7 +496,7 @@ jock.template.Template = (function () {
                     this.buffer = old;
 
                     try {
-                        this.buffer.add(this.macros[v](list));
+                        this.buffer.add(this.macros[value].apply(this.macros, list));
                     } catch (e) {
                         var possible = !!list ? list.join(",") : "???";
                         throw new Error("Macro call " + m + " (" + possible + ") failed (" + e.message + ")");
