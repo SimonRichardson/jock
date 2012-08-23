@@ -8,7 +8,7 @@ describe("Template", function () {
         console.log(template.execute({name:"John", age:33}));
     });
 
-    xit("should run this", function () {
+    it("should run this", function () {
         var partial = "The habitants of <em>::name::</em> are :\n" +
             "<ul>\n" +
             "::foreach users::\n" +
@@ -43,6 +43,8 @@ describe("Template", function () {
 
         var template = new jock.template.Template(partial);
 
-        console.log(template.execute(town));
+        console.log(template);
+
+        //console.log(template.execute(town));
     });
 });
