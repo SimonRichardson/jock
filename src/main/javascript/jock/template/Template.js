@@ -16,7 +16,7 @@ jock.template.Template = (function () {
             return this._matchedString.substr(pos, this._matchedString.length - pos);
         },
         matched:function (index) {
-            if (this._matched != null && index > 0 && index < this._matched.length)
+            if (this._matched != null && index >= 0 && index < this._matched.length)
                 return this._matched[index];
             else throw new Error("Invalid index");
         },
