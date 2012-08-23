@@ -45,9 +45,9 @@ jock.template.Template = (function () {
         this.l = l;
     };
 
-    var ExprToken = function (s, p) {
-        this.s = s;
+    var ExprToken = function (p, s) {
         this.p = p;
+        this.s = s;
     };
 
     var ExpressionType = {
@@ -210,12 +210,11 @@ jock.template.Template = (function () {
             var expression;
             try {
                 expression = this.makeExpr(expressions);
+
                 if (expressions.length !== 0)
-                    throw expressions[0].p;
+                    throw new Error(expressions[0].p);
             } catch (e) {
-                if (typeof e == "string")
-                    throw new Error("Unexpected '" + e.message + "' in " + expr);
-                else throw e;
+                throw new Error("Unexpected '" + e.message + "' in " + expr);
             }
 
             return function () {
@@ -248,20 +247,20 @@ jock.template.Template = (function () {
                 p = p.substr(3, p.length - 3);
                 expr = this.parseExpr(p);
 
-                var exprIf = this.parseBlock(tokens);
-                var exprElse;
+                var exprElse,
+                    exprIf = this.parseBlock(tokens);
 
                 head = tokens[0];
                 if (!head)
                     throw new Error("Unclosed 'if'");
 
                 if (head.p == "end") {
-                    tokens.pop();
+                    tokens.shift();
                     exprElse = null;
                 } else if (head.p == "else") {
-                    tokens.pop();
+                    tokens.shift();
                     exprElse = this.parseBlock(tokens);
-                    head = tokens.pop();
+                    head = tokens.shift();
 
                     if (!head || head.p !== "end")
                         throw new Error("Unclosed 'else'");
@@ -279,7 +278,7 @@ jock.template.Template = (function () {
                 expr = this.parseExpr(p);
 
                 var exprFor = this.parseBlock(tokens);
-                head = tokens.pop();
+                head = tokens.shift();
                 if (!head || head.p !== "end")
                     throw new Error("Unclosed 'foreach'");
                 return new OpForeach(expr, exprFor);
@@ -294,19 +293,18 @@ jock.template.Template = (function () {
             var token = list[0];
             if (!token || token.p !== ".") return fun;
 
-            list.pop();
+            list.shift();
 
-            var field = list.pop();
+            var field = list.shift();
             if (!field || !field.s)
                 throw new Error(field.p);
-            else {
-                var accessor = field.p;
-                expr_trim.match(accessor);
-                accessor = expr_trim.matched(1);
-                return this.makePath(function () {
-                    return fun()[accessor];
-                }, list);
-            }
+
+            var accessor = field.p;
+            expr_trim.match(accessor);
+            accessor = expr_trim.matched(1);
+            return this.makePath(function () {
+                return fun()[accessor];
+            }, list);
         },
         makeConst:function (value) {
             expr_trim.match(value);
@@ -339,7 +337,7 @@ jock.template.Template = (function () {
         },
         makeExpr2:function (list) {
             var expr,
-                p = list.pop();
+                p = list.shift();
 
             if (!p)
                 throw new Error("<eof>");
@@ -349,7 +347,7 @@ jock.template.Template = (function () {
             switch (p.p) {
                 case "(":
                     var e1 = this.makeExpr(list);
-                    var p1 = list.pop();
+                    var p1 = list.shift();
 
                     if (!p1 || p.s)
                         throw new Error(p.p);
@@ -358,7 +356,7 @@ jock.template.Template = (function () {
                         return e1;
 
                     var e2 = this.makeExpr(list);
-                    var p2 = list.pop();
+                    var p2 = list.shift();
 
                     if (!p2 || p2.p !== ")")
                         throw new Error(p2.p);

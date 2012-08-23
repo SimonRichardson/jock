@@ -1,6 +1,6 @@
 describe("Template", function () {
 
-    it("should convert this", function () {
+    xit("should convert this", function () {
 
         var partial = "My name is <strong>::name::</strong> and I'm <em>::age::</em> years old.";
         var template = new jock.template.Template(partial);
@@ -39,12 +39,8 @@ describe("Template", function () {
         town.addUser(new User("John", 30));
         town.addUser(new User("Sam", 40));
 
-        console.log(partial);
-
         var template = new jock.template.Template(partial);
 
-        console.log(template);
-
-        //console.log(template.execute(town));
+        console.log(template.execute(town));
     });
 });
