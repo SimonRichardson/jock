@@ -316,7 +316,7 @@ jock.template.Template = (function () {
                 };
             }
             if (expr_int.match(value)) {
-                var integer = parseInt(value, 16);
+                var integer = parseInt(value, 10);
                 return function () {
                     return integer;
                 };
