@@ -91,4 +91,33 @@ describe("Template", function () {
             {param:4}
         ]}, macro)).toEqual(result);
     });
+
+    it("should render option", function () {
+
+        var some = jock.option.some,
+            none = jock.option.none,
+            when = jock.option.when;
+
+        var macro = {
+            fun:function (resolve, opt) {
+                return when(opt, {
+                    some: function(v){
+                        return "(" + v + ")";
+                    },
+                    none: function(){
+                        return "";
+                    }
+                });
+            }
+        };
+
+        var partial = "Call macro : ::foreach items::$$fun(::param::)::end::";
+        var result = "Call macro : (1)(3)";
+
+        expect(template(partial, {items:[
+            {param:some(1)},
+            {param:none()},
+            {param:some(3)}
+        ]}, macro)).toEqual(result);
+    });
 });
