@@ -57,6 +57,6 @@ jock.template.lexer = (function () {
 
     return function (data) {
         return new Impl().execute(data);
-    }
+    };
 
 }).call(this);

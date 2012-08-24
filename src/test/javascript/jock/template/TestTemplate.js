@@ -32,7 +32,7 @@ describe("Template", function () {
         var User = function (name, age) {
             this.name = name;
             this.age = age;
-        }
+        };
 
         var town = new Town("London");
         town.addUser(new User("Tim", 2));
