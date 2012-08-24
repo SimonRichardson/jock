@@ -3,9 +3,9 @@ jock.template.tokens = jock.template.tokens || {};
 jock.template.tokens.ExpressionToken = (function(){
     "use strict";
 
-    var Impl = function(p, s){
-        this.p = p;
-        this.s = s;
+    var Impl = function(value, string){
+        this.value = value;
+        this.string = string;
     };
 
     return Impl;

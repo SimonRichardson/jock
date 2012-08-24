@@ -156,13 +156,13 @@ jock.template.Template = (function () {
         },
         makePath:function (fun, list) {
             var token = list[0];
-            if (!token || token.p !== ".") return fun;
+            if (!token || token.value !== ".") return fun;
 
             list.shift();
 
             var field = list.shift();
-            if (!field || !field.s)
-                throw new TemplateError(field.p);
+            if (!field || !field.string)
+                throw new TemplateError(field.value);
 
             var accessor = field.p;
             expr_trim.match(accessor);
@@ -206,29 +206,29 @@ jock.template.Template = (function () {
 
             if (!p)
                 throw new TemplateError("<eof>");
-            if (p.s)
-                return this.makeConst(p.p);
+            if (p.string)
+                return this.makeConst(p.value);
 
-            switch (p.p) {
+            switch (p.value) {
                 case "(":
                     var e1 = this.makeExpr(list);
                     var p1 = list.shift();
 
-                    if (!p1 || p.s)
-                        throw new Error(p.p);
+                    if (!p1 || p.string)
+                        throw new Error(p.value);
 
-                    if (p.p == ")")
+                    if (p.value == ")")
                         return e1;
 
                     var e2 = this.makeExpr(list);
                     var p2 = list.shift();
 
-                    if (!p2 || p2.p !== ")")
-                        throw new TemplateError(p2.p);
+                    if (!p2 || p2.value !== ")")
+                        throw new TemplateError(p2.value);
 
                     return (function () {
                         var result;
-                        switch (p1.p) {
+                        switch (p1.value) {
                             case "+":
                                 result = function () {
                                     return e1() + e2();
@@ -290,7 +290,7 @@ jock.template.Template = (function () {
                                 };
                                 break;
                             default:
-                                throw new TemplateError("Unknown operation " + p.p);
+                                throw new TemplateError("Unknown operation " + p.value);
                         }
                         return result;
                     })();
@@ -309,7 +309,7 @@ jock.template.Template = (function () {
                     };
 
                 default:
-                    throw new TemplateError(p.p);
+                    throw new TemplateError(p.value);
             }
         }
     };

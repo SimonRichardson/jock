@@ -2,10 +2,10 @@ jock.template.tokens = jock.template.tokens || {};
 jock.template.tokens.Token = (function(){
     "use strict";
 
-    var Impl = function(p, s, l){
-        this.p = p;
-        this.s = s;
-        this.l = l;
+    var Impl = function(value, string, params){
+        this.value = value;
+        this.string = string;
+        this.params = params;
     };
 
     return Impl;

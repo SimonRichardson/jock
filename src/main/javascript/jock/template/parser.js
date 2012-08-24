@@ -31,7 +31,11 @@ jock.template.parser = (function () {
             while (true) {
                 var token = tokens[0];
 
-                if (!token || (!token.s && (token.p == "end" || token.p == "else" || token.p.substr(0, 7) == "elseif ")))
+                if(!token)
+                    break;
+
+                var value = token.value;
+                if (!token.string && (value == "end" || value == "else" || value.substr(0, 7) == "elseif "))
                     break;
 
                 blocks.push(this.parse(tokens));
@@ -61,7 +65,7 @@ jock.template.parser = (function () {
                 expression = this.makeExpr(expressions);
 
                 if (!expression || expressions.length !== 0)
-                    throw new TemplateError(expressions[0].p);
+                    throw new TemplateError(expressions[0].value);
 
             } catch (e) {
                 if(e instanceof TemplateError)
@@ -83,15 +87,15 @@ jock.template.parser = (function () {
                 head,
                 token = tokens.shift();
 
-            var p = token.p;
+            var p = token.value;
 
-            if (token.s)
+            if (token.string)
                 return new OpStr(p);
 
-            if (token.l !== null) {
+            if (token.params !== null) {
                 var macroItems = [];
-                for (var i in token.l) {
-                    macroItems.push(this.parseBlock(lexer(token.l[i])));
+                for (var i in token.params) {
+                    macroItems.push(this.parseBlock(lexer(token.params[i])));
                 }
                 return new OpMacro(p, macroItems);
             }
@@ -107,19 +111,19 @@ jock.template.parser = (function () {
                 if (!head)
                     throw new TemplateError("Unclosed 'if'");
 
-                if (head.p == "end") {
+                if (head.value == "end") {
                     tokens.shift();
                     exprElse = null;
-                } else if (head.p == "else") {
+                } else if (head.value == "else") {
                     tokens.shift();
                     exprElse = this.parseBlock(tokens);
                     head = tokens.shift();
 
-                    if (!head || head.p !== "end")
+                    if (!head || head.value !== "end")
                         throw new TemplateError("Unclosed 'else'");
 
                 } else {
-                    head.p = head.p.substr(4, head.p.length - 4);
+                    head.value = head.value.substr(4, head.value.length - 4);
                     exprElse = this.parse(tokens);
                 }
 
@@ -133,7 +137,7 @@ jock.template.parser = (function () {
 
                 var exprFor = this.parseBlock(tokens);
                 head = tokens.shift();
-                if (!head || head.p !== "end")
+                if (!head || head.value !== "end")
                     throw new TemplateError("Unclosed 'foreach'");
 
                 return new OpForeach(expr, exprFor);
