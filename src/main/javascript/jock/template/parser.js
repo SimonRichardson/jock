@@ -1,26 +1,31 @@
 jock.template = jock.template || {};
-jock.template.parser = (function(){
+jock.template.parser = (function () {
 
-    var TemplateRegExp = jock.template.TemplateRegExp,
+    var lexer = jock.template.lexer,
+        TemplateRegExp = jock.template.TemplateRegExp,
         TemplateError = jock.template.errors.TemplateError,
         ExpressionToken = jock.template.tokens.ExpressionToken;
 
     var OpBlock = jock.template.expressions.OpBlock,
-        OpExpr =  jock.template.expressions.OpExpr,
-        OpForeach =  jock.template.expressions.OpForeach,
-        OpIf =  jock.template.expressions.OpIf,
-        OpMacro =  jock.template.expressions.OpMacro,
-        OpStr =  jock.template.expressions.OpStr,
-        OpVar =  jock.template.expressions.OpVar;
+        OpExpr = jock.template.expressions.OpExpr,
+        OpForeach = jock.template.expressions.OpForeach,
+        OpIf = jock.template.expressions.OpIf,
+        OpMacro = jock.template.expressions.OpMacro,
+        OpStr = jock.template.expressions.OpStr,
+        OpVar = jock.template.expressions.OpVar;
 
     var expr_splitter = new TemplateRegExp("(\\(|\\)|[ \r\n\t]*\"[^\"]*\"[ \r\n\t]*|[!+=/><*.&|-]+)");
 
-    var Impl = function(){
+    var Impl = function () {
+        this.init.apply(this, arguments);
     };
     Impl.prototype = {};
     Impl.prototype.name = "Parser";
 
     var Methods = {
+        init:function (makeExpr) {
+            this.makeExpr = makeExpr;
+        },
         parseBlock:function (tokens) {
             var blocks = [];
             while (true) {
@@ -55,8 +60,9 @@ jock.template.parser = (function(){
             try {
                 expression = this.makeExpr(expressions);
 
-                if (expressions.length !== 0)
+                if (!expression || expressions.length !== 0)
                     throw new TemplateError(expressions[0].p);
+
             } catch (e) {
                 throw new TemplateError("Unexpected '" + e.message + "' in " + expr);
             }
@@ -82,7 +88,7 @@ jock.template.parser = (function(){
             if (token.l !== null) {
                 var macroItems = [];
                 for (var i in token.l) {
-                    macroItems.push(this.parseBlock(this.parseTokens(i)));
+                    macroItems.push(this.parseBlock(lexer(i)));
                 }
                 return new OpMacro(p, macroItems);
             }
@@ -139,7 +145,7 @@ jock.template.parser = (function(){
 
     Impl = jock.utils.extend(Impl, Methods);
 
-    return function(tokens){
-        return new Impl().parseBlock(tokens);
+    return function (tokens, makeExpr) {
+        return new Impl(makeExpr).parseBlock(tokens);
     };
 }).call(this);

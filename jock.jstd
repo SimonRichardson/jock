@@ -21,7 +21,13 @@ load:
   - src/main/javascript/jock/ioc/errors/BindingError.js
   - src/main/javascript/jock/ioc/inject.js
   - src/main/javascript/jock/ioc/injectIn.js
-  - src/main/javascript/jock/template/*.js
+  - src/main/javascript/jock/template/errors/*.js
+  - src/main/javascript/jock/template/expressions/*.js
+  - src/main/javascript/jock/template/tokens/*.js
+  - src/main/javascript/jock/template/TemplateRegExp.js
+  - src/main/javascript/jock/template/lexer.js
+  - src/main/javascript/jock/template/parser.js
+  - src/main/javascript/jock/template/Template.js
   - src/main/javascript/jock/tuple/*.js
   - src/test/javascript/jasmine/matchers/*.js
   - src/test/javascript/jasmine/utils/*.js

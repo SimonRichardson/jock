@@ -10,6 +10,8 @@ jock.template.errors.TemplateError = (function(){
             this.message = message;
         else
             this.message = "";
+
+        this.message += "\n" + jock.utils.printStackTrace();
     };
     Impl.prototype = new Error();
     Impl.prototype.constructor = Impl;

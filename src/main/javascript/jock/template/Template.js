@@ -34,7 +34,12 @@ jock.template.Template = (function () {
     var Methods = {
         init:function (str) {
             var tokens = lexer(str);
-            this.expressions = parser(tokens);
+
+            var scope = this;
+            this.expressions = parser(tokens, function (list) {
+                return scope.makeExpr(list);
+            });
+
             if (tokens.length !== 0)
                 throw new TemplateError("Unexpected '" + tokens[0].string + "'");
         },
@@ -301,5 +306,7 @@ jock.template.Template = (function () {
         }
     };
 
-    return jock.utils.extend(Impl, Methods);
+    Impl = jock.utils.extend(Impl, Methods);
+
+    return Impl;
 }).call(this);
