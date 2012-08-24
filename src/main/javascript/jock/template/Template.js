@@ -105,28 +105,32 @@ jock.template.Template = (function () {
 
                 case OpType.MACRO:
                     var macroValue = this.macros[expression.name];
-                    var list = [];
+                    var args = [];
                     var old = this.buffer;
 
-                    list.push(this.resolve);
+                    var scope = this;
+                    args.push(function(value){
+                        return scope.resolve(value);
+                    });
 
                     for (var p in expression.params) {
                         var param = expression.params[p];
 
                         if (param.getType() === OpType.VAR)
-                            list.push(this.resolve(param.variable));
+                            args.push(this.resolve(param.variable));
                         else {
                             this.buffer = new StringBuffer();
                             this.run(param);
-                            list.push(this.buffer.toString());
+
+                            args.push(this.buffer.toString());
                         }
                     }
                     this.buffer = old;
 
                     try {
-                        this.buffer.add(this.macros[macroValue].apply(this.macros, list));
+                        this.buffer.add(macroValue.apply(this, args));
                     } catch (e) {
-                        var possible = !!list ? list.join(",") : "???";
+                        var possible = !!args ? args.join(",") : "???";
                         throw new TemplateError("Macro call " + expression.name + " (" + possible + ") failed (" + e + ")");
                     }
                     break;

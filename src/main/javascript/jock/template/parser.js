@@ -91,7 +91,7 @@ jock.template.parser = (function () {
             if (token.l !== null) {
                 var macroItems = [];
                 for (var i in token.l) {
-                    macroItems.push(this.parseBlock(lexer(i)));
+                    macroItems.push(this.parseBlock(lexer(token.l[i])));
                 }
                 return new OpMacro(p, macroItems);
             }

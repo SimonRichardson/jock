@@ -72,4 +72,23 @@ describe("Template", function () {
         var result = "My sub template is  (0) (33) (-5)";
         expect(t0.execute({sub:str})).toEqual(result);
     });
+
+    it("should render macros", function () {
+
+        var macro = {
+            fun:function (resolve, title, p) {
+                return "[" + title + "=" + (p * resolve("mult")) + "]";
+            }
+        };
+
+        var partial = "Call macro : ::foreach items:: $$fun(index:\"::param::\", ::param::)::end::";
+        var result = "Call macro :  [index:\"1\"=2] [index:\"2\"=4] [index:\"3\"=6] [index:\"4\"=8]";
+
+        expect(template(partial, {mult:2, items:[
+            {param:1},
+            {param:2},
+            {param:3},
+            {param:4}
+        ]}, macro)).toEqual(result);
+    });
 });
