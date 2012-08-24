@@ -1,4 +1,7 @@
 jock.template = jock.template || {};
+jock.template.template = function(partial, context, macros){
+    return new jock.template.Template(partial).execute(context, macros);
+};
 jock.template.Template = (function () {
     "use strict";
 
@@ -14,7 +17,7 @@ jock.template.Template = (function () {
     };
     StringBuffer.prototype = {
         add:function (value) {
-            this._value += value.toString();
+            this._value += value;
         },
         toString:function () {
             return this._value.toString();
@@ -33,6 +36,8 @@ jock.template.Template = (function () {
 
     var Methods = {
         init:function (str) {
+            this.globals = {};
+
             var tokens = lexer(str);
 
             var scope = this;
@@ -48,7 +53,6 @@ jock.template.Template = (function () {
             this.macros = macros ? macros : {};
 
             this.stack = [];
-            this.globals = {};
             this.buffer = new StringBuffer();
 
             this.run(this.expressions);
@@ -132,12 +136,12 @@ jock.template.Template = (function () {
             }
         },
         resolve:function (value) {
-            if (!!this.context[value])
+            if (this.context[value] !== null && this.context[value] !== undefined)
                 return this.context[value];
 
             for (var i in this.stack) {
                 var context = this.stack[i];
-                if (!!context[value])
+                if (context[value] !== null && context[value] !== undefined)
                     return context[value];
             }
 
@@ -306,7 +310,5 @@ jock.template.Template = (function () {
         }
     };
 
-    Impl = jock.utils.extend(Impl, Methods);
-
-    return Impl;
+    return jock.utils.extend(Impl, Methods);
 }).call(this);

@@ -64,7 +64,10 @@ jock.template.parser = (function () {
                     throw new TemplateError(expressions[0].p);
 
             } catch (e) {
-                throw new TemplateError("Unexpected '" + e.message + "' in " + expr);
+                if(e instanceof TemplateError)
+                    throw new TemplateError("Unexpected '" + e.message + "' in " + expr);
+                else
+                    throw e;
             }
 
             return function () {
