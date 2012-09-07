@@ -1,23 +1,24 @@
-jock.ioc = jock.ioc || {};
-jock.ioc.InjectionPoint = (function () {
-    "use strict";
+jock.package("jock.ioc", {
+    InjectionPoint:(function () {
+        "use strict";
 
-    var Aspect = jock.aop.Aspect;
+        var Aspect = jock.aop.Aspect;
 
-    var Impl = function (value) {
-        this._aspect = new Aspect(value);
-    };
-    Impl.prototype = {};
-    Impl.prototype.constructor = Impl;
+        var Impl = function (value) {
+            this._aspect = new Aspect(value);
+        };
+        Impl.prototype = {};
+        Impl.prototype.constructor = Impl;
 
-    var Methods = {
-        get:function () {
-            return this._aspect.get();
-        },
-        intercept:function () {
-            return this._aspect;
-        }
-    };
+        var Methods = {
+            get:function () {
+                return this._aspect.get();
+            },
+            intercept:function () {
+                return this._aspect;
+            }
+        };
 
-    return jock.extend(Impl, Methods);
-}).call(this);
+        return jock.extend(Impl, Methods);
+    })()
+});

@@ -1,13 +1,14 @@
-jock.ioc = jock.ioc || {};
-jock.ioc.Scope = (function () {
-    "use strict";
+jock.package("jock.ioc", {
+    Scope:(function () {
+        "use strict";
 
-    var Methods = {
-        asSingleton:function () {
-            throw new jock.errors.AbstractMethodError();
-        }
-    };
+        var Methods = {
+            asSingleton:function () {
+                throw new jock.errors.AbstractMethodError();
+            }
+        };
 
-    return jock.extend(function () {
-    }, Methods);
-}).call(this);
+        return jock.extend(function () {
+        }, Methods);
+    })()
+});
