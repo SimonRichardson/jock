@@ -12,6 +12,6 @@ jock.errors.RangeError = (function(){
     };
     Impl.prototype = new Error();
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "RangeError";
+
     return Impl;
 }).call(this);

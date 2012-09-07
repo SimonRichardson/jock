@@ -1,7 +1,10 @@
-jock.utils = jock.utils || {};
-jock.utils.verifiedType = function (expected, actual) {
-    if(jock.utils.isType(expected, actual))
-        return expected;
+jock.package("jock.utils", {
+    verifiedType:function (expected, actual) {
+        "use strict";
 
-    throw new jock.errors.TypeError();
-};
+        if (jock.utils.isType(expected, actual))
+            return expected;
+
+        throw new jock.errors.TypeError();
+    }
+});

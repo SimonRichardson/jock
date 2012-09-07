@@ -1,25 +1,20 @@
-jock.product = jock.product || {};
-jock.product.ProductIterator = (function () {
-    "use strict";
+jock.package("jock.product", {
+    ProductIterator:(function () {
+        "use strict";
 
-    var Impl = function (product) {
-        this._product = product;
-        this._arity = product.productArity();
-        this._index = 0;
-    };
-    Impl.prototype = {};
-    Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "ProductIterator";
+        // Note (Simon) : prevent scope instances leaking.
+        return function (product) {
+            var index = 0;
+            var arity = product.productArity();
 
-    var Methods = {
-        hasNext:function () {
-            return this._index < this._arity;
-        },
-        next:function () {
-            if (this.hasNext()) return jock.option.some(this._product.productElement(this._index++));
-            else return jock.option.none();
-        }
-    };
-
-    return jock.utils.extend(Impl, Methods);
-}).call(this);
+            this.hasNext = function(){
+                return index < arity;
+            };
+            this.next = function(){
+                if(this.hasNext())
+                    return jock.option.some(product.productElement(index++));
+                return jock.option.none();
+            };
+        };
+    })()
+});

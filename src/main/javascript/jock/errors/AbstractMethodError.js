@@ -12,6 +12,6 @@ jock.errors.AbstractMethodError = (function(){
     };
     Impl.prototype = new Error();
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "AbstractMethodError";
+
     return Impl;
 }).call(this);

@@ -12,6 +12,6 @@ jock.errors.NoSuchElementError = (function(){
     };
     Impl.prototype = new Error();
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "NoSuchElementError";
+
     return Impl;
 }).call(this);

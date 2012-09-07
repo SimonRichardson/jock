@@ -12,6 +12,6 @@ jock.errors.TypeError = (function(){
     };
     Impl.prototype = new Error();
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "TypeError";
+
     return Impl;
 }).call(this);
