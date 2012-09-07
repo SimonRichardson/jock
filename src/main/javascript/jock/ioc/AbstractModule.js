@@ -29,7 +29,6 @@ jock.ioc.AbstractModule = (function () {
     };
     Impl.prototype = new jock.ioc.Module();
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "AbstractModule";
 
     var Methods = {
         initialize:function () {
@@ -79,5 +78,5 @@ jock.ioc.AbstractModule = (function () {
         }
     };
 
-    return jock.utils.extend(Impl, Methods);
+    return jock.extend(Impl, Methods);
 }).call(this);

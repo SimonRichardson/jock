@@ -62,7 +62,6 @@ jock.ioc.Binding = (function () {
     };
     Impl.prototype = new jock.ioc.Scope();
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "Binding";
 
     var Methods = {
         bind:function () {
@@ -107,5 +106,5 @@ jock.ioc.Binding = (function () {
         }
     };
 
-    return jock.utils.extend(Impl, Methods);
+    return jock.extend(Impl, Methods);
 }).call(this);

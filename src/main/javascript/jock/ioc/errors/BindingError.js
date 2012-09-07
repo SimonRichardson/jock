@@ -13,6 +13,6 @@ jock.ioc.errors.BindingError = (function(){
     };
     Impl.prototype = new Error();
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "BindingError";
+
     return Impl;
 }).call(this);

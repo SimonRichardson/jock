@@ -2,12 +2,6 @@ jock.ioc = jock.ioc || {};
 jock.ioc.Module = (function(){
     "use strict";
 
-    var Impl = function(){
-    };
-    Impl.prototype = {};
-    Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "Module";
-
     var Methods = {
         initialize: function(){
             throw new jock.errors.AbstractMethodError();
@@ -20,5 +14,6 @@ jock.ioc.Module = (function(){
         }
     };
 
-    return jock.utils.extend(Impl, Methods);
+    return jock.extend(function(){
+    }, Methods);
 }).call(this);

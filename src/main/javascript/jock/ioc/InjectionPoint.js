@@ -9,7 +9,6 @@ jock.ioc.InjectionPoint = (function () {
     };
     Impl.prototype = {};
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "InjectionPoint";
 
     var Methods = {
         get:function () {
@@ -20,5 +19,5 @@ jock.ioc.InjectionPoint = (function () {
         }
     };
 
-    return jock.utils.extend(Impl, Methods);
+    return jock.extend(Impl, Methods);
 }).call(this);

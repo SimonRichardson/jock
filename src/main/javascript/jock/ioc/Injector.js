@@ -31,7 +31,6 @@ jock.ioc.Injector = (function () {
     };
     Impl.prototype = {};
     Impl.prototype.constructor = Impl;
-    Impl.prototype.name = "Injector";
 
     var Methods = {
         initialize:function (module) {
@@ -107,7 +106,7 @@ jock.ioc.Injector = (function () {
         }
     };
 
-    return jock.utils.extend(Impl, Methods);
+    return jock.extend(Impl, Methods);
 }).call(this);
 
 jock.ioc.Injectors = {
