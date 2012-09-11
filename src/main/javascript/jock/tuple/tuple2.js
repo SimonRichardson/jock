@@ -35,7 +35,7 @@ jock.package("jock.tuple", {
             }
         };
 
-        jock.utils.extend(Impl, Methods);
+        jock.extend(Impl, Methods);
 
         return function (_1, _2) {
             return new Impl(_1, _2);

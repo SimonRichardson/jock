@@ -1,5 +1,6 @@
 var jock = {
     VERSION:"0.0.2",
+    scope:this,
     extend:function (type, methods) {
         "use strict";
 
@@ -36,18 +37,20 @@ var jock = {
     package:function (ns, objects) {
         "use strict";
 
-        var scope = this;
-        var namespace = scope;
+        var scope = jock.scope;
 
         if (ns.indexOf(".") > -1) {
             ns.split(".").forEach(function (value) {
-                namespace = (scope[value] = scope[value] || {});
+                if(!!scope[value])
+                    scope = scope[value];
+                else
+                    scope = scope[value] = {};
             });
         }
 
         for (var i in objects) {
             if (objects.hasOwnProperty(i)) {
-                namespace[i] = objects[i];
+                scope[i] = objects[i];
             }
         }
     },
@@ -82,25 +85,11 @@ var jock = {
             this.__EnumIndex__ = index;
 
             validate(types, values);
-        };
-        Impl = jock.mixin(Impl, jock.product.Product);
 
-        var Methods = {
-            productArity:function(){
-                return this.types.length;
-            },
-            productElement:function(index){
-                if(index >= 0 && index < this.productArity())
-                    return this.values[index];
-
-                throw new jock.errors.RangeError();
-            },
-            productPrefix:function () {
-                return this.ns;
+            this.toString = function () {
+                return this.ns + "(" + this.values + ")";
             }
         };
-
-        Impl = jock.extend(Impl, Methods);
 
         return function (type) {
             function closure(index, ns, types) {
@@ -120,3 +109,5 @@ var jock = {
         };
     })()
 };
+
+window.jock = jock;

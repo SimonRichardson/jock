@@ -107,7 +107,11 @@ jock.package("jock.ioc", {
         };
 
         return jock.extend(Impl, Methods);
-    })(),
+    })()
+});
+
+// Note (Simon) we do this like this, because we're using the newly created injector.
+jock.package("jock.ioc", {
     Injectors:{
         DEFAULT:new jock.ioc.Injector()
     }
