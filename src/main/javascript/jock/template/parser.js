@@ -6,13 +6,15 @@ jock.package("jock.template", {
             TemplateError = jock.template.errors.TemplateError,
             ExpressionToken = jock.template.tokens.ExpressionToken;
 
-        var OpBlock = jock.template.expressions.OpBlock,
-            OpExpr = jock.template.expressions.OpExpr,
-            OpForeach = jock.template.expressions.OpForeach,
-            OpIf = jock.template.expressions.OpIf,
-            OpMacro = jock.template.expressions.OpMacro,
-            OpStr = jock.template.expressions.OpStr,
-            OpVar = jock.template.expressions.OpVar;
+        var Expr = jock.enum({
+            OpBlock:[Array],
+            OpExpr:[Function],
+            OpForeach:[Function, Object],
+            OpIf:[Function, Object, Object],
+            OpMacro:[String, Array],
+            OpStr:[String],
+            OpVar:[String]
+        });
 
         var expr_splitter = new TemplateRegExp("(\\(|\\)|[ \r\n\t]*\"[^\"]*\"[ \r\n\t]*|[!+=/><*.&|-]+)");
 
@@ -41,7 +43,7 @@ jock.package("jock.template", {
                 }
 
                 if (blocks.length == 1) return blocks[0];
-                else return new OpBlock(blocks);
+                else return Expr.OpBlock(blocks);
             },
             parseExpr:function (data) {
                 var expressions = [];
@@ -89,14 +91,14 @@ jock.package("jock.template", {
                 var p = token.value;
 
                 if (token.string)
-                    return new OpStr(p);
+                    return Expr.OpStr(p);
 
                 if (token.params !== null) {
                     var macroItems = [];
                     for (var i in token.params) {
                         macroItems.push(this.parseBlock(lexer(token.params[i])));
                     }
-                    return new OpMacro(p, macroItems);
+                    return Expr.OpMacro(p, macroItems);
                 }
 
                 if (p.substr(0, 3) == "if ") {
@@ -126,7 +128,7 @@ jock.package("jock.template", {
                         exprElse = this.parse(tokens);
                     }
 
-                    return new OpIf(expr, exprIf, exprElse);
+                    return Expr.OpIf(expr, exprIf, exprElse);
                 }
 
                 if (p.substr(0, 8) == "foreach ") {
@@ -139,13 +141,13 @@ jock.package("jock.template", {
                     if (!head || head.value !== "end")
                         throw new TemplateError("Unclosed 'foreach'");
 
-                    return new OpForeach(expr, exprFor);
+                    return Expr.OpForeach(expr, exprFor);
                 }
 
                 if (expr_splitter.match(p))
-                    return new OpExpr(this.parseExpr(p));
+                    return Expr.OpExpr(this.parseExpr(p));
 
-                return new OpVar(p);
+                return Expr.OpVar(p);
             }
         };
 

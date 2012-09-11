@@ -1,4 +1,4 @@
-jock.package("jock.template.tokens", {
+jock.package("jock.template", {
     TemplateRegExp:(function () {
         "use strict";
 

@@ -7,7 +7,7 @@ jock.package("jock.template", {
 
         var lexer = jock.template.lexer,
             parser = jock.template.parser,
-            OpType = jock.template.expressions.OpType,
+            match = jock.utils.match,
             TemplateRegExp = jock.template.TemplateRegExp,
             TemplateError = jock.template.errors.TemplateError;
 
@@ -59,51 +59,45 @@ jock.package("jock.template", {
                 return this.buffer.toString();
             },
             run:function (expression) {
-                switch (expression.getType()) {
-                    case OpType.VAR:
-                        this.buffer.add(this.resolve(expression.variable));
-                        break;
-
-                    case OpType.EXPR:
-                        this.buffer.add(expression.expression());
-                        break;
-
-                    case OpType.IF:
-                        var value = expression.expression();
+                match(expression, {
+                    OpVar:function (variable) {
+                        this.buffer.add(this.resolve(variable));
+                    },
+                    OpExpr:function (expression) {
+                        this.buffer.add(expression());
+                    },
+                    OpIf:function (expression, exprIf, exprElse) {
+                        var value = expression();
                         if (!value) {
-                            if (expression.exprElse !== null)
-                                this.run(expression.exprElse);
+                            if (exprElse !== null)
+                                this.run(exprElse);
                         } else {
-                            this.run(expression.exprIf);
+                            this.run(exprIf);
                         }
-                        break;
-
-                    case OpType.STR:
-                        this.buffer.add(expression.string);
-                        break;
-
-                    case OpType.BLOCK:
-                        for (var b in expression.block) {
-                            var block = expression.block[b];
-                            this.run(block);
+                    },
+                    OpStr:function (string) {
+                        this.buffer.add(string);
+                    },
+                    OpBlock:function (blocks) {
+                        for (var i = 0, total = blocks.length; i < total; i++) {
+                            this.run(blocks[i]);
                         }
-                        break;
-
-                    case OpType.FOREACH:
-                        var exprValue = expression.expression();
+                    },
+                    OpForeach:function (expression, loop) {
+                        var exprValue = expression();
 
                         this.stack.push(this.context);
 
                         for (var ctx in exprValue) {
                             this.context = exprValue[ctx];
-                            this.run(expression.loop);
+                            this.run(loop);
                         }
 
                         this.context = this.stack.pop();
-                        break;
+                    },
+                    OpMacro:function (name, params) {
 
-                    case OpType.MACRO:
-                        var macroValue = this.macros[expression.name];
+                        var macroValue = this.macros[name];
                         var args = [];
                         var old = this.buffer;
 
@@ -112,17 +106,20 @@ jock.package("jock.template", {
                             return scope.resolve(value);
                         });
 
-                        for (var p in expression.params) {
-                            var param = expression.params[p];
+                        for (var p in params) {
+                            var param = params[p];
 
-                            if (param.getType() === OpType.VAR)
-                                args.push(this.resolve(param.variable));
-                            else {
-                                this.buffer = new StringBuffer();
-                                this.run(param);
+                            match(param, {
+                                OpVar:function (variable) {
+                                    args.push(this.resolve(variable));
+                                },
+                                Default:function () {
+                                    this.buffer = new StringBuffer();
+                                    this.run(param);
 
-                                args.push(this.buffer.toString());
-                            }
+                                    args.push(this.buffer.toString());
+                                }
+                            });
                         }
                         this.buffer = old;
 
@@ -132,11 +129,8 @@ jock.package("jock.template", {
                             var possible = !!args ? args.join(",") : "???";
                             throw new TemplateError("Macro call " + expression.name + " (" + possible + ") failed (" + e + ")");
                         }
-                        break;
-
-                    default:
-                        throw new TemplateError("Unknown expression type");
-                }
+                    }
+                });
             },
             resolve:function (value) {
                 if (this.context[value] !== null && this.context[value] !== undefined)
