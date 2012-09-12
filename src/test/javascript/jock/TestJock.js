@@ -219,4 +219,108 @@ describe("jock", function () {
             expect(jock.scope.xxx.xx.x.yy).not.toBeFalsy();
         });
     });
+
+    describe("enumeration", function () {
+
+        it("should create a valid enum type", function(){
+            var Alpha = jock.enumeration({
+                A:[],
+                B:[]
+            });
+
+            expect(Alpha).not.toBeNull();
+        });
+
+        it("should create a valid enum", function(){
+            var Alpha = jock.enumeration({
+                A:[],
+                B:[]
+            });
+
+            expect(Alpha.A).not.toBeNull();
+        });
+
+        it("should create a valid enum instance", function(){
+            var Alpha = jock.enumeration({
+                A:[],
+                B:[]
+            });
+
+            expect(Alpha.A()).not.toBeNull();
+        });
+
+        it("should create a valid enum instance with a Number", function(){
+            var Alpha = jock.enumeration({
+                A:[Number],
+                B:[]
+            });
+
+            expect(Alpha.A(1.1)).not.toBeNull();
+        });
+
+        it("should throw ArgumentError if passing String instead of Number", function(){
+            var Alpha = jock.enumeration({
+                A:[Number],
+                B:[]
+            });
+
+            expect(function(){
+                Alpha.A("data")
+            }).toBeThrown(new jock.errors.ArgumentError());
+        });
+
+        it("should match the enum", function(){
+            var Alpha = jock.enumeration({
+                A:[Number],
+                B:[]
+            });
+
+            expect(jock.utils.match(Alpha.A(1.1), {
+                A: function(){
+                    return true;
+                }
+            })).toBeTruthy();
+        });
+
+        it("should match the enum using the Default", function(){
+            var Alpha = jock.enumeration({
+                A:[Number],
+                B:[]
+            });
+
+            expect(jock.utils.match(Alpha.A(1.1), {
+                Default: function(){
+                    return true;
+                }
+            })).toBeTruthy();
+        });
+
+        it("should match the enum and return value", function(){
+            var Alpha = jock.enumeration({
+                A:[Number],
+                B:[]
+            });
+
+            var value = 1.3;
+            expect(jock.utils.match(Alpha.A(value), {
+                A: function(v){
+                    return value === v;
+                }
+            })).toBeTruthy();
+        });
+
+        it("should match the enum and return value using Default", function(){
+            var Alpha = jock.enumeration({
+                A:[Number],
+                B:[]
+            });
+
+            var value = 1.3;
+            expect(jock.utils.match(Alpha.A(value), {
+                Default: function(v){
+                    return value === v;
+                }
+            })).toBeTruthy();
+        });
+    });
 });
