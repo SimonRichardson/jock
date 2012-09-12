@@ -2,10 +2,10 @@ jock.package("jock.aop", {
     Aspect:(function () {
 
         var Aspects = jock.enum({
-            Before:[String, Object, Object, Object],
-            After:[String, Object, Object, Object],
-            Around:[String, Object, Object, Object],
-            Prevent:[String, Object, Object, Object]
+            Before:[String, Object, Function, Object],
+            After:[String, Object, Function, Object],
+            Around:[String, Object, Function, Object],
+            Prevent:[String, Object, Function, Object]
         });
 
         function validate(source, name, override) {
@@ -30,6 +30,7 @@ jock.package("jock.aop", {
                         override.apply(scope, args);
                         return origin.apply(scope, args);
                     };
+                    return true;
                 },
                 After:function (name, source, override, scope) {
                     validate(source, name, override);
@@ -40,6 +41,7 @@ jock.package("jock.aop", {
                         origin.apply(scope, args);
                         return override.apply(scope, args);
                     };
+                    return true;
                 },
                 Around:function (name, source, override, scope) {
                     validate(source, name, override);
@@ -51,6 +53,7 @@ jock.package("jock.aop", {
                             origin.apply(scope, args);
                         }].concat(args));
                     };
+                    return true;
                 },
                 Prevent:function (name, source, override, scope) {
                     validate(source, name, override);
@@ -60,6 +63,7 @@ jock.package("jock.aop", {
                         var args = Array.prototype.slice.call(arguments);
                         return override.apply(scope, args);
                     };
+                    return true;
                 }
             });
 

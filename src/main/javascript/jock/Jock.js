@@ -64,9 +64,12 @@ var jock = {
                     var type = types[i];
                     var value = values[i];
 
-                    if ((typeof value === "number" && type == Number) ||
-                        (typeof value === "string" && type == String) ||
-                        (typeof value === "object" && value instanceof type)) {
+                    var valueType = typeof value;
+                    if ((valueType === "boolean" && type == Boolean) ||
+                        (valueType === "function" && type == Function) ||
+                        (valueType === "number" && type == Number) ||
+                        (valueType === "string" && type == String) ||
+                        (valueType === "object" && value instanceof type)) {
                         continue;
                     }
 

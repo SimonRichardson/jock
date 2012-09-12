@@ -9,6 +9,8 @@ jock.package("jock.errors", {
                 this.message = message;
             else
                 this.message = "";
+
+            //this.message += "\n" + jock.utils.stackTrace();
         };
         Impl.prototype = new Error();
         Impl.prototype.constructor = Impl;

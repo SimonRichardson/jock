@@ -22,7 +22,6 @@ load:
   - src/main/javascript/jock/ioc/inject.js
   - src/main/javascript/jock/ioc/injectIn.js
   - src/main/javascript/jock/template/errors/*.js
-  - src/main/javascript/jock/template/expressions/*.js
   - src/main/javascript/jock/template/tokens/*.js
   - src/main/javascript/jock/template/TemplateRegExp.js
   - src/main/javascript/jock/template/lexer.js

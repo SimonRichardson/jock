@@ -1,5 +1,5 @@
 jock.package("jock.utils", {
-    printStackTrace:function () {
+    stackTrace:function () {
         var mode = function (e) {
             if (e['arguments'] && e.stack)
                 return 'chrome';

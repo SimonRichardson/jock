@@ -5,13 +5,6 @@ jock.package("jock.template", {
     Template:(function () {
         "use strict";
 
-        var lexer = jock.template.lexer,
-            parser = jock.template.parser,
-            match = jock.utils.match,
-            TemplateRegExp = jock.template.TemplateRegExp,
-            TemplateError = jock.template.errors.TemplateError;
-
-
         var StringBuffer = function () {
             this._value = "";
         };
@@ -24,9 +17,9 @@ jock.package("jock.template", {
             }
         };
 
-        var expr_trim = new TemplateRegExp("^[ ]*([^ ]+)[ ]*$");
-        var expr_int = new TemplateRegExp("^[0-9]+$");
-        var expr_float = new TemplateRegExp("^([+-]?)(?=\\d|,\\d)\\d*(,\\d*)?([Ee]([+-]?\\d+))?$");
+        var expr_trim = new jock.template.TemplateRegExp("^[ ]*([^ ]+)[ ]*$");
+        var expr_int = new jock.template.TemplateRegExp("^[0-9]+$");
+        var expr_float = new jock.template.TemplateRegExp("^([+-]?)(?=\\d|,\\d)\\d*(,\\d*)?([Ee]([+-]?\\d+))?$");
 
         var Impl = function () {
             this.init.apply(this, arguments);
@@ -37,15 +30,15 @@ jock.package("jock.template", {
             init:function (str) {
                 this.globals = {};
 
-                var tokens = lexer(str);
+                var tokens = jock.template.lexer(str);
 
                 var scope = this;
-                this.expressions = parser(tokens, function (list) {
+                this.expressions = jock.template.parser(tokens, function (list) {
                     return scope.makeExpr(list);
                 });
 
                 if (tokens.length !== 0)
-                    throw new TemplateError("Unexpected '" + tokens[0].string + "'");
+                    throw new jock.template.errors.TemplateError("Unexpected '" + tokens[0].string + "'");
             },
             execute:function (context, macros) {
                 this.context = context;
@@ -59,7 +52,7 @@ jock.package("jock.template", {
                 return this.buffer.toString();
             },
             run:function (expression) {
-                match(expression, {
+                jock.utils.match.call(this, expression, {
                     OpVar:function (variable) {
                         this.buffer.add(this.resolve(variable));
                     },
@@ -109,7 +102,7 @@ jock.package("jock.template", {
                         for (var p in params) {
                             var param = params[p];
 
-                            match(param, {
+                            jock.utils.match.call(this, param, {
                                 OpVar:function (variable) {
                                     args.push(this.resolve(variable));
                                 },
@@ -127,7 +120,8 @@ jock.package("jock.template", {
                             this.buffer.add(macroValue.apply(this, args));
                         } catch (e) {
                             var possible = !!args ? args.join(",") : "???";
-                            throw new TemplateError("Macro call " + expression.name + " (" + possible + ") failed (" + e + ")");
+                            throw new jock.template.errors.TemplateError("Macro call " + expression.name + " (" +
+                                    possible + ") failed (" + e + ")");
                         }
                     }
                 });
@@ -155,7 +149,7 @@ jock.package("jock.template", {
 
                 var field = list.shift();
                 if (!field || !field.string)
-                    throw new TemplateError(field.value);
+                    throw new jock.template.errors.TemplateError(field.value);
 
                 var accessor = field.p;
                 expr_trim.match(accessor);
@@ -198,7 +192,7 @@ jock.package("jock.template", {
                     p = list.shift();
 
                 if (!p)
-                    throw new TemplateError("<eof>");
+                    throw new jock.template.errors.TemplateError("<eof>");
                 if (p.string)
                     return this.makeConst(p.value);
 
@@ -217,7 +211,7 @@ jock.package("jock.template", {
                         var p2 = list.shift();
 
                         if (!p2 || p2.value !== ")")
-                            throw new TemplateError(p2.value);
+                            throw new jock.template.errors.TemplateError(p2.value);
 
                         return (function () {
                             var result;
@@ -283,7 +277,7 @@ jock.package("jock.template", {
                                     };
                                     break;
                                 default:
-                                    throw new TemplateError("Unknown operation " + p.value);
+                                    throw new jock.template.errors.TemplateError("Unknown operation " + p.value);
                             }
                             return result;
                         })();
@@ -302,7 +296,7 @@ jock.package("jock.template", {
                         };
 
                     default:
-                        throw new TemplateError(p.value);
+                        throw new jock.template.errors.TemplateError(p.value);
                 }
             }
         };
