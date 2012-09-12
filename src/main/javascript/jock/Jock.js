@@ -53,6 +53,8 @@ var jock = {
                 scope[i] = objects[i];
             }
         }
+
+        return scope;
     },
     enum:(function () {
         function validate(types, values) {
