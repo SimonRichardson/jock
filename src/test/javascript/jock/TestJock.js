@@ -78,6 +78,95 @@ describe("jock", function () {
         });
     });
 
+    describe("mixin", function () {
+
+        var origin;
+
+        beforeEach(function () {
+            origin = jock.extend(function () {
+            }, {
+                foo:function () {
+                    return "foo";
+                }
+            });
+        });
+
+        it("should create a valid object", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(f1).not.toBeNull();
+        });
+
+        it("should create a typeof function", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(typeof f1 === "function").toBeTruthy();
+        });
+
+        it("should create a valid object and mixin method should not be null", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(new f1().foo).not.toBeNull();
+        });
+
+        it("should create a valid object and mixin method should return 'foo'", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(new f1().foo() === "foo").toBeTruthy();
+        });
+
+        it("should create a valid object and overridden method should return 'bar'", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+            f1 = jock.extend(f1, {
+                foo:function () {
+                    return "bar";
+                }
+            })
+
+            expect(new f1().foo() === "bar").toBeTruthy();
+        });
+
+        it("should create a valid object and mixin and have an is property", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(new f1().is).not.toBeNull();
+        });
+
+        it("should create a valid object and mixin and have an is property which is an instanceof Array", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(new f1().is instanceof Array).toBeTruthy();
+        });
+
+        it("should create a valid object and mixin and has a reference to origin in is", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(new f1().is.indexOf(origin) >= 0).toBeTruthy();
+        });
+
+        it("should using jock.utils.isType contain origin", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            expect(jock.utils.isType(new f1(), origin)).toBeTruthy();
+        });
+
+        it("should using jock.utils.verifiedType contain origin", function () {
+            var f1 = jock.mixin(function () {
+            }, origin);
+
+            var instance = new f1();
+            expect(jock.utils.verifiedType(instance, origin) === instance).toBeTruthy();
+        });
+    });
 
     describe("bundle", function () {
 
