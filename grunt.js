@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 	var src = {
-        version: "0.0.1",
+        version: "0.0.2",
 		main : [
                 'src/main/javascript/jock/Jock.js',
 				'src/main/javascript/jock/errors/*.js',
