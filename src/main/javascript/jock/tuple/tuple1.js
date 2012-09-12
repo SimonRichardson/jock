@@ -1,4 +1,4 @@
-jock.package("jock.tuple", {
+jock.bundle("jock.tuple", {
     tuple1:(function () {
         "use strict";
 

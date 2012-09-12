@@ -1,4 +1,4 @@
-jock.package("jock.product", {
+jock.bundle("jock.product", {
     Product:(function () {
         "use strict";
 

@@ -1,8 +1,8 @@
-jock.package("jock.ioc", {
+jock.bundle("jock.ioc", {
     Binding:(function () {
         "use strict";
 
-        var BindTypes = jock.enum({
+        var BindTypes = jock.enumeration({
             To:[jock.option.Option],
             ToInstance:[jock.option.Option],
             ToProvider:[jock.option.Option]
@@ -20,7 +20,9 @@ jock.package("jock.ioc", {
                             return module.getInstance(value);
                         },
                         none:function () {
-                            return new bindType();
+                            // Note (Simon) We do this to get past jslint.
+                            var Klass = bindType;
+                            return new Klass();
                         }
                     });
                 },

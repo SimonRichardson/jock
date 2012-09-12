@@ -1,4 +1,4 @@
-jock.package("jock.utils", {
+jock.bundle("jock.utils", {
     isType:function (expected, actual) {
         "use strict";
 

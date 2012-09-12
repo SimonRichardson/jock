@@ -1,4 +1,4 @@
-jock.package("jock.template.errors", {
+jock.bundle("jock.template.errors", {
     TemplateError:(function () {
         "use strict";
 

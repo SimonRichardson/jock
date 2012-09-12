@@ -1,4 +1,4 @@
-jock.package("jock.template.tokens", {
+jock.bundle("jock.template.tokens", {
     ExpressionToken:(function () {
         "use strict";
 

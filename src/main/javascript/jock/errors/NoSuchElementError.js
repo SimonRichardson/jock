@@ -1,4 +1,4 @@
-jock.package("jock.errors", {
+jock.bundle("jock.errors", {
     NoSuchElementError:(function () {
         "use strict";
 

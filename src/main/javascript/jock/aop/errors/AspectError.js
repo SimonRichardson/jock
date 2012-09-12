@@ -1,4 +1,4 @@
-jock.package("jock.aop.errors", {
+jock.bundle("jock.aop.errors", {
     AspectError:(function () {
         "use strict";
 

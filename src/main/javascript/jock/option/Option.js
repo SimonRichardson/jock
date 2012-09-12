@@ -1,4 +1,4 @@
-jock.package("jock.option", {
+jock.bundle("jock.option", {
     Option:(function () {
         "use strict";
 

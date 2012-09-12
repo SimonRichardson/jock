@@ -1,4 +1,4 @@
-jock.package("jock.ioc", {
+jock.bundle("jock.ioc", {
     Provider:(function () {
         "use strict";
 

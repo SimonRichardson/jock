@@ -1,4 +1,4 @@
-jock.package("jock.template", {
+jock.bundle("jock.template", {
     parser:(function () {
 
         var lexer = jock.template.lexer,
@@ -6,7 +6,7 @@ jock.package("jock.template", {
             TemplateError = jock.template.errors.TemplateError,
             ExpressionToken = jock.template.tokens.ExpressionToken;
 
-        var Expr = jock.enum({
+        var Expr = jock.enumeration({
             OpBlock:[Array],
             OpExpr:[Function],
             OpForeach:[Function, Object],

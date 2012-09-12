@@ -1,4 +1,4 @@
-jock.package("jock.template", {
+jock.bundle("jock.template", {
     template:function (partial, context, macros) {
         return new jock.template.Template(partial).execute(context, macros);
     },
@@ -99,19 +99,26 @@ jock.package("jock.template", {
                             return scope.resolve(value);
                         });
 
+
+                        var opVarClosure = function(variable){
+                            args.push(scope.resolve(variable));
+                        };
+
+                        var defaultClosure = function(param){
+                            return function(){
+                                scope.buffer = new StringBuffer();
+                                scope.run(param);
+
+                                args.push(scope.buffer.toString());
+                            };
+                        };
+
                         for (var p in params) {
                             var param = params[p];
 
                             jock.utils.match.call(this, param, {
-                                OpVar:function (variable) {
-                                    args.push(this.resolve(variable));
-                                },
-                                Default:function () {
-                                    this.buffer = new StringBuffer();
-                                    this.run(param);
-
-                                    args.push(this.buffer.toString());
-                                }
+                                OpVar:opVarClosure,
+                                Default:defaultClosure(param)
                             });
                         }
                         this.buffer = old;

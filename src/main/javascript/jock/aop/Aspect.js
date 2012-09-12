@@ -1,7 +1,7 @@
-jock.package("jock.aop", {
+jock.bundle("jock.aop", {
     Aspect:(function () {
 
-        var Aspects = jock.enum({
+        var Aspects = jock.enumeration({
             Before:[String, Object, Function, Object],
             After:[String, Object, Function, Object],
             Around:[String, Object, Function, Object],

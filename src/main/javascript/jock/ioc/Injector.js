@@ -1,4 +1,4 @@
-jock.package("jock.ioc", {
+jock.bundle("jock.ioc", {
     Injector:(function () {
         "use strict";
 
@@ -111,7 +111,7 @@ jock.package("jock.ioc", {
 });
 
 // Note (Simon) we do this like this, because we're using the newly created injector.
-jock.package("jock.ioc", {
+jock.bundle("jock.ioc", {
     Injectors:{
         DEFAULT:new jock.ioc.Injector()
     }

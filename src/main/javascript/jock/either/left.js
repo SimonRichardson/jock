@@ -1,4 +1,4 @@
-jock.package("jock.either", {
+jock.bundle("jock.either", {
     left:(function () {
         "use strict";
 

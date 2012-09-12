@@ -1,4 +1,4 @@
-jock.package("jock.utils", {
+jock.bundle("jock.utils", {
     stackTrace:function () {
         var mode = function (e) {
             if (e['arguments'] && e.stack)

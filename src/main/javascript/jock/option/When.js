@@ -1,4 +1,4 @@
-jock.package("jock.option", {
+jock.bundle("jock.option", {
     when:function (option, cases) {
         if (!option)
             throw new jock.errors.ArgumentError("Option can not be null or undefined");

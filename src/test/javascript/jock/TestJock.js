@@ -79,7 +79,7 @@ describe("jock", function () {
     });
 
 
-    describe("package", function () {
+    describe("bundle", function () {
 
         afterEach(function () {
             jock.scope.xxx = null;
@@ -90,40 +90,40 @@ describe("jock", function () {
             expect(jock.scope).not.toBeNull();
         });
 
-        it("should create a package that is not null", function () {
-            var p = jock.package("xxx.xx.x", {
+        it("should create a bundle that is not null", function () {
+            var p = jock.bundle("xxx.xx.x", {
                 yy:true
             });
 
             expect(p).not.toBeNull();
         });
 
-        it("should create a object package and have a valid yy property", function () {
-            var p = jock.package("xxx.xx.x", {
+        it("should create a object bundle and have a valid yy property", function () {
+            var p = jock.bundle("xxx.xx.x", {
                 yy:true
             });
 
             expect(p.yy).not.toBeFalsy();
         });
 
-        it("should create a object package that is valid", function () {
-            var p = jock.package("xxx.xx.x", {
+        it("should create a object bundle that is valid", function () {
+            var p = jock.bundle("xxx.xx.x", {
                 yy:true
             });
 
             expect(jock.scope.xxx).not.toBeNull();
         });
 
-        it("should create a full object package that is valid", function () {
-            var p = jock.package("xxx.xx.x", {
+        it("should create a full object bundle that is valid", function () {
+            var p = jock.bundle("xxx.xx.x", {
                 yy:true
             });
 
             expect(jock.scope.xxx.xx.x).not.toBeNull();
         });
 
-        it("should create a full object package and have a valid yy property", function () {
-            var p = jock.package("xxx.xx.x", {
+        it("should create a full object bundle and have a valid yy property", function () {
+            var p = jock.bundle("xxx.xx.x", {
                 yy:true
             });
 

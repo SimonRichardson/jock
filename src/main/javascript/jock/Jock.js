@@ -34,7 +34,7 @@ var jock = {
         }
         return impl;
     },
-    package:function (ns, objects) {
+    bundle:function (ns, objects) {
         "use strict";
 
         var scope = jock.scope;
@@ -56,7 +56,7 @@ var jock = {
 
         return scope;
     },
-    enum:(function () {
+    enumeration:(function () {
         function validate(types, values) {
             var total = types.length;
             if (total != values.length)
@@ -93,14 +93,14 @@ var jock = {
 
             this.toString = function () {
                 return this.ns + "(" + this.values + ")";
-            }
+            };
         };
 
         return function (type) {
             function closure(index, ns, types) {
                 return function () {
                     return new Impl(index, ns, types, Array.prototype.slice.call(arguments));
-                }
+                };
             }
 
             var scope = {};

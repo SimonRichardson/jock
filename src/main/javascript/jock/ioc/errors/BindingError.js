@@ -1,4 +1,4 @@
-jock.package("jock.ioc.errors", {
+jock.bundle("jock.ioc.errors", {
     BindingError:(function () {
         "use strict";
 

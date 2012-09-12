@@ -1,4 +1,4 @@
-jock.package("jock.template", {
+jock.bundle("jock.template", {
     lexer:(function () {
         "use strict";
 

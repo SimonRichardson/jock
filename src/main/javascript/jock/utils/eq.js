@@ -1,4 +1,4 @@
-jock.package("jock.utils", {
+jock.bundle("jock.utils", {
     eq:function (a, b) {
         "use strict";
 

@@ -1,4 +1,4 @@
-jock.package("jock.errors", {
+jock.bundle("jock.errors", {
     ArgumentError:(function () {
         "use strict";
 

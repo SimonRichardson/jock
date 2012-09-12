@@ -1,4 +1,4 @@
-jock.package("jock.ioc", {
+jock.bundle("jock.ioc", {
     inject:function (type, injector) {
         if (!type) throw new jock.errors.ArgumentError("Given type must not be null.");
 

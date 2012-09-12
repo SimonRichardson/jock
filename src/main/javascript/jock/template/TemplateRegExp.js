@@ -1,4 +1,4 @@
-jock.package("jock.template", {
+jock.bundle("jock.template", {
     TemplateRegExp:(function () {
         "use strict";
 
