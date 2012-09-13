@@ -42,8 +42,8 @@ jock.bundle("jock.utils", {
             if (typeof cases[EitherTypes.ANY] === "function")
                 return cases[EitherTypes.ANY](type.get());
             else {
-                var name = left ? EitherTypes.LEFT : EitherTypes.RIGHT;
-                throw new jock.errors.NoSuchElementError("Expected " + name + " in cases");
+                var eitherName = left ? EitherTypes.LEFT : EitherTypes.RIGHT;
+                throw new jock.errors.NoSuchElementError("Expected " + eitherName + " in cases");
             }
         }
 

@@ -27,8 +27,16 @@ describe("Future", function() {
         expect(future.attempt().isRight()).toBeTruthy();
     });
 
-    it("should calling isSuccessful on a new future should return false", function(){
+    it("should calling resolve on a future calling get should return Option", function(){
         var future = new Future();
-        expect(future.isSuccessful()).toBeFalsy();
+        future.resolve(1);
+        expect(future.get()).toBeType(jock.option.Option);
+    });
+
+    it("should calling resolve on a future should get be defined", function(){
+        var future = new Future();
+        future.resolve(1);
+        console.log(future.get());
+        expect(future.get().isDefined()).toBeTruthy();
     });
 });
