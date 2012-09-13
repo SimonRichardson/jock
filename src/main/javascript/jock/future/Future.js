@@ -2,22 +2,46 @@ jock.bundle("jock.future", {
     Future:(function () {
         "use strict";
 
+        var State = jock.enumeration({
+            Pending:[],
+            Successful:[],
+            Unsuccessful:[]
+        })
+
         var Impl = function () {
-            this._completed = false;
-            this._successful = false;
-            this._value = null;
+            this._state = State.Pending();
         };
 
         var Methods = {
             attempt:function () {
-                if (this._completed && this._successful)
-                    return jock.either.left();
-                return jock.either.right();
+                return jock.utils.match(this._state, {
+                    Successful:function () {
+                        return jock.either.left();
+                    },
+                    Default:function () {
+                        return jock.either.right();
+                    }
+                });
             },
             get:function () {
-                if(this._completed && this._successful)
-                    return jock.option.some(this._value);
-                return jock.option.none();
+                return jock.utils.match(this._state, {
+                    Successful:function () {
+                        return jock.option.some();
+                    },
+                    Default:function () {
+                        return jock.option.none();
+                    }
+                })
+            },
+            isSuccessful:function () {
+                return jock.utils.match(this._state, {
+                    Successful:function () {
+                        return true;
+                    },
+                    Default:function () {
+                        return false;
+                    }
+                })
             }
         };
 
