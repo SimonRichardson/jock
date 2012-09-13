@@ -96,7 +96,7 @@ describe("Template", function () {
 
         var some = jock.option.some,
             none = jock.option.none,
-            when = jock.option.when;
+            when = jock.utils.when;
 
         var macro = {
             fun:function (resolve, opt) {

@@ -10,7 +10,7 @@ jock.bundle("jock.ioc", {
 
         var none = jock.option.none,
             some = jock.option.some,
-            when = jock.option.when;
+            when = jock.utils.when;
 
         var solve = function (type, module, bindType) {
             return jock.utils.match(type, {

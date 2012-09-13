@@ -7,8 +7,7 @@ jock.bundle("jock.ioc", {
 
         var defaultInjector = injector || jock.ioc.Injectors.DEFAULT;
 
-        var when = jock.option.when;
-        return when(defaultInjector.moduleOf(module), {
+        return jock.utils.when(defaultInjector.moduleOf(module), {
             none:function () {
                 throw new jock.ioc.errors.BindingError();
             },

@@ -3,7 +3,7 @@ jock.bundle("jock.ioc", {
         if (!type) throw new jock.errors.ArgumentError("Given type must not be null.");
 
         var InjectionPoint = jock.ioc.InjectionPoint,
-            when = jock.option.when;
+            when = jock.utils.when;
 
         var defaultInjector = injector || jock.ioc.Injectors.DEFAULT;
         var result = when(defaultInjector.currentScope(), {

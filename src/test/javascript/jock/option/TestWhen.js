@@ -2,7 +2,7 @@ describe("when", function () {
 
     var none = jock.option.none,
         some = jock.option.some,
-        when = jock.option.when;
+        when = jock.utils.when;
 
     it("should throw an error if passing null", function () {
         expect(function () {
@@ -14,7 +14,7 @@ describe("when", function () {
                     fail();
                 }
             });
-        }).toThrow(new jock.errors.ArgumentError("Option can not be null or undefined"));
+        }).toThrow(new jock.errors.ArgumentError("Type can not be null or undefined"));
     });
 
     it("should throw an error if passing {}", function () {
@@ -27,7 +27,7 @@ describe("when", function () {
                     fail();
                 }
             });
-        }).toThrow(new jock.errors.TypeError("Expected: jock.option.Option"));
+        }).toThrow(new jock.errors.TypeError("Invalid type"));
     });
 
     describe("when calling none", function () {
@@ -94,7 +94,7 @@ describe("when", function () {
                         fail();
                     }
                 });
-            }).toThrow(new jock.errors.ArgumentError("Option can not be null or undefined"));
+            }).toThrow(new jock.errors.ArgumentError("Type can not be null or undefined"));
         });
 
         it("should throw an error if passing {}", function () {
@@ -104,7 +104,7 @@ describe("when", function () {
                         fail();
                     }
                 });
-            }).toThrow(new jock.errors.TypeError("Expected: jock.option.Option"));
+            }).toBeThrown(new jock.errors.TypeError());
         });
     });
 });

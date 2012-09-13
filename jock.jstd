@@ -8,7 +8,6 @@ load:
   - src/main/javascript/jock/option/Option.js
   - src/main/javascript/jock/option/none.js
   - src/main/javascript/jock/option/some.js
-  - src/main/javascript/jock/option/when.js
   - src/main/javascript/jock/aop/Aspect.js
   - src/main/javascript/jock/aop/errors/AspectError.js
   - src/main/javascript/jock/ioc/Scope.js
@@ -28,10 +27,13 @@ load:
   - src/main/javascript/jock/template/parser.js
   - src/main/javascript/jock/template/Template.js
   - src/main/javascript/jock/tuple/*.js
+  - src/main/javascript/jock/either/*.js
+  - src/main/javascript/jock/future/*.js
   - src/test/javascript/jasmine/matchers/*.js
   - src/test/javascript/jasmine/utils/*.js
   - src/test/javascript/jock/*.js
   - src/test/javascript/jock/aop/*.js
+  - src/test/javascript/jock/future/*.js
   - src/test/javascript/jock/ioc/*.js
   - src/test/javascript/jock/option/*.js
   - src/test/javascript/jock/product/*.js

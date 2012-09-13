@@ -4,7 +4,7 @@ jock.bundle("jock.ioc", {
 
         var none = jock.option.none,
             some = jock.option.some,
-            when = jock.option.when,
+            when = jock.utils.when,
             Injector = jock.ioc.Injector;
 
         var findByBinding = function (bindings, value) {

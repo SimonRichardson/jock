@@ -17,7 +17,7 @@ jock.bundle("jock.utils", {
                 var opt = a1 ? a : b;
                 var val = a1 ? b : a;
 
-                return jock.option.when(opt, {
+                return jock.utils.when(opt, {
                     none:function () {
                         return jock.utils.eq(false, val);
                     },
