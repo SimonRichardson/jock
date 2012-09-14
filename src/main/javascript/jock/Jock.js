@@ -114,5 +114,3 @@ var jock = {
         };
     })()
 };
-
-window.jock = jock;
