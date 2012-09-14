@@ -2,7 +2,7 @@ jock.bundle("jock.errors", {
     NoSuchElementError:(function () {
         "use strict";
 
-        var Impl = function (message) {
+        var Impl = function NoSuchElementError(message) {
             Error.apply(this, arguments);
 
             if (typeof message !== "undefined")

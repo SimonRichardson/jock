@@ -2,7 +2,7 @@ jock.bundle("jock.option", {
     none:(function () {
         "use strict";
 
-        var Impl = function () {
+        var Impl = function none() {
             jock.option.Option.call(this);
         };
         Impl.prototype = new jock.option.Option();

@@ -1,5 +1,5 @@
 jock.bundle("jock.template.tokens", {
-    Token:(function () {
+    Token:(function Token() {
         "use strict";
 
         var Impl = function (value, string, params) {

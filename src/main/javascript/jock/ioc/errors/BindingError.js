@@ -2,7 +2,7 @@ jock.bundle("jock.ioc.errors", {
     BindingError:(function () {
         "use strict";
 
-        var Impl = function (message) {
+        var Impl = function BindingError(message) {
             Error.apply(this, arguments);
 
             if (typeof message !== "undefined")

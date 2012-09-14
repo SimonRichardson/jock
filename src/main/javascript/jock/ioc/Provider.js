@@ -8,7 +8,7 @@ jock.bundle("jock.ioc", {
             }
         };
 
-        return jock.extend(function () {
+        return jock.extend(function Provider() {
         }, Methods);
     })()
 });

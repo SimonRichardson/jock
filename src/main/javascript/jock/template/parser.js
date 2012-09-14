@@ -18,10 +18,9 @@ jock.bundle("jock.template", {
 
         var expr_splitter = new TemplateRegExp("(\\(|\\)|[ \r\n\t]*\"[^\"]*\"[ \r\n\t]*|[!+=/><*.&|-]+)");
 
-        var Impl = function () {
+        var Impl = function Parser() {
             this.init.apply(this, arguments);
         };
-        Impl.prototype = {};
 
         var Methods = {
             init:function (makeExpr) {

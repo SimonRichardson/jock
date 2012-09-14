@@ -2,7 +2,7 @@ jock.bundle("jock.either", {
     right:(function () {
         "use strict";
 
-        var Impl = function (value) {
+        var Impl = function right(value) {
             jock.either.Either.call(this);
 
             this._value = value;

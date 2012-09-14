@@ -20,7 +20,7 @@ jock.bundle("jock.ioc", {
             return none();
         };
 
-        var Impl = function (injector) {
+        var Impl = function AbstractModule(injector) {
             jock.ioc.Module.call(this);
 
             this._injector = injector || jock.ioc.Injectors.DEFAULT;

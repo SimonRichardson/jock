@@ -2,11 +2,9 @@ jock.bundle("jock.template", {
     TemplateRegExp:(function () {
         "use strict";
 
-        var Impl = function (expression) {
+        var Impl = function TemplateRegExp(expression) {
             this.expression = new RegExp(expression);
         };
-        Impl.prototype = {};
-        Impl.prototype.name = "TemplateRegExp";
 
         var Methods = {
             matchedPos:function () {

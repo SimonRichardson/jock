@@ -2,7 +2,7 @@ jock.bundle("jock.aop.errors", {
     AspectError:(function () {
         "use strict";
 
-        var Impl = function (message) {
+        var Impl = function AspectError(message) {
             Error.apply(this, arguments);
 
             if (typeof message !== "undefined")

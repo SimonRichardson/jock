@@ -2,7 +2,7 @@ jock.bundle("jock.tuple", {
     tuple1:(function () {
         "use strict";
 
-        var Impl = function (_1) {
+        var Impl = function Tuple1(_1) {
             jock.tuple.Tuple.call(this);
 
             this.__1 = _1;

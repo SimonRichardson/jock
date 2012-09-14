@@ -9,8 +9,11 @@ jock.bundle("jock.future", {
             Aborted:[]
         });
 
-        var Impl = function () {
+        var Impl = function Future() {
             this._state = States.Pending();
+
+            this._fails = [];
+            this._completes = [];
         };
 
         var Methods = {
@@ -38,12 +41,15 @@ jock.bundle("jock.future", {
                 var scope = this;
                 jock.utils.match(this._state, {
                     Pending:function () {
-                        scope._state = States.Resolved(jock.option.some(value));
+                        var s = jock.option.some(value);
+                        scope._state = States.Resolved(s);
 
-                        // Dispatch completes
+                        var index = scope._completes.length;
+                        while(--index > -1){
+                            scope._completes[index](s);
+                        }
                     },
                     Default:function () {
-
                     }
                 });
             },
@@ -54,14 +60,50 @@ jock.bundle("jock.future", {
                         error = jock.utils.verifiedType(error, Error);
                         scope._state = States.Rejected(error);
 
-                        // Dispatch fail
+                        var index = scope._fails.length;
+                        while(--index > -1){
+                            scope._fails[index](error);
+                        }
                     },
                     Default:function () {
                     }
-                })
+                });
             },
             abort:function () {
                 this._state = States.Aborted();
+
+                this._fails.length = 0;
+                this._completes.length = 0;
+            },
+            completes:function (func) {
+                var scope = this;
+                jock.utils.match(this._state, {
+                    Pending:function () {
+                        if (scope._completes.indexOf(func) >= 0) {
+                            scope._completes.push(func);
+                        }
+                    },
+                    Resolved:function (value) {
+                        func(value);
+                    },
+                    Default:function () {
+                    }
+                });
+            },
+            fails:function (func) {
+                var scope = this;
+                jock.utils.match(this._state, {
+                    Pending:function () {
+                        if (scope._fails.indexOf(func) >= 0) {
+                            scope._fails.push(func);
+                        }
+                    },
+                    Rejected:function (value) {
+                        func(value);
+                    },
+                    Default:function () {
+                    }
+                });
             }
         };
 

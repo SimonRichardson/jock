@@ -36,7 +36,6 @@ describe("Future", function() {
     it("should calling resolve on a future should get be defined", function(){
         var future = new Future();
         future.resolve(1);
-        console.log(future.get());
         expect(future.get().isDefined()).toBeTruthy();
     });
 });

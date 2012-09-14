@@ -48,7 +48,7 @@ jock.bundle("jock.template", {
             }
         };
 
-        var Impl = jock.extend(function () {
+        var Impl = jock.extend(function Lexer() {
         }, Methods);
 
         return function (data) {

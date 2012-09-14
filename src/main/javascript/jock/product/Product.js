@@ -15,9 +15,6 @@ jock.bundle("jock.product", {
             return buffer;
         };
 
-        var Impl = function () {
-        };
-
         var Methods = {
             productArity:function () {
                 throw new jock.errors.AbstractMethodError();
@@ -52,6 +49,7 @@ jock.bundle("jock.product", {
             }
         };
 
-        return jock.extend(Impl, Methods);
+        return jock.extend(function Product() {
+        }, Methods);
     })()
 });

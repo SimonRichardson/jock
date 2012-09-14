@@ -23,7 +23,7 @@ jock.bundle("jock.ioc", {
             this.module = module;
         };
 
-        var Impl = function () {
+        var Impl = function Injector() {
             this._map = [];
             this._scopes = [];
             this._modules = [];

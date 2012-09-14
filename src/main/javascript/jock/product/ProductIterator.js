@@ -3,7 +3,7 @@ jock.bundle("jock.product", {
         "use strict";
 
         // Note (Simon) : prevent scope instances leaking.
-        return function (product) {
+        return function ProductIterator(product) {
             var index = 0;
             var arity = product.productArity();
 

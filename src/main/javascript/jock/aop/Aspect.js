@@ -71,7 +71,7 @@ jock.bundle("jock.aop", {
                 throw new jock.aop.errors.AspectError("Unable to bind method");
         }
 
-        var Impl = function (source) {
+        var Impl = function Aspect(source) {
             if (!source)
                 throw new jock.errors.ArgumentError("Source can not be null/undefined");
 

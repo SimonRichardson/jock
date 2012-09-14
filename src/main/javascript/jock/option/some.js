@@ -2,7 +2,7 @@ jock.bundle("jock.option", {
     some:(function () {
         "use strict";
 
-        var Impl = function (value) {
+        var Impl = function some(value) {
             jock.option.Option.call(this);
 
             this._value = value;

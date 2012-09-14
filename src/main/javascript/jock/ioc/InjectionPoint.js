@@ -4,7 +4,7 @@ jock.bundle("jock.ioc", {
 
         var Aspect = jock.aop.Aspect;
 
-        var Impl = function (value) {
+        var Impl = function InjectionPoint(value) {
             this._aspect = new Aspect(value);
         };
         Impl.prototype = {};

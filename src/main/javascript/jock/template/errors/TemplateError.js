@@ -2,7 +2,7 @@ jock.bundle("jock.template.errors", {
     TemplateError:(function () {
         "use strict";
 
-        var Impl = function (message) {
+        var Impl = function TemplateError(message) {
             Error.apply(this, arguments);
 
             if (typeof message !== "undefined")

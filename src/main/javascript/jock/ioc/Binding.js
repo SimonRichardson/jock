@@ -41,7 +41,7 @@ jock.bundle("jock.ioc", {
             });
         };
 
-        var Impl = function (module, bindType) {
+        var Impl = function Binding(module, bindType) {
             if (!module) throw new jock.errors.ArgumentError("Module can not be null/undefined");
             if (!bindType) throw new jock.errors.ArgumentError("BindType can not be null/undefined");
 

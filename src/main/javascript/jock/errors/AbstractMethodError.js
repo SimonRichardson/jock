@@ -2,7 +2,7 @@ jock.bundle("jock.errors", {
     AbstractMethodError:(function () {
         "use strict";
 
-        var Impl = function (message) {
+        var Impl = function AbstractMethodError(message) {
             Error.apply(this, arguments);
 
             if (typeof message !== "undefined")

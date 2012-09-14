@@ -5,7 +5,7 @@ jock.bundle("jock.template", {
     Template:(function () {
         "use strict";
 
-        var StringBuffer = function () {
+        var StringBuffer = function StringBuffer() {
             this._value = "";
         };
         StringBuffer.prototype = {
@@ -21,10 +21,9 @@ jock.bundle("jock.template", {
         var expr_int = new jock.template.TemplateRegExp("^[0-9]+$");
         var expr_float = new jock.template.TemplateRegExp("^([+-]?)(?=\\d|,\\d)\\d*(,\\d*)?([Ee]([+-]?\\d+))?$");
 
-        var Impl = function () {
+        var Impl = function Template() {
             this.init.apply(this, arguments);
         };
-        Impl.prototype = {};
 
         var Methods = {
             init:function (str) {
