@@ -33,9 +33,42 @@ describe("Future", function() {
         expect(future.get()).toBeType(jock.option.Option);
     });
 
-    it("should calling resolve on a future should get be defined", function(){
+    it("should calling resolve on a future should call get and result should be defined", function(){
         var future = new Future();
         future.resolve(1);
         expect(future.get().isDefined()).toBeTruthy();
+    });
+
+    it("should adding completes, then calling resolve dispatch completed", function(){
+        var dispatched = false;
+        var future = new Future();
+        future.completes(function(value){
+            dispatched = true;
+        });
+        future.resolve(1.23);
+
+        expect(dispatched).toBeTruthy();
+    });
+
+    it("should adding completes, then calling abort should not dispatch completed", function(){
+        var dispatched = false;
+        var future = new Future();
+        future.completes(function(value){
+            fail();
+        });
+        future.abort();
+
+        expect(dispatched).toBeFalsy();
+    });
+
+    it("should adding completes, then calling reject should not dispatch completed", function(){
+        var dispatched = false;
+        var future = new Future();
+        future.completes(function(value){
+            fail();
+        });
+        future.reject(new Error());
+
+        expect(dispatched).toBeFalsy();
     });
 });

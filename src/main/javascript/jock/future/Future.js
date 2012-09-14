@@ -79,7 +79,7 @@ jock.bundle("jock.future", {
                 var scope = this;
                 jock.utils.match(this._state, {
                     Pending:function () {
-                        if (scope._completes.indexOf(func) >= 0) {
+                        if (scope._completes.indexOf(func) < 0) {
                             scope._completes.push(func);
                         }
                     },
@@ -94,7 +94,7 @@ jock.bundle("jock.future", {
                 var scope = this;
                 jock.utils.match(this._state, {
                     Pending:function () {
-                        if (scope._fails.indexOf(func) >= 0) {
+                        if (scope._fails.indexOf(func) < 0) {
                             scope._fails.push(func);
                         }
                     },
