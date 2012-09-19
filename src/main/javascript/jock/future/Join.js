@@ -35,25 +35,23 @@ jock.bundle("jock.future", {
                             }
                         };
 
-                        var someClosure = function () {
+                        var someClosure = function (index) {
                             return function (tailFuture) {
-                                total++;
-
                                 tailFuture.then(function (value) {
-                                    values.push(value);
+                                    values[index] = value;
                                     check();
                                 });
                             };
                         };
 
-                        someClosure()(future);
+                        someClosure(total++)(future);
 
                         var tail = scope._tail;
                         while (tail.isDefined()) {
 
                             var join = tail.get();
                             jock.utils.when(join._head, {
-                                some:someClosure(),
+                                some:someClosure(total++),
                                 none:jock.utils.identity
                             });
 
