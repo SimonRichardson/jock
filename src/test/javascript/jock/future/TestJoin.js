@@ -161,4 +161,50 @@ describe("Join", function () {
 
         expect(sum).toEqual(value1);
     });
+
+    it("should add two futures and resolve future 1 mid-flow", function () {
+        var value0 = 1.1,
+            value1 = 2.2,
+            sum = 0,
+            total = value0 + value1;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0);
+
+        future1.resolve(value1);
+
+        join.add(future1).then(function (tuple) {
+            sum = tuple._1().get() + tuple._2().get();
+        });
+
+        future0.resolve(value0);
+
+        expect(sum).toEqual(total);
+    });
+
+    it("should add two futures and resolve future 1 mid-flow", function () {
+        var value0 = 1.1,
+            value1 = 2.2,
+            sum = 0,
+            total = value0 + value1;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0);
+
+        future0.resolve(value0);
+
+        join.add(future1).then(function (tuple) {
+            sum = tuple._1().get() + tuple._2().get();
+        });
+
+        future1.resolve(value1);
+
+        expect(sum).toEqual(total);
+    });
 });
