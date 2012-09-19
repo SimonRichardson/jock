@@ -18,5 +18,20 @@ describe("Join", function () {
         expect(join.add(new Future())).not.toEqual(join);
     });
 
+    it("should add a task and when future is done", function(){
+        var value = 1.1,
+            executed = false;
+
+        var future = new Future();
+
+        var join = new Join();
+        join = join.add(future).then(function(result){
+            executed = result._1().get() === value;
+        });
+        future.resolve(value);
+
+        expect(executed).toBeTruthy();
+    });
+
 
 });

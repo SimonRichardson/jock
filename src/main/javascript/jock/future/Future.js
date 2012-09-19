@@ -46,7 +46,8 @@ jock.bundle("jock.future", {
 
                         var index = scope._completes.length;
                         while(--index > -1){
-                            scope._completes[index](s);
+                            var func = scope._completes[index];
+                            func(s);
                         }
                     },
                     Default:function () {

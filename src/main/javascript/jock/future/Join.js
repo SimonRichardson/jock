@@ -3,39 +3,64 @@ jock.bundle("jock.future", {
         "use strict";
 
         var Impl = function Join(head, tail) {
-            if(typeof head !== "undefined") {
+            if (typeof head !== "undefined") {
                 head = jock.utils.verifiedType(head, jock.future.Future);
             }
 
             this._head = jock.option.toOption(head);
-            this._tail = tail;
+            this._tail = jock.option.toOption(tail);
         };
 
         var Methods = {
-            attempt:function(){
+            attempt:function () {
 
             },
             get:function () {
-                var result = jock.utils.when(this._head, {
-                    some:function (value) {
-                        return value.get();
-                    },
-                    none:function () {
-                        return jock.option.none();
-                    }
-                });
+                var result = jock.option.none();
                 return jock.utils.verifiedType(result, jock.option.Option);
             },
             add:function (value) {
                 return new Impl(value, this);
             },
-            when:function (value) {
+            then:function (func) {
+                var scope = this;
                 jock.utils.when(this._head, {
                     some:function (future) {
-                        future.when(value);
+                        var total = 0,
+                            values = [];
+
+                        var check = function () {
+                            if (values.length == total) {
+                                func.apply(scope, [jock.tuple.toTuple.apply(scope, values.reverse())]);
+                            }
+                        };
+
+                        var someClosure = function () {
+                            return function (tailFuture) {
+                                total++;
+
+                                tailFuture.then(function (value) {
+                                    values.push(value);
+                                    check();
+                                });
+                            };
+                        };
+
+                        someClosure()(future);
+
+                        var tail = scope._tail;
+                        while (tail.isDefined()) {
+
+                            var join = tail.get();
+                            jock.utils.when(join._head, {
+                                some:someClosure(),
+                                none:jock.utils.identity
+                            });
+
+                            tail = join._tail;
+                        }
                     },
-                    none:function () {
-                    }
+                    none:jock.utils.identity
                 });
 
                 return this;
