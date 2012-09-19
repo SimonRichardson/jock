@@ -5,11 +5,9 @@ jock.bundle("jock.future", {
         var Impl = function Join(head, tail) {
             if(typeof head !== "undefined") {
                 head = jock.utils.verifiedType(head, jock.future.Future);
-                this._head = jock.option.some(head);
-            } else {
-                this._head = jock.option.none();
             }
 
+            this._head = jock.option.toOption(head);
             this._tail = tail;
         };
 

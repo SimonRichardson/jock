@@ -9,6 +9,7 @@ module.exports = function(grunt) {
 				'src/main/javascript/jock/option/Option.js',
                 'src/main/javascript/jock/option/none.js',
                 'src/main/javascript/jock/option/some.js',
+                'src/main/javascript/jock/option/toOption.js',
                 'src/main/javascript/jock/aop/errors/*.js',
                 'src/main/javascript/jock/aop/Aspect.js',
                 'src/main/javascript/jock/ioc/errors/*.js',
