@@ -75,7 +75,7 @@ jock.bundle("jock.future", {
                 this._fails.length = 0;
                 this._completes.length = 0;
             },
-            completes:function (func) {
+            then:function (func) {
                 var scope = this;
                 jock.utils.match(this._state, {
                     Pending:function () {
@@ -89,8 +89,9 @@ jock.bundle("jock.future", {
                     Default:function () {
                     }
                 });
+                return this;
             },
-            fails:function (func) {
+            but:function (func) {
                 var scope = this;
                 jock.utils.match(this._state, {
                     Pending:function () {
@@ -104,6 +105,7 @@ jock.bundle("jock.future", {
                     Default:function () {
                     }
                 });
+                return this;
             }
         };
 

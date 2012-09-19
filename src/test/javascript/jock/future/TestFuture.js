@@ -39,10 +39,24 @@ describe("Future", function () {
         expect(future.get().isDefined()).toBeTruthy();
     });
 
-    it("should adding completes, then calling resolve dispatch completed", function () {
+    it("should adding then, should return the same future", function () {
+        var future = new Future();
+        expect(future.then(function (value) {
+            fail();
+        })).toEqual(future);
+    });
+
+    it("should adding but, should return the same future", function () {
+        var future = new Future();
+        expect(future.but(function (value) {
+            fail();
+        })).toEqual(future);
+    });
+
+    it("should adding then, then calling resolve dispatch completed", function () {
         var dispatched = false;
         var future = new Future();
-        future.completes(function (value) {
+        future.then(function (value) {
             dispatched = true;
         });
         future.resolve(1.23);
@@ -50,10 +64,10 @@ describe("Future", function () {
         expect(dispatched).toBeTruthy();
     });
 
-    it("should adding completes, then calling abort should not dispatch completed", function () {
+    it("should adding then, then calling abort should not dispatch completed", function () {
         var dispatched = false;
         var future = new Future();
-        future.completes(function (value) {
+        future.then(function (value) {
             fail();
         });
         future.abort();
@@ -61,10 +75,10 @@ describe("Future", function () {
         expect(dispatched).toBeFalsy();
     });
 
-    it("should adding completes, then calling reject should not dispatch completed", function () {
+    it("should adding then, then calling reject should not dispatch completed", function () {
         var dispatched = false;
         var future = new Future();
-        future.completes(function (value) {
+        future.then(function (value) {
             fail();
         });
         future.reject(new Error());
@@ -88,12 +102,11 @@ describe("Future", function () {
             },
             run2:function (future) {
                 var f = new Future();
-                future.completes(function (value) {
+                future.then(function (value) {
                     setTimeout(function () {
                         f.resolve(2);
                     }, 100);
-                });
-                future.fails(function(error){
+                }).but(function(error){
                     f.reject(error);
                 });
                 return f;
@@ -109,7 +122,7 @@ describe("Future", function () {
 
             var future0 = task.run();
             var future1 = task.run2(future0);
-            future1.completes(function (value) {
+            future1.then(function (value) {
                 taskValue = value.get();
             });
 
@@ -127,7 +140,7 @@ describe("Future", function () {
 
             var future0 = task.run();
             var future1 = task.run2(future0);
-            future1.fails(function (value) {
+            future1.but(function (value) {
                 failed = true;
             });
 
