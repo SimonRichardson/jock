@@ -185,7 +185,7 @@ describe("Join", function () {
         expect(sum).toEqual(total);
     });
 
-    it("should add two futures and resolve future 1 mid-flow", function () {
+    it("should add two futures and resolve future 0 mid-flow", function () {
         var value0 = 1.1,
             value1 = 2.2,
             sum = 0,
@@ -204,6 +204,55 @@ describe("Join", function () {
         });
 
         future1.resolve(value1);
+
+        expect(sum).toEqual(total);
+    });
+
+    it("should add two futures and resolve future 0 and 1 mid-flow", function () {
+        var value0 = 1.1,
+            value1 = 2.2,
+            sum = 0,
+            total = value0 + value1;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0);
+
+        future0.resolve(value0);
+
+        join = join.add(future1);
+
+        future1.resolve(value1);
+
+        join.then(function (tuple) {
+            sum = tuple._1().get() + tuple._2().get();
+        });
+
+        expect(sum).toEqual(total);
+    });
+
+    it("should add two futures and resolve future 1 pre-flow", function () {
+        var value0 = 1.1,
+            value1 = 2.2,
+            sum = 0,
+            total = value0 + value1;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0);
+
+        future0.resolve(value0);
+        future1.resolve(value1);
+
+        join = join.add(future1);
+
+        join.then(function (tuple) {
+            sum = tuple._1().get() + tuple._2().get();
+        });
 
         expect(sum).toEqual(total);
     });
