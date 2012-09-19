@@ -9,9 +9,9 @@ module.exports = function(grunt) {
 				'src/main/javascript/jock/option/Option.js',
                 'src/main/javascript/jock/option/none.js',
                 'src/main/javascript/jock/option/some.js',
-				'src/main/javascript/jock/ioc/errors/*.js',
+                'src/main/javascript/jock/aop/errors/*.js',
                 'src/main/javascript/jock/aop/Aspect.js',
-                'src/main/javascript/jock/aop/errors/AspectError.js',
+                'src/main/javascript/jock/ioc/errors/*.js',
                 'src/main/javascript/jock/ioc/Scope.js',
                 'src/main/javascript/jock/ioc/Binding.js',
                 'src/main/javascript/jock/ioc/Module.js',
@@ -25,7 +25,12 @@ module.exports = function(grunt) {
                 'src/main/javascript/jock/tuple/*.js',
                 'src/main/javascript/jock/either/*.js',
                 'src/main/javascript/jock/future/*.js',
-                'src/main/javascript/jock/template/*.js']
+                'src/main/javascript/jock/template/errors/*.js',
+                'src/main/javascript/jock/template/tokens/*.js',
+                'src/main/javascript/jock/template/TemplateRegExp.js',
+                'src/main/javascript/jock/template/lexer.js',
+                'src/main/javascript/jock/template/parser.js',
+                'src/main/javascript/jock/template/Template.js']
 	};
 	
 	grunt.initConfig({

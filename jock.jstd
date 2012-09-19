@@ -39,3 +39,4 @@ load:
   - src/test/javascript/jock/product/*.js
   - src/test/javascript/jock/template/*.js
   - src/test/javascript/jock/tuple/*.js
+  - src/test/javascript/jock/utils/*.js
