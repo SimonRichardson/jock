@@ -41,7 +41,7 @@ var jock = {
 
         if (ns.indexOf(".") > -1) {
             ns.split(".").forEach(function (value) {
-                if(!!scope[value])
+                if (!!scope[value])
                     scope = scope[value];
                 else
                     scope = scope[value] = {};
@@ -81,7 +81,7 @@ var jock = {
             }
         }
 
-        var Impl = function (index, ns, types, values) {
+        var Impl = function Enumeration(index, ns, types, values) {
             this.ns = ns;
             this.types = types;
             this.values = values;
@@ -91,6 +91,22 @@ var jock = {
 
             validate(types, values);
 
+            this.equals = function (that) {
+                if (that instanceof Impl) {
+                    var valid = true,
+                        total = this.values.length;
+                    if (this.ns === that.ns && total === that.values.length) {
+                        for(var i = 0; i<total; i++) {
+                            if(!jock.utils.eq(this.values[i], that.values[i])) {
+                                valid = false;
+                                break;
+                            }
+                        }
+                        return valid;
+                    }
+                }
+                return false;
+            };
             this.toString = function () {
                 return this.ns + "(" + this.values + ")";
             };

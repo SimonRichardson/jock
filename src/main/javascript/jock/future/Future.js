@@ -22,6 +22,9 @@ jock.bundle("jock.future", {
                     Resolved:function (value) {
                         return jock.either.left(value.get());
                     },
+                    Rejected:function (error) {
+                        return jock.either.right(error);
+                    },
                     Default:function () {
                         return jock.either.right();
                     }
@@ -45,7 +48,7 @@ jock.bundle("jock.future", {
                         scope._state = States.Resolved(s);
 
                         var index = scope._completes.length;
-                        while(--index > -1){
+                        while (--index > -1) {
                             var func = scope._completes[index];
                             func(s);
                         }
@@ -62,7 +65,7 @@ jock.bundle("jock.future", {
                         scope._state = States.Rejected(error);
 
                         var index = scope._fails.length;
-                        while(--index > -1){
+                        while (--index > -1) {
                             scope._fails[index](error);
                         }
                     },

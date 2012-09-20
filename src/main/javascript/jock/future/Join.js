@@ -2,17 +2,82 @@ jock.bundle("jock.future", {
     Join:(function () {
         "use strict";
 
-        var checkResult = function (func, values, total) {
+        var CallbackTypes = jock.enumeration({
+            Then:[],
+            But:[]
+        });
+
+        var checkResult = function checkResult(callback, values, total) {
             // Make sure we've got all the valid options.
             var valid = true;
-            for(var i = 0, len = values.length; i<len; i++) {
+            for (var i = 0, len = values.length; i < len; i++) {
                 valid = valid && !!values[i];
             }
             // Now do the final check and then do the callback.
             if (valid && values.length == total) {
                 var args = jock.tuple.toTuple.apply(this, values.reverse());
-                func.apply(this, [args]);
+                callback.apply(this, [args]);
             }
+        };
+
+        var someClosure = function someClosure(type, scope, callback, values, index, total) {
+            return function (future) {
+                // See if the attempt is successful so we don't have to implement the callback.
+                var attempt = future.attempt();
+                if (attempt.isLeft()) {
+                    values[index] = future.get();
+                    checkResult.call(scope, callback, values, total);
+                } else {
+                    // It's not finished yet, let's wait.
+                    future.then(function (value) {
+                        values[index] = value;
+                        checkResult.call(scope, callback, values, total);
+                    });
+
+                    // If the type is a But then assign a but to it
+                    jock.utils.match(type, {
+                        But: function(){
+                            future.but(function (error) {
+                                values[index] = jock.option.some(error);
+                                checkResult.call(scope, callback, values, total);
+                            });
+                        },
+                        Default:jock.utils.identity
+                    });
+                }
+            };
+        };
+
+        var addCallback = function addCallback(type, scope, callback){
+            jock.utils.when(scope._head, {
+                some:function (future) {
+                    var total = 0,
+                        index = 0,
+                        values = [];
+
+                    // How many futures do we have?
+                    var tail = scope._tail;
+                    while (tail.isDefined()) {
+                        total++;
+                        tail = tail.get()._tail;
+                    }
+
+                    someClosure(type, scope, callback, values, index++, total)(future);
+
+                    tail = scope._tail;
+                    while (tail.isDefined()) {
+
+                        var join = tail.get();
+                        jock.utils.when(join._head, {
+                            some:someClosure(type, scope, callback, values, index++, total),
+                            none:jock.utils.identity
+                        });
+
+                        tail = join._tail;
+                    }
+                },
+                none:jock.utils.identity
+            });
         };
 
         var Impl = function Join(head, tail) {
@@ -35,65 +100,12 @@ jock.bundle("jock.future", {
             add:function (value) {
                 return new Impl(value, this);
             },
-            then:function (func) {
-                var scope = this;
-                jock.utils.when(this._head, {
-                    some:function (future) {
-                        var total = 0,
-                            index = 0,
-                            values = [];
-
-                        // How many futures do we have?
-                        var tail = scope._tail;
-                        while (tail.isDefined()) {
-                            total++;
-                            tail = tail.get()._tail;
-                        }
-
-                        var someClosure = function (index) {
-                            return function (tailFuture) {
-                                // See if the attempt is successful so we don't have to implement the callback.
-                                if(tailFuture.attempt().isLeft()) {
-                                    values[index] = tailFuture.get();
-                                    checkResult.call(this, func, values, total);
-                                } else {
-                                    // It's not finished yet, let's wait.
-                                    tailFuture.then(function (value) {
-                                        values[index] = value;
-                                        checkResult.call(this, func, values, total);
-                                    });
-                                }
-                            };
-                        };
-
-                        someClosure(index++)(future);
-
-                        tail = scope._tail;
-                        while (tail.isDefined()) {
-
-                            var join = tail.get();
-                            jock.utils.when(join._head, {
-                                some:someClosure(index++),
-                                none:jock.utils.identity
-                            });
-
-                            tail = join._tail;
-                        }
-                    },
-                    none:jock.utils.identity
-                });
-
+            then:function (callback) {
+                addCallback(CallbackTypes.Then(), this, callback);
                 return this;
             },
-            but:function (value) {
-                jock.utils.when(this._head, {
-                    some:function (future) {
-                        future.but(value);
-                    },
-                    none:function () {
-                    }
-                });
-
+            but:function (callback) {
+                addCallback(CallbackTypes.But(), this, callback);
                 return this;
             }
         };

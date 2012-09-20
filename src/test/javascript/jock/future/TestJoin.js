@@ -256,4 +256,122 @@ describe("Join", function () {
 
         expect(sum).toEqual(total);
     });
+
+    it("should add two futures and one should reject in the wrong order and should not complete", function () {
+        var executed = false;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join.add(future0).add(future1).then(function (tuple) {
+            fail();
+            executed = true;
+        });
+
+        future1.resolve(1.1);
+        future0.reject(new Error());
+
+        expect(executed).toBeFalsy();
+    });
+
+    it("should add two futures and one should reject in the right order and should not complete", function () {
+        var executed = false;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join.add(future0).add(future1).then(function (tuple) {
+            fail();
+            executed = true;
+        });
+
+        future0.resolve(1.1);
+        future1.reject(new Error());
+
+        expect(executed).toBeFalsy();
+    });
+
+    it("should add two futures and one should reject in mid-flow in the right order and should not complete", function () {
+        var executed = false;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0);
+
+        future0.resolve(1.1);
+
+        join.add(future1).then(function (tuple) {
+            fail();
+            executed = true;
+        });
+
+        future1.reject(new Error());
+
+        expect(executed).toBeFalsy();
+    });
+
+    it("should add two futures and one should reject in mid-flow in the wrong order and should not complete", function () {
+        var executed = false;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0);
+
+        future1.reject(new Error());
+
+        join.add(future1).then(function (tuple) {
+            fail();
+            executed = true;
+        });
+
+        future0.resolve(1.1);
+
+        expect(executed).toBeFalsy();
+    });
+
+    it("should add two futures and fail one, calling the but callback", function () {
+        var executed = false;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join.add(future0).add(future1).then(function(tuple){
+            fail();
+        }).but(function (tuple) {
+            executed = true;
+        });
+
+        future0.resolve(1.1);
+        future1.reject(new Error());
+
+        expect(executed).toBeTruthy();
+    });
+
+    it("should add two futures and fail one making sure that the error is the same one as passed", function () {
+        var value0 = 1.1,
+            value1 = new Error("fail"),
+            executed = false;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join.add(future0).add(future1).then(function(tuple){
+            fail();
+        }).but(function (tuple) {
+                executed = tuple._1().get() === value0 && tuple._2().get() === value1;
+            });
+
+        future0.resolve(value0);
+        future1.reject(value1);
+
+        expect(executed).toBeTruthy();
+    });
 });
