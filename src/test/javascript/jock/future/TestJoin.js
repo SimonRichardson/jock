@@ -374,4 +374,35 @@ describe("Join", function () {
 
         expect(executed).toBeTruthy();
     });
+
+    it("should calling get on empty join should return none", function () {
+        var join = new Join();
+        expect(join.get().isEmpty()).toBeTruthy();
+    });
+
+    it("should calling get on empty join should return none", function () {
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0).add(future1);
+
+        expect(join.get().isDefined()).toBeTruthy();
+    });
+
+    it("should calling get on empty join should return none", function () {
+        var value0 = 1.1,
+            value1 = 2.2;
+
+        var future0 = new Future();
+        var future1 = new Future();
+
+        var join = new Join();
+        join = join.add(future0).add(future1);
+
+        future0.resolve(value0);
+        future1.resolve(value1);
+
+        expect(join.get().get()._1().get()).toEqual(value0);
+    });
 });

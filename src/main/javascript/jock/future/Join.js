@@ -36,7 +36,7 @@ jock.bundle("jock.future", {
 
                     // If the type is a But then assign a but to it
                     jock.utils.match(type, {
-                        But: function(){
+                        But:function () {
                             future.but(function (error) {
                                 values[index] = jock.option.some(error);
                                 checkResult.call(scope, callback, values, total);
@@ -48,7 +48,7 @@ jock.bundle("jock.future", {
             };
         };
 
-        var addCallback = function addCallback(type, scope, callback){
+        var addCallback = function addCallback(type, scope, callback) {
             jock.utils.when(scope._head, {
                 some:function (future) {
                     var total = 0,
@@ -91,11 +91,65 @@ jock.bundle("jock.future", {
 
         var Methods = {
             attempt:function () {
+                var someCallback = function (future) {
+                    return future.attempt.isLeft();
+                };
+                var noneCallback = function () {
+                    return false;
+                };
 
+                var valid = true,
+                    tail = this._tail;
+                while (tail.isDefined()) {
+                    var join = tail.get();
+
+                    var result = jock.utils.when(join._head, {
+                        some:someCallback,
+                        none:noneCallback
+                    });
+
+                    if (!result) {
+                        valid = false;
+                        break;
+                    }
+
+                    tail = join._tail;
+                }
+
+                if (valid) {
+                    return jock.either.left(this.get());
+                }
+                return jock.either.right(this.get());
             },
             get:function () {
-                var result = jock.option.none();
-                return jock.utils.verifiedType(result, jock.option.Option);
+                var values = [];
+                var someCallback = function (future) {
+                    values.push(future.get());
+                };
+
+                jock.utils.when(this._head, {
+                    some:someCallback,
+                    none:jock.utils.identity
+                });
+
+                var tail = this._tail;
+                while (tail.isDefined()) {
+                    var join = tail.get();
+
+                    jock.utils.when(join._head, {
+                        some:someCallback,
+                        none:jock.utils.identity
+                    });
+
+                    tail = join._tail;
+                }
+
+                if (values.length == 0) {
+                    return jock.option.none();
+                } else {
+                    var tuple = jock.tuple.toTuple.apply(this, values.reverse());
+                    return jock.option.some(tuple);
+                }
             },
             add:function (value) {
                 return new Impl(value, this);
