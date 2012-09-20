@@ -91,35 +91,34 @@ jock.bundle("jock.future", {
 
         var Methods = {
             attempt:function () {
-                var someCallback = function (future) {
-                    return future.attempt.isLeft();
-                };
-                var noneCallback = function () {
-                    return false;
+                var callback = function (result) {
+                    return function(){
+                        return result;
+                    }
                 };
 
-                var valid = true,
-                    tail = this._tail;
+                var result = jock.utils.when(this._head, {
+                    some:callback(true),
+                    none:callback(false)
+                });
+
+                var tail = this._tail;
                 while (tail.isDefined()) {
                     var join = tail.get();
 
-                    var result = jock.utils.when(join._head, {
-                        some:someCallback,
-                        none:noneCallback
+                    result = jock.utils.when(join._head, {
+                        some:callback(true),
+                        none:callback(false)
                     });
 
-                    if (!result) {
-                        valid = false;
+                    if(!result) {
                         break;
                     }
 
                     tail = join._tail;
                 }
 
-                if (valid) {
-                    return jock.either.left(this.get());
-                }
-                return jock.either.right(this.get());
+                return jock.either.toEither(result, this.get());
             },
             get:function () {
                 var values = [];
