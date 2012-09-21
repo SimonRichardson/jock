@@ -4,7 +4,8 @@ jock.bundle("jock.future", {
 
         var CallbackTypes = jock.enumeration({
             Then:[],
-            But:[]
+            But:[],
+            Done:[]
         });
 
         var checkResult = function checkResult(callback, values, total) {
@@ -30,16 +31,24 @@ jock.bundle("jock.future", {
                 } else {
                     // It's not finished yet, let's wait.
                     var promise = deferred.promise();
-                    promise.then(function (value) {
-                        values[index] = value;
-                        checkResult.call(scope, callback, values, total);
-                    });
 
                     // If the type is a But then assign a but to it
                     jock.utils.match(type, {
+                        Then: function (){
+                            promise.then(function (value) {
+                                values[index] = jock.option.toOption(value);
+                                checkResult.call(scope, callback, values, total);
+                            });
+                        },
                         But:function () {
                             promise.but(function (error) {
-                                values[index] = jock.option.some(error);
+                                values[index] = jock.option.toOption(error);
+                                checkResult.call(scope, callback, values, total);
+                            });
+                        },
+                        Done:function () {
+                            promise.done(function (error) {
+                                values[index] = jock.option.toOption(error);
                                 checkResult.call(scope, callback, values, total);
                             });
                         },
@@ -162,8 +171,9 @@ jock.bundle("jock.future", {
                 addCallback(CallbackTypes.But(), this, callback);
                 return this;
             },
-            fork:function () {
-                // remove the current item and create a fork of the join
+            done:function (callback) {
+                addCallback(CallbackTypes.Done(), this, callback);
+                return this;
             }
         };
 

@@ -7,34 +7,54 @@ jock.bundle("jock.future", {
         };
 
         var Methods = {
-            then:function (func) {
+            then:function (callback) {
                 var deferred = this._deferred;
                 jock.utils.match(deferred.getState(), {
                     Pending:function () {
-                        if (deferred.completes.indexOf(func) < 0) {
-                            deferred.completes.push(func);
+                        if (deferred.completes.indexOf(callback) < 0) {
+                            deferred.completes.push(callback);
                         }
                     },
-                    Resolved:function (value) {
-                        func(value);
+                    Resolved:function (callback) {
+                        func(callback);
                     },
                     Default:function () {
                     }
                 });
                 return this;
             },
-            but:function (func) {
+            but:function (callback) {
                 var deferred = this._deferred;
                 jock.utils.match(deferred.getState(), {
                     Pending:function () {
-                        if (deferred.fails.indexOf(func) < 0) {
-                            deferred.fails.push(func);
+                        if (deferred.fails.indexOf(callback) < 0) {
+                            deferred.fails.push(callback);
                         }
                     },
                     Rejected:function (value) {
-                        func(value);
+                        callback(value);
                     },
                     Default:function () {
+                    }
+                });
+                return this;
+            },
+            done:function (callback) {
+                var deferred = this._deferred;
+                jock.utils.match(deferred.getState(), {
+                    Pending:function () {
+                        if (deferred.done.indexOf(callback) < 0) {
+                            deferred.done.push(callback);
+                        }
+                    },
+                    Resolved:function (value) {
+                        callback(value);
+                    },
+                    Rejected:function (value) {
+                        callback(value);
+                    },
+                    Default:function () {
+
                     }
                 });
                 return this;

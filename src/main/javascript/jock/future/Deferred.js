@@ -12,7 +12,9 @@ jock.bundle("jock.future", {
         var Impl = function Deferred() {
             this.state = States.Pending();
 
+            this.done = [];
             this.fails = [];
+            this.updates = [];
             this.completes = [];
         };
 
@@ -40,14 +42,32 @@ jock.bundle("jock.future", {
                     }
                 });
             },
+            progress:function (value) {
+                var scope = this;
+                jock.utils.match(this.state, {
+                    Pending:function () {
+                        var s = jock.option.toOption(value);
+
+                        scope.updates.forEach(function (callback) {
+                            callback(s);
+                        });
+                    },
+                    Default:function () {
+                    }
+                });
+            },
             resolve:function (value) {
                 var scope = this;
                 jock.utils.match(this.state, {
                     Pending:function () {
-                        var s = jock.option.some(value);
+                        var s = jock.option.toOption(value);
+
                         scope.state = States.Resolved(s);
-                        scope.completes.forEach(function (func) {
-                            func(s);
+                        scope.completes.forEach(function (callback) {
+                            callback(s);
+                        });
+                        scope.done.forEach(function(callback) {
+                            callback(s);
                         });
                     },
                     Default:function () {
@@ -59,9 +79,13 @@ jock.bundle("jock.future", {
                 jock.utils.match(this.state, {
                     Pending:function () {
                         error = jock.utils.verifiedType(error, Error);
+
                         scope.state = States.Rejected(error);
-                        scope.fails.forEach(function (func) {
-                            func(error);
+                        scope.fails.forEach(function (callback) {
+                            callback(error);
+                        });
+                        scope.done.forEach(function(callback) {
+                            callback(error);
                         });
                     },
                     Default:function () {

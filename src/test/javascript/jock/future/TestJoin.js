@@ -335,7 +335,7 @@ describe("Join", function () {
         expect(executed).toBeFalsy();
     });
 
-    it("should add two deferreds and fail one, calling the but callback", function () {
+    it("should add two deferreds and fail one, calling the done callback", function () {
         var executed = false;
 
         var deferred0 = new Deferred();
@@ -344,7 +344,7 @@ describe("Join", function () {
         var join = new Join();
         join.add(deferred0).add(deferred1).then(function(tuple){
             fail();
-        }).but(function (tuple) {
+        }).done(function (tuple) {
             executed = true;
         });
 
@@ -365,7 +365,7 @@ describe("Join", function () {
         var join = new Join();
         join.add(deferred0).add(deferred1).then(function(tuple){
             fail();
-        }).but(function (tuple) {
+        }).done(function (tuple) {
                 executed = tuple._1().get() === value0 && tuple._2().get() === value1;
             });
 
