@@ -21,15 +21,16 @@ jock.bundle("jock.future", {
         };
 
         var someClosure = function someClosure(type, scope, callback, values, index, total) {
-            return function (future) {
+            return function (deferred) {
                 // See if the attempt is successful so we don't have to implement the callback.
-                var attempt = future.attempt();
+                var attempt = deferred.attempt();
                 if (attempt.isRight()) {
-                    values[index] = future.get();
+                    values[index] = deferred.get();
                     checkResult.call(scope, callback, values, total);
                 } else {
                     // It's not finished yet, let's wait.
-                    future.then(function (value) {
+                    var promise = deferred.promise();
+                    promise.then(function (value) {
                         values[index] = value;
                         checkResult.call(scope, callback, values, total);
                     });
@@ -37,7 +38,7 @@ jock.bundle("jock.future", {
                     // If the type is a But then assign a but to it
                     jock.utils.match(type, {
                         But:function () {
-                            future.but(function (error) {
+                            promise.but(function (error) {
                                 values[index] = jock.option.some(error);
                                 checkResult.call(scope, callback, values, total);
                             });
@@ -50,19 +51,19 @@ jock.bundle("jock.future", {
 
         var addCallback = function addCallback(type, scope, callback) {
             jock.utils.when(scope._head, {
-                some:function (future) {
+                some:function (deferred) {
                     var total = 0,
                         index = 0,
                         values = [];
 
-                    // How many futures do we have?
+                    // How many promises do we have?
                     var tail = scope._tail;
                     while (tail.isDefined()) {
                         total++;
                         tail = tail.get()._tail;
                     }
 
-                    someClosure(type, scope, callback, values, index++, total)(future);
+                    someClosure(type, scope, callback, values, index++, total)(deferred);
 
                     tail = scope._tail;
                     while (tail.isDefined()) {
@@ -82,7 +83,7 @@ jock.bundle("jock.future", {
 
         var Impl = function Join(head, tail) {
             if (typeof head !== "undefined") {
-                head = jock.utils.verifiedType(head, jock.future.Future);
+                head = jock.utils.verifiedType(head, jock.future.Deferred);
             }
 
             this._head = jock.option.toOption(head);
@@ -94,7 +95,7 @@ jock.bundle("jock.future", {
                 var callback = function (result) {
                     return function(){
                         return result;
-                    }
+                    };
                 };
 
                 var result = jock.utils.when(this._head, {
@@ -122,8 +123,8 @@ jock.bundle("jock.future", {
             },
             get:function () {
                 var values = [];
-                var someCallback = function (future) {
-                    values.push(future.get());
+                var someCallback = function (promise) {
+                    values.push(promise.get());
                 };
 
                 jock.utils.when(this._head, {
@@ -143,7 +144,7 @@ jock.bundle("jock.future", {
                     tail = join._tail;
                 }
 
-                if (values.length == 0) {
+                if (values.length === 0) {
                     return jock.option.none();
                 } else {
                     var tuple = jock.tuple.toTuple.apply(this, values.reverse());

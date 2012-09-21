@@ -1,6 +1,6 @@
 describe("Join", function () {
 
-    var Future = jock.future.Future,
+    var Deferred = jock.future.Deferred,
         Join = jock.future.Join;
 
     it("should generate a valid join", function () {
@@ -8,91 +8,91 @@ describe("Join", function () {
         expect(join).not.toBeNull();
     });
 
-    it("should calling get on a new future should return Option", function () {
+    it("should calling get on a new deferred should return Option", function () {
         var join = new Join();
         expect(join.get()).toBeType(jock.option.Option);
     });
 
     it("should add a task and return a new join", function () {
         var join = new Join();
-        expect(join.add(new Future())).not.toEqual(join);
+        expect(join.add(new Deferred())).not.toEqual(join);
     });
 
-    it("should add one future and wait for the futures to be done", function () {
+    it("should add one deferred and wait for the deferreds to be done", function () {
         var value = 1.1,
             executed = false;
 
-        var future = new Future();
+        var deferred = new Deferred();
 
         var join = new Join();
-        join = join.add(future).then(function (tuple) {
+        join = join.add(deferred).then(function (tuple) {
             executed = tuple._1().get() === value;
         });
-        future.resolve(value);
+        deferred.resolve(value);
 
         expect(executed).toBeTruthy();
     });
 
-    it("should add two futures and wait for the futures to be done", function () {
+    it("should add two deferreds and wait for the deferreds to be done", function () {
         var value0 = 1.1,
             value1 = 2.2,
             executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             executed = tuple._1().get() === value0 && tuple._2().get() === value1;
         });
 
-        future0.resolve(value0);
-        future1.resolve(value1);
+        deferred0.resolve(value0);
+        deferred1.resolve(value1);
 
         expect(executed).toBeTruthy();
     });
 
-    it("should add two futures and resolve in a different order and wait for the futures to be done", function () {
+    it("should add two deferreds and resolve in a different order and wait for the deferreds to be done", function () {
         var value0 = 1.1,
             value1 = 2.2,
             executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             executed = tuple._1().get() === value0 && tuple._2().get() === value1;
         });
 
-        future1.resolve(value1);
-        future0.resolve(value0);
+        deferred1.resolve(value1);
+        deferred0.resolve(value0);
 
         expect(executed).toBeTruthy();
     });
 
-    it("should add two futures and resolve with timeout in a different order and wait for the futures to be done", function () {
+    it("should add two deferreds and resolve with timeout in a different order and wait for the deferreds to be done", function () {
         var value0 = 1.1,
             value1 = 2.2,
             total = value0 + value1,
             sum = 0,
             executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             sum = tuple._1().get() + tuple._2().get();
             executed = tuple._1().get() === value0 && tuple._2().get() === value1;
         });
 
         setTimeout(function () {
-            future1.resolve(value1);
+            deferred1.resolve(value1);
         }, 300);
 
         setTimeout(function () {
-            future0.resolve(value0);
+            deferred0.resolve(value0);
         }, 500);
 
         waitsFor(function () {
@@ -104,127 +104,127 @@ describe("Join", function () {
         });
     });
 
-    it("should add two futures then should be called once", function () {
+    it("should add two deferreds then should be called once", function () {
         var value0 = 1.1,
             value1 = 2.2,
             executed = 0;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             executed++;
         });
 
-        future1.resolve(value1);
-        future0.resolve(value0);
+        deferred1.resolve(value1);
+        deferred0.resolve(value0);
 
         expect(executed).toEqual(1);
     });
 
-    it("should add two futures and result match total", function () {
+    it("should add two deferreds and result match total", function () {
         var value0 = 1.1,
             value1 = 2.2,
             sum = 0,
             total = value0 + value1;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             sum = tuple._1().get() + tuple._2().get();
         });
 
-        future1.resolve(value1);
-        future0.resolve(value0);
+        deferred1.resolve(value1);
+        deferred0.resolve(value0);
 
         expect(sum).toEqual(total);
     });
 
-    it("should add two futures and result 1 match value 1", function () {
+    it("should add two deferreds and result 1 match value 1", function () {
         var value0 = 1.1,
             value1 = 2.2,
             sum = 0;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             sum = tuple._2().get();
         });
 
-        future1.resolve(value1);
-        future0.resolve(value0);
+        deferred1.resolve(value1);
+        deferred0.resolve(value0);
 
         expect(sum).toEqual(value1);
     });
 
-    it("should add two futures and resolve future 1 mid-flow", function () {
+    it("should add two deferreds and resolve deferred 1 mid-flow", function () {
         var value0 = 1.1,
             value1 = 2.2,
             sum = 0,
             total = value0 + value1;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0);
+        join = join.add(deferred0);
 
-        future1.resolve(value1);
+        deferred1.resolve(value1);
 
-        join.add(future1).then(function (tuple) {
+        join.add(deferred1).then(function (tuple) {
             sum = tuple._1().get() + tuple._2().get();
         });
 
-        future0.resolve(value0);
+        deferred0.resolve(value0);
 
         expect(sum).toEqual(total);
     });
 
-    it("should add two futures and resolve future 0 mid-flow", function () {
+    it("should add two deferreds and resolve deferred 0 mid-flow", function () {
         var value0 = 1.1,
             value1 = 2.2,
             sum = 0,
             total = value0 + value1;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0);
+        join = join.add(deferred0);
 
-        future0.resolve(value0);
+        deferred0.resolve(value0);
 
-        join.add(future1).then(function (tuple) {
+        join.add(deferred1).then(function (tuple) {
             sum = tuple._1().get() + tuple._2().get();
         });
 
-        future1.resolve(value1);
+        deferred1.resolve(value1);
 
         expect(sum).toEqual(total);
     });
 
-    it("should add two futures and resolve future 0 and 1 mid-flow", function () {
+    it("should add two deferreds and resolve deferred 0 and 1 mid-flow", function () {
         var value0 = 1.1,
             value1 = 2.2,
             sum = 0,
             total = value0 + value1;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0);
+        join = join.add(deferred0);
 
-        future0.resolve(value0);
+        deferred0.resolve(value0);
 
-        join = join.add(future1);
+        join = join.add(deferred1);
 
-        future1.resolve(value1);
+        deferred1.resolve(value1);
 
         join.then(function (tuple) {
             sum = tuple._1().get() + tuple._2().get();
@@ -233,22 +233,22 @@ describe("Join", function () {
         expect(sum).toEqual(total);
     });
 
-    it("should add two futures and resolve future 1 pre-flow", function () {
+    it("should add two deferreds and resolve deferred 1 pre-flow", function () {
         var value0 = 1.1,
             value1 = 2.2,
             sum = 0,
             total = value0 + value1;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0);
+        join = join.add(deferred0);
 
-        future0.resolve(value0);
-        future1.resolve(value1);
+        deferred0.resolve(value0);
+        deferred1.resolve(value1);
 
-        join = join.add(future1);
+        join = join.add(deferred1);
 
         join.then(function (tuple) {
             sum = tuple._1().get() + tuple._2().get();
@@ -257,120 +257,120 @@ describe("Join", function () {
         expect(sum).toEqual(total);
     });
 
-    it("should add two futures and one should reject in the wrong order and should not complete", function () {
+    it("should add two deferreds and one should reject in the wrong order and should not complete", function () {
         var executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             fail();
             executed = true;
         });
 
-        future1.resolve(1.1);
-        future0.reject(new Error());
+        deferred1.resolve(1.1);
+        deferred0.reject(new Error());
 
         expect(executed).toBeFalsy();
     });
 
-    it("should add two futures and one should reject in the right order and should not complete", function () {
+    it("should add two deferreds and one should reject in the right order and should not complete", function () {
         var executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function (tuple) {
+        join.add(deferred0).add(deferred1).then(function (tuple) {
             fail();
             executed = true;
         });
 
-        future0.resolve(1.1);
-        future1.reject(new Error());
+        deferred0.resolve(1.1);
+        deferred1.reject(new Error());
 
         expect(executed).toBeFalsy();
     });
 
-    it("should add two futures and one should reject in mid-flow in the right order and should not complete", function () {
+    it("should add two deferreds and one should reject in mid-flow in the right order and should not complete", function () {
         var executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0);
+        join = join.add(deferred0);
 
-        future0.resolve(1.1);
+        deferred0.resolve(1.1);
 
-        join.add(future1).then(function (tuple) {
+        join.add(deferred1).then(function (tuple) {
             fail();
             executed = true;
         });
 
-        future1.reject(new Error());
+        deferred1.reject(new Error());
 
         expect(executed).toBeFalsy();
     });
 
-    it("should add two futures and one should reject in mid-flow in the wrong order and should not complete", function () {
+    it("should add two deferreds and one should reject in mid-flow in the wrong order and should not complete", function () {
         var executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0);
+        join = join.add(deferred0);
 
-        future1.reject(new Error());
+        deferred1.reject(new Error());
 
-        join.add(future1).then(function (tuple) {
+        join.add(deferred1).then(function (tuple) {
             fail();
             executed = true;
         });
 
-        future0.resolve(1.1);
+        deferred0.resolve(1.1);
 
         expect(executed).toBeFalsy();
     });
 
-    it("should add two futures and fail one, calling the but callback", function () {
+    it("should add two deferreds and fail one, calling the but callback", function () {
         var executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function(tuple){
+        join.add(deferred0).add(deferred1).then(function(tuple){
             fail();
         }).but(function (tuple) {
             executed = true;
         });
 
-        future0.resolve(1.1);
-        future1.reject(new Error());
+        deferred0.resolve(1.1);
+        deferred1.reject(new Error());
 
         expect(executed).toBeTruthy();
     });
 
-    it("should add two futures and fail one making sure that the error is the same one as passed", function () {
+    it("should add two deferreds and fail one making sure that the error is the same one as passed", function () {
         var value0 = 1.1,
             value1 = new Error("fail"),
             executed = false;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join.add(future0).add(future1).then(function(tuple){
+        join.add(deferred0).add(deferred1).then(function(tuple){
             fail();
         }).but(function (tuple) {
                 executed = tuple._1().get() === value0 && tuple._2().get() === value1;
             });
 
-        future0.resolve(value0);
-        future1.reject(value1);
+        deferred0.resolve(value0);
+        deferred1.reject(value1);
 
         expect(executed).toBeTruthy();
     });
@@ -381,11 +381,11 @@ describe("Join", function () {
     });
 
     it("should calling get on empty join should return none", function () {
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0).add(future1);
+        join = join.add(deferred0).add(deferred1);
 
         expect(join.get().isDefined()).toBeTruthy();
     });
@@ -394,14 +394,14 @@ describe("Join", function () {
         var value0 = 1.1,
             value1 = 2.2;
 
-        var future0 = new Future();
-        var future1 = new Future();
+        var deferred0 = new Deferred();
+        var deferred1 = new Deferred();
 
         var join = new Join();
-        join = join.add(future0).add(future1);
+        join = join.add(deferred0).add(deferred1);
 
-        future0.resolve(value0);
-        future1.resolve(value1);
+        deferred0.resolve(value0);
+        deferred1.resolve(value1);
 
         expect(join.get().get()._1().get()).toEqual(value0);
     });
