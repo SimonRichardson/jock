@@ -22,9 +22,9 @@ describe("Future", function () {
         expect(future.attempt()).toBeType(jock.either.Either);
     });
 
-    it("should calling attempt on a new future should return right", function () {
+    it("should calling attempt on a new future should return left", function () {
         var future = new Future();
-        expect(future.attempt().isRight()).toBeTruthy();
+        expect(future.attempt().isLeft()).toBeTruthy();
     });
 
     it("should calling resolve on a future calling get should return Option", function () {

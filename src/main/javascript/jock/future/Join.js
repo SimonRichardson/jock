@@ -24,7 +24,7 @@ jock.bundle("jock.future", {
             return function (future) {
                 // See if the attempt is successful so we don't have to implement the callback.
                 var attempt = future.attempt();
-                if (attempt.isLeft()) {
+                if (attempt.isRight()) {
                     values[index] = future.get();
                     checkResult.call(scope, callback, values, total);
                 } else {
@@ -160,6 +160,9 @@ jock.bundle("jock.future", {
             but:function (callback) {
                 addCallback(CallbackTypes.But(), this, callback);
                 return this;
+            },
+            fork:function () {
+                // remove the current item and create a fork of the join
             }
         };
 

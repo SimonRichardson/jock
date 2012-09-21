@@ -20,13 +20,13 @@ jock.bundle("jock.future", {
             attempt:function () {
                 return jock.utils.match(this._state, {
                     Resolved:function (value) {
-                        return jock.either.left(value.get());
+                        return jock.either.right(value.get());
                     },
                     Rejected:function (error) {
-                        return jock.either.right(error);
+                        return jock.either.left(error);
                     },
                     Default:function () {
-                        return jock.either.right();
+                        return jock.either.left();
                     }
                 });
             },
