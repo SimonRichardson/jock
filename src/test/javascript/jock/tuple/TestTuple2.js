@@ -29,10 +29,10 @@ describe("Tuple2", function() {
     });
 
     it("should calling _1 return 1", function(){
-        expect(tuple(1, 2)._1()).toEqual(1);
+        expect(tuple(1, 2)._1).toEqual(1);
     });
 
     it("should calling _2 return 2", function(){
-        expect(tuple(1, 2)._2()).toEqual(2);
+        expect(tuple(1, 2)._2).toEqual(2);
     });
 });

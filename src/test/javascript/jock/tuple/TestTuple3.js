@@ -33,14 +33,14 @@ describe("Tuple3", function() {
     });
 
     it("should calling _1 return 1", function(){
-        expect(tuple(1, 2, 3)._1()).toEqual(1);
+        expect(tuple(1, 2, 3)._1).toEqual(1);
     });
 
     it("should calling _2 return 2", function(){
-        expect(tuple(1, 2, 3)._2()).toEqual(2);
+        expect(tuple(1, 2, 3)._2).toEqual(2);
     });
 
     it("should calling _3 return 3", function(){
-        expect(tuple(1, 2, 3)._3()).toEqual(3);
+        expect(tuple(1, 2, 3)._3).toEqual(3);
     });
 });

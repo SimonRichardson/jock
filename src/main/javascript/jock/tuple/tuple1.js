@@ -2,33 +2,30 @@ jock.bundle("jock.tuple", {
     tuple1:(function () {
         "use strict";
 
-        var Impl = function Tuple1(_1) {
+        var Impl = function Tuple1() {
             jock.tuple.Tuple.call(this);
-
-            this.__1 = _1;
         };
         Impl.prototype = new jock.tuple.Tuple();
-
-        var Methods = {
-            _1:function () {
-                return this.__1;
-            },
-            productArity:function () {
-                return 1;
-            },
-            productElement:function (index) {
-                if (index === 0) return this._1();
-                else throw new jock.errors.RangeError();
-            },
-            productPrefix:function () {
-                return "Tuple1";
-            }
+        Impl.prototype.productArity = function () {
+            return 1;
+        };
+        Impl.prototype.productElement = function (index) {
+            if (index === 0) return this._1;
+            else throw new jock.errors.RangeError();
+        };
+        Impl.prototype.productPrefix = function () {
+            return "Tuple1";
         };
 
-        Impl = jock.extend(Impl, Methods);
-
         return function (_1) {
-            return new Impl(_1);
+            var instance = Object.create(new Impl());
+            Object.defineProperty(instance, "_1", {
+                get: function(){
+                    return _1;
+                },
+                configurable: false
+            });
+            return Object.freeze(instance);
         };
     })()
 });

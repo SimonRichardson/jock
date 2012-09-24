@@ -25,6 +25,6 @@ describe("Tuple1", function() {
     });
 
     it("should calling _1 return 1", function(){
-        expect(tuple(1)._1()).toEqual(1);
+        expect(tuple(1)._1).toEqual(1);
     });
 });

@@ -10,7 +10,7 @@ describe("Tuple4", function() {
         expect(tuple(1, 2, 3, 4).toString()).toEqual("Tuple4(1, 2, 3, 4)");
     });
 
-    it("should calling productArity return 3", function(){
+    it("should calling productArity return 4", function(){
         expect(tuple(1, 2, 3, 4).productArity()).toEqual(4);
     });
 
@@ -37,18 +37,18 @@ describe("Tuple4", function() {
     });
 
     it("should calling _1 return 1", function(){
-        expect(tuple(1, 2, 3, 4)._1()).toEqual(1);
+        expect(tuple(1, 2, 3, 4)._1).toEqual(1);
     });
 
     it("should calling _2 return 2", function(){
-        expect(tuple(1, 2, 3, 4)._2()).toEqual(2);
+        expect(tuple(1, 2, 3, 4)._2).toEqual(2);
     });
 
     it("should calling _3 return 3", function(){
-        expect(tuple(1, 2, 3, 4)._3()).toEqual(3);
+        expect(tuple(1, 2, 3, 4)._3).toEqual(3);
     });
 
     it("should calling _4 return 4", function(){
-        expect(tuple(1, 2, 3, 4)._4()).toEqual(4);
+        expect(tuple(1, 2, 3, 4)._4).toEqual(4);
     });
 });

@@ -18,41 +18,41 @@ jock.bundle("jock.tuple", {
             default:
                 // This will be slow as hell compared to the built in ones, but does offer flexibility.
                 return (function (args) {
+                    var total = args.length;
+
                     var Impl = function RuntimeTuple() {
                         jock.tuple.Tuple.call(this);
                     };
                     Impl.prototype = new jock.tuple.Tuple();
-
-                    var total = args.length;
-
-                    var Methods = {
-                        productArity:function () {
-                            return total;
-                        },
-                        productElement:function (index) {
-                            if (index >= 0 && index < total) {
-                                return args[index];
-                            }
-                            throw new jock.errors.RangeError();
-                        },
-                        productPrefix:function () {
-                            return "Tuple" + total;
-                        }
+                    Impl.prototype.productArity = function () {
+                        return total;
+                    };
+                    Impl.prototype.productElement = function (index) {
+                        if (index >= 0 && index < total) return this["_" + (index + 1)];
+                        else throw new jock.errors.RangeError();
+                    };
+                    Impl.prototype.productPrefix = function () {
+                        return "Tuple" + total;
                     };
 
-                    var closure = function (index) {
-                        return function () {
-                            return args[index];
+                    var closure = function(value) {
+                        return function(){
+                            return value;
                         };
                     };
 
-                    for (var i = 0; i < total; i++) {
-                        Methods["_" + (i + 1)] = closure(i);
-                    }
+                    var properties = {};
+                    args.forEach(function(value, index) {
+                        properties["_" + (index + 1)] = {
+                            get: closure(value),
+                            configurable: false
+                        }
+                    });
 
-                    Impl = jock.extend(Impl, Methods);
+                    var instance = Object.create(new Impl());
+                    Object.defineProperties(instance, properties);
+                    return Object.freeze(instance);
 
-                    return new Impl(args);
                 })(args.slice());
         }
     }

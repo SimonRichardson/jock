@@ -2,49 +2,52 @@ jock.bundle("jock.tuple", {
     tuple3:(function () {
         "use strict";
 
-        var Impl = function Tuple3(_1, _2, _3) {
+        var Impl = function Tuple3() {
             jock.tuple.Tuple.call(this);
-
-            this.__1 = _1;
-            this.__2 = _2;
-            this.__3 = _3;
         };
         Impl.prototype = new jock.tuple.Tuple();
-
-        var Methods = {
-            _1:function () {
-                return this.__1;
-            },
-            _2:function () {
-                return this.__2;
-            },
-            _3:function () {
-                return this.__3;
-            },
-            productArity:function () {
-                return 3;
-            },
-            productElement:function (index) {
-                switch (index) {
-                    case 0:
-                        return this._1();
-                    case 1:
-                        return this._2();
-                    case 2:
-                        return this._3();
-                    default:
-                        throw new jock.errors.RangeError();
-                }
-            },
-            productPrefix:function () {
-                return "Tuple3";
+        Impl.prototype.productArity = function () {
+            return 3;
+        };
+        Impl.prototype.productElement = function (index) {
+            switch (index) {
+                case 0:
+                    return this._1;
+                case 1:
+                    return this._2;
+                case 2:
+                    return this._3;
+                default:
+                    throw new jock.errors.RangeError();
             }
         };
-
-        Impl = jock.extend(Impl, Methods);
+        Impl.prototype.productPrefix = function () {
+            return "Tuple3";
+        };
 
         return function (_1, _2, _3) {
-            return new Impl(_1, _2, _3);
+            var instance = Object.create(new Impl());
+            Object.defineProperties(instance, {
+                "_1": {
+                    get:function () {
+                        return _1;
+                    },
+                    configurable:false
+                },
+                "_2": {
+                    get:function () {
+                        return _2;
+                    },
+                    configurable:false
+                },
+                "_3": {
+                    get:function () {
+                        return _3;
+                    },
+                    configurable:false
+                }
+            });
+            return Object.freeze(instance);
         };
     })()
 });

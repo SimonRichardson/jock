@@ -2,61 +2,68 @@ jock.bundle("jock.tuple", {
     tuple5:(function () {
         "use strict";
 
-        var Impl = function Tuple5(_1, _2, _3, _4, _5) {
+        var Impl = function Tuple5() {
             jock.tuple.Tuple.call(this);
-
-            this.__1 = _1;
-            this.__2 = _2;
-            this.__3 = _3;
-            this.__4 = _4;
-            this.__5 = _5;
         };
         Impl.prototype = new jock.tuple.Tuple();
-
-        var Methods = {
-            _1:function () {
-                return this.__1;
-            },
-            _2:function () {
-                return this.__2;
-            },
-            _3:function () {
-                return this.__3;
-            },
-            _4:function () {
-                return this.__4;
-            },
-            _5:function () {
-                return this.__5;
-            },
-            productArity:function () {
-                return 5;
-            },
-            productElement:function (index) {
-                switch (index) {
-                    case 0:
-                        return this._1();
-                    case 1:
-                        return this._2();
-                    case 2:
-                        return this._3();
-                    case 3:
-                        return this._4();
-                    case 4:
-                        return this._5();
-                    default:
-                        throw new jock.errors.RangeError();
-                }
-            },
-            productPrefix:function () {
-                return "Tuple5";
+        Impl.prototype.productArity = function () {
+            return 5;
+        };
+        Impl.prototype.productElement = function (index) {
+            switch (index) {
+                case 0:
+                    return this._1;
+                case 1:
+                    return this._2;
+                case 2:
+                    return this._3;
+                case 3:
+                    return this._4;
+                case 4:
+                    return this._5;
+                default:
+                    throw new jock.errors.RangeError();
             }
         };
-
-        Impl = jock.extend(Impl, Methods);
+        Impl.prototype.productPrefix = function () {
+            return "Tuple5";
+        };
 
         return function (_1, _2, _3, _4, _5) {
-            return new Impl(_1, _2, _3, _4, _5);
+            var instance = Object.create(new Impl());
+            Object.defineProperties(instance, {
+                "_1": {
+                    get:function () {
+                        return _1;
+                    },
+                    configurable:false
+                },
+                "_2": {
+                    get:function () {
+                        return _2;
+                    },
+                    configurable:false
+                },
+                "_3": {
+                    get:function () {
+                        return _3;
+                    },
+                    configurable:false
+                },
+                "_4": {
+                    get:function () {
+                        return _4;
+                    },
+                    configurable:false
+                },
+                "_5": {
+                    get:function () {
+                        return _5;
+                    },
+                    configurable:false
+                }
+            });
+            return Object.freeze(instance);
         };
     })()
 });
