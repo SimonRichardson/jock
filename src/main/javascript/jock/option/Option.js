@@ -2,7 +2,13 @@ jock.bundle("jock.option", {
     Option:(function () {
         "use strict";
 
-        return jock.mixin(function Option() {
+        var Impl = jock.mixin(function Option() {
         }, jock.product.Product);
+
+        Impl.prototype.productPrefix = function () {
+            return "Option";
+        };
+
+        return Impl;
     })()
 });
