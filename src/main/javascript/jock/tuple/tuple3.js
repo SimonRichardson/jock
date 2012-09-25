@@ -1,7 +1,7 @@
 jock.bundle("jock.tuple", {
     tuple3:(function () {
         "use strict";
-
+           /*
         var Impl = function Tuple3() {
             jock.tuple.Tuple.call(this);
         };
@@ -48,6 +48,6 @@ jock.bundle("jock.tuple", {
                 }
             });
             return Object.freeze(instance);
-        };
+        };     */
     })()
 });

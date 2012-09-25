@@ -3,18 +3,32 @@ jock.bundle("jock.product", {
         "use strict";
 
         // Note (Simon) : prevent scope instances leaking.
-        return function ProductIterator(product) {
-            var index = 0;
-            var arity = product.productArity();
+        var ProductIterator = {
+            init:function (product) {
+                jock.utils.verifiedType(product, jock.utils.Product);
 
-            this.hasNext = function(){
-                return index < arity;
-            };
-            this.next = function(){
-                if(this.hasNext())
-                    return jock.option.some(product.productElement(index++));
-                return jock.option.none();
-            };
+                this._index = 0;
+                this._product = product;
+            }
         };
+
+        Object.defineProperties(ProductIterator, {
+            hasNext:{
+                get:function () {
+                    return this._index < this._product.arity;
+                },
+                configurable:false
+            },
+            next:{
+                get:function(){
+                    if(this.hasNext) return jock.option.some(this._product.productElement(this._index++));
+                    else return jock.option.none();
+                },
+                configurable:false
+            }
+        })
+
+
+        return ProductIterator;
     })()
 });

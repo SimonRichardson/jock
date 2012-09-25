@@ -2,13 +2,14 @@ jock.bundle("jock.tuple", {
     Tuple:(function () {
         "use strict";
 
-        var Impl = jock.mixin(function Tuple() {
-        }, jock.product.Product);
+        var Tuple = Object.create(jock.product.Product, {
+            productPrefix: {
+                get : function(){
+                    return 'Tuple';
+                }
+            }
+        });
 
-        Impl.prototype.productPrefix = function () {
-            return "Tuple";
-        };
-
-        return Impl;
+        return Tuple;
     })()
 });
