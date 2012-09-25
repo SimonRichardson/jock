@@ -2,9 +2,21 @@ jock.bundle("jock.tuple", {
     tuple3:(function () {
         "use strict";
 
-        var Tuple3 = Object.create(jock.tuple.Tuple);
-        Tuple3.productElement = function(index) {
-            switch(index) {
+        var Tuple3 = Object.create(jock.tuple.Tuple, {
+            productArity:{
+                get:function () {
+                    return 3;
+                },
+                configurable:false
+            },
+            productPrefix:{
+                get:function () {
+                    return "Tuple3";
+                }
+            }
+        });
+        Tuple3.productElement = function (index) {
+            switch (index) {
                 case 0:
                     return this._1;
                 case 1:
@@ -18,34 +30,23 @@ jock.bundle("jock.tuple", {
 
         return function (_1, _2, _3) {
             var instance = Object.create(Tuple3, {
-                _1: {
-                    get: function(){
+                _1:{
+                    get:function () {
                         return _1;
                     },
                     configurable:false
                 },
-                _2: {
-                    get: function(){
+                _2:{
+                    get:function () {
                         return _2;
                     },
                     configurable:false
                 },
-                _3: {
-                    get: function(){
+                _3:{
+                    get:function () {
                         return _3;
                     },
                     configurable:false
-                },
-                productArity: {
-                    get: function(){
-                        return 3;
-                    },
-                    configurable:false
-                },
-                productPrefix: {
-                    get: function(){
-                        return "Tuple3";
-                    }
                 }
             });
             return Object.freeze(instance);

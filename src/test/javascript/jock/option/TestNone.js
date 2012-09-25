@@ -13,17 +13,17 @@ describe("none", function () {
     });
 
     it("should be defined", function () {
-        expect(none().isDefined()).toBeFalsy();
+        expect(none().isDefined).toBeFalsy();
     });
 
     it("should be empty", function () {
-        expect(none().isEmpty()).toBeTruthy();
+        expect(none().isEmpty).toBeTruthy();
     });
 
     it("should have no value", function () {
         expect(
             function () {
-                none().get()
+                none().get
             }).toThrow(new jock.errors.NoSuchElementError());
     });
 
@@ -90,7 +90,7 @@ describe("none", function () {
             expect(none().orElse(
                 function () {
                     return some(false);
-                }).get()).toBeFalsy();
+                }).get).toBeFalsy();
         });
 
         it("should none be equal to expected orElse call", function () {
@@ -126,11 +126,11 @@ describe("none", function () {
     describe("when product on some", function () {
 
         it("should have product arity of 0", function () {
-            expect(none().productArity()).toEqual(0);
+            expect(none().productArity).toEqual(0);
         });
 
         it("should have product prefix of none", function () {
-            expect(none().productPrefix()).toEqual("none");
+            expect(none().productPrefix).toEqual("none");
         });
 
         it("should throw RangeError for product element at 0", function () {

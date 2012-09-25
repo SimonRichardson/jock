@@ -2,62 +2,72 @@ jock.bundle("jock.option", {
     none:(function () {
         "use strict";
 
-        var Impl = function none() {
-            jock.option.Option.call(this);
-        };
-        Impl.prototype = new jock.option.Option();
-        Impl.prototype.constructor = Impl;
-
-        var Methods = {
-            getOrElse:function (f) {
-                return f();
+        var None = Object.create(jock.option.Option, {
+            get:{
+                get:function () {
+                    throw new jock.errors.NoSuchElementError();
+                },
+                configurable:false
             },
-            orElse:function (f) {
-                return f();
+            productPrefix:{
+                get:function () {
+                    return "none";
+                },
+                configurable:false
             },
-            equals:function (that) {
-                if (that instanceof jock.option.Option)
-                    return !that.isDefined();
-                return false;
+            productArity:{
+                get:function () {
+                    return 0;
+                },
+                configurable:false
             },
-            filter:function (f) {
-                return this;
+            isEmpty:{
+                get:function () {
+                    return true;
+                },
+                configurable:false
             },
-            foreach:function (f) {
-            },
-            flatMap:function (f) {
-                return this;
-            },
-            map:function (f) {
-                return this;
-            },
-            get:function () {
-                throw new jock.errors.NoSuchElementError();
-            },
-            productPrefix:function () {
-                return "none";
-            },
-            productArity:function () {
-                return 0;
-            },
-            productElement:function (index) {
-                throw new jock.errors.RangeError();
-            },
-            isEmpty:function () {
-                return true;
-            },
-            isDefined:function () {
-                return false;
+            isDefined:{
+                get:function () {
+                    return false;
+                },
+                configurable:false
             }
+        });
+
+        None.getOrElse = function (f) {
+            return f();
+        };
+        None.orElse = function (f) {
+            return f();
+        };
+        None.equals = function (that) {
+            if (jock.utils.isType(that, jock.option.Option))
+                return !that.isDefined;
+            return false;
+        };
+        None.filter = function (f) {
+            return this;
+        };
+        None.foreach = function (f) {
+        };
+        None.flatMap = function (f) {
+            return this;
+        };
+        None.map = function (f) {
+            return this;
+        };
+        None.productElement = function (index) {
+            throw new jock.errors.RangeError();
         };
 
-        Impl = jock.extend(Impl, Methods);
+        var instance = Object.freeze(Object.create(None));
 
         return function () {
             if (arguments.length > 0)
                 throw new jock.errors.ArgumentError('Unexpected arguments');
 
-            return new Impl();
+            return instance;
         };
     })()
 });

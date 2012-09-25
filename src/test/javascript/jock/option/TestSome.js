@@ -6,25 +6,25 @@ describe("some", function () {
         identity = jock.utils.identity;
 
     it("should be defined", function () {
-        expect(some({}).isDefined()).toBeTruthy();
+        expect(some({}).isDefined).toBeTruthy();
     });
 
     it("should be empty", function () {
-        expect(some({}).isEmpty()).toBeFalsy();
+        expect(some({}).isEmpty).toBeFalsy();
     });
 
     it("should actual value match expected value", function () {
         var value = {};
 
-        expect(some(value).get()).toEqual(value);
+        expect(some(value).get).toEqual(value);
     });
 
     it("should expected value be undefined if actual value is undefined", function () {
-        expect(some(undefined).get()).toBeUndefined();
+        expect(some(undefined).get).toBeUndefined();
     });
 
     it("should expected value be null if actual value is null", function () {
-        expect(some(null).get()).toBeNull();
+        expect(some(null).get).toBeNull();
     });
 
     describe("when getOrElse on some", function () {
@@ -53,7 +53,7 @@ describe("some", function () {
                 return v === value;
             });
 
-            expect(value).toEqual(actual.get());
+            expect(value).toEqual(actual.get);
         });
 
         it("should return a invalid option", function () {
@@ -106,7 +106,7 @@ describe("some", function () {
                 return some(v);
             });
 
-            expect(value).toEqual(actual.get());
+            expect(value).toEqual(actual.get);
         });
 
         it("should result in an TypeError if invalid result", function () {
@@ -127,7 +127,7 @@ describe("some", function () {
                 return x.toString();
             }
 
-            expect(some(value).map(func).get()).toEqual(func(value));
+            expect(some(value).map(func).get).toEqual(func(value));
         });
 
         it("should map be called multiple times should be the same value", function () {
@@ -136,7 +136,7 @@ describe("some", function () {
                 return x.toString();
             }
 
-            expect(some(value).map(func).get()).toEqual(some(value).map(func).get());
+            expect(some(value).map(func).get).toEqual(some(value).map(func).get);
         });
 
         it("should map result equal the value entered in some", function () {
@@ -157,7 +157,7 @@ describe("some", function () {
             expect(op.orElse(
                 function () {
                     fail();
-                }).get()).toBeTruthy();
+                }).get).toBeTruthy();
         });
 
         it("should result in the same value", function () {
@@ -239,11 +239,11 @@ describe("some", function () {
     describe("when product on some", function () {
 
         it("should have product arity of 1", function () {
-            expect(some(true).productArity()).toEqual(1);
+            expect(some(true).productArity).toEqual(1);
         });
 
         it("should have product prefix of some", function () {
-            expect(some(true).productPrefix()).toEqual("some");
+            expect(some(true).productPrefix).toEqual("some");
         });
 
         it("should have product element at 0 of true", function () {

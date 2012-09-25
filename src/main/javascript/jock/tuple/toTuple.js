@@ -21,36 +21,36 @@ jock.bundle("jock.tuple", {
                     var total = args.length;
 
                     var RuntimeTuple = Object.create(jock.tuple.Tuple);
-                    RuntimeTuple.productElement = function(index) {
+                    RuntimeTuple.productElement = function (index) {
                         if (index >= 0 && index < total) return this["_" + (index + 1)];
                         else throw new jock.errors.RangeError();
                     };
 
                     var instance = Object.create(RuntimeTuple, {
-                        productArity: {
-                            get: function(){
+                        productArity:{
+                            get:function () {
                                 return total;
                             },
                             configurable:false
                         },
-                        productPrefix: {
-                            get: function(){
+                        productPrefix:{
+                            get:function () {
                                 return "Tuple" + total;
                             }
                         }
                     });
 
-                    var closure = function(value){
-                        return function() {
+                    var closure = function (value) {
+                        return function () {
                             return value;
                         };
                     };
 
                     var properties = {};
-                    args.forEach(function(value, index) {
+                    args.forEach(function (value, index) {
                         properties["_" + (index + 1)] = {
-                            get: closure(value),
-                            configurable: false
+                            get:closure(value),
+                            configurable:false
                         }
                     });
                     Object.defineProperties(instance, properties);
