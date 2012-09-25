@@ -2,8 +2,8 @@ describe("Tuple5", function() {
 
     var toTuple = jock.tuple.toTuple;
 
-    it("should calling productPrefix return 'Tuple5'", function(){
-        expect(toTuple(1, 2, 3, 4, 5, 6, 7).productPrefix()).toEqual("Tuple7");
+    it("should calling productPrefix return 'Tuple7'", function(){
+        expect(toTuple(1, 2, 3, 4, 5, 6, 7).productPrefix).toEqual("Tuple7");
     });
 
     it("should calling toString throw error", function(){
@@ -11,7 +11,7 @@ describe("Tuple5", function() {
     });
 
     it("should calling productArity return 7", function(){
-        expect(toTuple(1, 2, 3, 4, 5, 6, 7).productArity()).toEqual(7);
+        expect(toTuple(1, 2, 3, 4, 5, 6, 7).productArity).toEqual(7);
     });
 
     it("should calling productElement with invalid index throw error", function(){

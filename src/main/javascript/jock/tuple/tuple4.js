@@ -1,16 +1,10 @@
 jock.bundle("jock.tuple", {
     tuple4:(function () {
         "use strict";
-                /*
-        var Impl = function Tuple4() {
-            jock.tuple.Tuple.call(this);
-        };
-        Impl.prototype = new jock.tuple.Tuple();
-        Impl.prototype.productArity = function () {
-            return 4;
-        };
-        Impl.prototype.productElement = function (index) {
-            switch (index) {
+
+        var Tuple4 = Object.create(jock.tuple.Tuple);
+        Tuple4.productElement = function(index) {
+            switch(index) {
                 case 0:
                     return this._1;
                 case 1:
@@ -23,39 +17,46 @@ jock.bundle("jock.tuple", {
                     throw new jock.errors.RangeError();
             }
         };
-        Impl.prototype.productPrefix = function () {
-            return "Tuple4";
-        };
 
         return function (_1, _2, _3, _4) {
-            var instance = Object.create(new Impl());
-            Object.defineProperties(instance, {
-                "_1": {
-                    get:function () {
+            var instance = Object.create(Tuple4, {
+                _1: {
+                    get: function(){
                         return _1;
                     },
                     configurable:false
                 },
-                "_2": {
-                    get:function () {
+                _2: {
+                    get: function(){
                         return _2;
                     },
                     configurable:false
                 },
-                "_3": {
-                    get:function () {
+                _3: {
+                    get: function(){
                         return _3;
                     },
                     configurable:false
                 },
-                "_4": {
-                    get:function () {
+                _4: {
+                    get: function(){
                         return _4;
                     },
                     configurable:false
+                },
+                productArity: {
+                    get: function(){
+                        return 4;
+                    },
+                    configurable:false
+                },
+                productPrefix: {
+                    get: function(){
+                        return "Tuple4";
+                    }
                 }
             });
             return Object.freeze(instance);
-        };                   */
+        };
     })()
 });

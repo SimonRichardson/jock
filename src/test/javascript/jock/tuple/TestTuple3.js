@@ -1,9 +1,22 @@
 describe("Tuple3", function() {
 
-    var tuple = jock.tuple.tuple3;
+    var Tuple = jock.tuple.Tuple,
+        Product = jock.product.Product,
+        tuple = jock.tuple.tuple3,
+        toTuple = jock.tuple.toTuple,
+        eq = jock.utils.eq,
+        isType = jock.utils.isType;
+
+    it("should be a valid Tuple", function(){
+        expect(isType(tuple(), Tuple) === true).toBeTruthy();
+    });
+
+    it("should be a valid Product", function(){
+        expect(isType(tuple(), Product) === true).toBeTruthy();
+    });
 
     it("should calling productPrefix return 'Tuple3'", function(){
-        expect(tuple().productPrefix()).toEqual("Tuple3");
+        expect(tuple().productPrefix).toEqual("Tuple3");
     });
 
     it("should calling toString throw error", function(){
@@ -11,7 +24,7 @@ describe("Tuple3", function() {
     });
 
     it("should calling productArity return 3", function(){
-        expect(tuple(1, 2, 3).productArity()).toEqual(3);
+        expect(tuple(1, 2, 3).productArity).toEqual(3);
     });
 
     it("should calling productElement with invalid index throw error", function(){
@@ -42,5 +55,17 @@ describe("Tuple3", function() {
 
     it("should calling _3 return 3", function(){
         expect(tuple(1, 2, 3)._3).toEqual(3);
+    });
+
+    it("should equal two tuple instances", function(){
+        expect(eq(tuple(1, 2, 3), tuple(1, 2, 3))).toBeTruthy();
+    });
+
+    it("should not equal two tuple instances", function(){
+        expect(eq(tuple(1, 2, 3), tuple(2, 2, 3))).toBeFalsy();
+    });
+
+    it("should equal two tuple instances via toTuple", function(){
+        expect(eq(tuple(1, 2, 3), toTuple(1, 2, 3))).toBeTruthy();
     });
 });

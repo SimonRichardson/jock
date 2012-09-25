@@ -20,23 +20,28 @@ jock.bundle("jock.tuple", {
                 return (function (args) {
                     var total = args.length;
 
-                    var Impl = function RuntimeTuple() {
-                        jock.tuple.Tuple.call(this);
-                    };
-                    Impl.prototype = new jock.tuple.Tuple();
-                    Impl.prototype.productArity = function () {
-                        return total;
-                    };
-                    Impl.prototype.productElement = function (index) {
+                    var RuntimeTuple = Object.create(jock.tuple.Tuple);
+                    RuntimeTuple.productElement = function(index) {
                         if (index >= 0 && index < total) return this["_" + (index + 1)];
                         else throw new jock.errors.RangeError();
                     };
-                    Impl.prototype.productPrefix = function () {
-                        return "Tuple" + total;
-                    };
 
-                    var closure = function(value) {
-                        return function(){
+                    var instance = Object.create(RuntimeTuple, {
+                        productArity: {
+                            get: function(){
+                                return total;
+                            },
+                            configurable:false
+                        },
+                        productPrefix: {
+                            get: function(){
+                                return "Tuple" + total;
+                            }
+                        }
+                    });
+
+                    var closure = function(value){
+                        return function() {
                             return value;
                         };
                     };
@@ -48,11 +53,9 @@ jock.bundle("jock.tuple", {
                             configurable: false
                         }
                     });
-
-                    var instance = Object.create(new Impl());
                     Object.defineProperties(instance, properties);
-                    return Object.freeze(instance);
 
+                    return Object.freeze(instance);
                 })(args.slice());
         }
     }
