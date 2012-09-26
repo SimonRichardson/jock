@@ -2,8 +2,14 @@ jock.bundle("jock.either", {
     Either:(function () {
         "use strict";
 
-        return jock.mixin(function Either() {
-            this._value = null;
-        }, jock.product.Product);
+        var Either = Object.create(jock.product.Product, {
+            productPrefix: {
+                get : function(){
+                    return 'Either';
+                }
+            }
+        });
+
+        return Either;
     })()
 });

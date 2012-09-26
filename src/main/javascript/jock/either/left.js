@@ -2,59 +2,77 @@ jock.bundle("jock.either", {
     left:(function () {
         "use strict";
 
-        var Impl = function left(value) {
-            jock.either.Either.call(this);
-
-            this._value = value;
-        };
-        Impl.prototype = new jock.either.Either();
-
-        var Methods = {
-            equals:function (that) {
-                if (that instanceof jock.either.Either)
-                    return this.isLeft();
-                return false;
+        var Left = Object.create(jock.either.Either, {
+            isLeft:{
+                get:function () {
+                    return true;
+                },
+                configurable:false
             },
-            isLeft:function () {
-                return true;
+            isRight:{
+                get:function () {
+                    return false;
+                },
+                configurable:false
             },
-            isRight:function () {
-                return false;
+            left:{
+                get:function () {
+                    return jock.option.some(this.get);
+                },
+                configurable:false
             },
-            get:function () {
-                return this._value;
+            right:{
+                get:function () {
+                    return jock.option.none();
+                },
+                configurable:false
             },
-            fold:function (a, b) {
-                a = jock.utils.verifiedTypeOf(a, "function");
-                b = jock.utils.verifiedTypeOf(b, "function");
-
-                return jock.either.left(a(this.get()));
+            swap:{
+                get:function () {
+                    return jock.either.right(this.get);
+                },
+                configurable:false
             },
-            left:function () {
-                return jock.option.some(this.get());
+            productPrefix:{
+                get:function () {
+                    return "left";
+                },
+                configurable:false
             },
-            right:function () {
-                return jock.option.none();
-            },
-            swap:function () {
-                return jock.either.right(this.get());
-            },
-            productPrefix:function () {
-                return "left";
-            },
-            productArity:function () {
-                return 1;
-            },
-            productElement:function (index) {
-                if (index === 0) return this.get();
-                else throw new jock.errors.RangeError();
+            productArity:{
+                get:function () {
+                    return 1;
+                },
+                configurable:false
             }
-        };
+        });
 
-        Impl = jock.extend(Impl, Methods);
+        Left.equals = function (that) {
+            if (that instanceof jock.either.Either)
+                return this.isRight;
+            return false;
+        };
+        Left.fold = function (a, b) {
+            a = jock.utils.verifiedTypeOf(a, "function");
+            b = jock.utils.verifiedTypeOf(b, "function");
+
+            return jock.either.left(a(this.get));
+        };
+        Left.productElement = function (index) {
+            if (index === 0) return this.get;
+            else throw new jock.errors.RangeError();
+        };
 
         return function (value) {
-            return new Impl(value);
+            var instance = Object.create(Left, {
+                get:{
+                    get:function () {
+                        return value;
+                    },
+                    configurable:false
+                }
+            });
+            return Object.freeze(instance);
         };
     })()
 });
