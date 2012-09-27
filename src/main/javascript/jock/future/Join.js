@@ -24,30 +24,28 @@ jock.bundle("jock.future", {
         var someClosure = function someClosure(type, scope, callback, values, index, total) {
             return function (deferred) {
                 // See if the attempt is successful so we don't have to implement the callback.
-                var attempt = deferred.attempt();
-                if (attempt.isRight()) {
-                    values[index] = deferred.get();
+                if (deferred.attempt.isRight) {
+                    values[index] = deferred.get;
                     checkResult.call(scope, callback, values, total);
+
                 } else {
-                    // It's not finished yet, let's wait.
-                    var promise = deferred.promise();
 
                     // If the type is a But then assign a but to it
                     jock.utils.match(type, {
                         Then:function () {
-                            promise.then(function (value) {
+                            deferred.promise.then(function (value) {
                                 values[index] = jock.option.toOption(value);
                                 checkResult.call(scope, callback, values, total);
                             });
                         },
                         But:function () {
-                            promise.but(function (error) {
+                            deferred.promise.but(function (error) {
                                 values[index] = jock.option.toOption(error);
                                 checkResult.call(scope, callback, values, total);
                             });
                         },
                         Done:function () {
-                            promise.done(function (error) {
+                            deferred.promise.done(function (error) {
                                 values[index] = jock.option.toOption(error);
                                 checkResult.call(scope, callback, values, total);
                             });
@@ -67,17 +65,17 @@ jock.bundle("jock.future", {
 
                     // How many promises do we have?
                     var tail = scope._tail;
-                    while (tail.isDefined()) {
+                    while (tail.isDefined) {
                         total++;
-                        tail = tail.get()._tail;
+                        tail = tail.get._tail;
                     }
 
                     someClosure(type, scope, callback, values, index++, total)(deferred);
 
                     tail = scope._tail;
-                    while (tail.isDefined()) {
+                    while (tail.isDefined) {
 
-                        var join = tail.get();
+                        var join = tail.get;
                         jock.utils.when(join._head, {
                             some:someClosure(type, scope, callback, values, index++, total),
                             none:jock.utils.identity
@@ -105,8 +103,8 @@ jock.bundle("jock.future", {
                     });
 
                     var tail = this._tail;
-                    while (tail.isDefined()) {
-                        var join = tail.get();
+                    while (tail.isDefined) {
+                        var join = tail.get;
 
                         result = jock.utils.when(join._head, {
                             some:callback(true),
@@ -127,7 +125,7 @@ jock.bundle("jock.future", {
                 get:function () {
                     var values = [];
                     var someCallback = function (promise) {
-                        values.push(promise.get());
+                        values.push(promise.get);
                     };
 
                     jock.utils.when(this._head, {
@@ -136,8 +134,8 @@ jock.bundle("jock.future", {
                     });
 
                     var tail = this._tail;
-                    while (tail.isDefined()) {
-                        var join = tail.get();
+                    while (tail.isDefined) {
+                        var join = tail.get;
 
                         jock.utils.when(join._head, {
                             some:someCallback,
@@ -154,15 +152,23 @@ jock.bundle("jock.future", {
                         return jock.option.some(tuple);
                     }
                 }
+            },
+            productPrefix:{
+                get:function () {
+                    return "Join";
+                },
+                configurable:false
+            },
+            productArity:{
+                get:function () {
+                    return 1;
+                },
+                configurable:false
             }
         });
 
         Join.add = function (value) {
             var instance = Object.create(Join);
-
-            if (typeof value !== "undefined") {
-                value = jock.utils.verifiedType(value, jock.future.Deferred);
-            }
 
             instance._head = jock.option.toOption(value);
             instance._tail = jock.option.toOption(this);
@@ -181,7 +187,6 @@ jock.bundle("jock.future", {
             addCallback(CallbackTypes.Done(), this, callback);
             return this;
         };
-
         Join.productElement = function (index) {
             if (index === 0) {
                 return this.get;

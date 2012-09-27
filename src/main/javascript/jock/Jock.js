@@ -71,7 +71,7 @@ var jock = {
                         (valueType === "function" && type == Function) ||
                         (valueType === "number" && type == Number) ||
                         (valueType === "string" && type == String) ||
-                        (valueType === "object" && value instanceof type)) {
+                        (valueType === "object" && jock.utils.isType(value, type))) {
                         continue;
                     }
 

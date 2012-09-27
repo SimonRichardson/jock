@@ -10,6 +10,7 @@ jock.bundle("jock.errors", {
             else
                 this.message = "";
         };
+
         Impl.prototype = new Error();
         Impl.prototype.constructor = Impl;
 

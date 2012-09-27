@@ -14,7 +14,7 @@ jock.bundle("jock.future", {
                 get:function () {
                     return jock.utils.match(this.state, {
                         Resolved:function (value) {
-                            return jock.either.right(value.get());
+                            return jock.either.right(value.get);
                         },
                         Rejected:function (error) {
                             return jock.either.left(error);
@@ -41,13 +41,13 @@ jock.bundle("jock.future", {
             },
             state:{
                 get:function () {
-                    return this.state;
+                    return this._state.value;
                 },
                 configurable:false
             },
             promise:{
                 get:function () {
-                    return jock.future.promise(this);
+                    return jock.future.Promise(this);
                 },
                 configurable:false
             },
@@ -66,7 +66,7 @@ jock.bundle("jock.future", {
         });
 
         Deferred.progress = function (value) {
-            jock.utils.match(this._state, {
+            jock.utils.match(this.state, {
                 Pending:function () {
                     var s = jock.option.toOption(value);
 
@@ -79,11 +79,11 @@ jock.bundle("jock.future", {
             });
         };
         Deferred.resolve = function (value) {
-            jock.utils.match(this._state, {
+            jock.utils.match(this.state, {
                 Pending:function () {
                     var s = jock.option.toOption(value);
 
-                    this._state = States.Resolved(s);
+                    this._state.value = States.Resolved(s);
                     this._completes.forEach(function (callback) {
                         callback(s);
                     });
@@ -96,11 +96,11 @@ jock.bundle("jock.future", {
             });
         };
         Deferred.reject = function (error) {
-            jock.utils.match(this._state, {
+            jock.utils.match(this.state, {
                 Pending:function () {
                     error = jock.utils.verifiedType(error, Error);
 
-                    this._state = States.Rejected(error);
+                    this._state.value = States.Rejected(error);
                     this._fails.forEach(function (callback) {
                         callback(error);
                     });
@@ -113,19 +113,28 @@ jock.bundle("jock.future", {
             });
         };
         Deferred.abort = function () {
-            this._state = States.Aborted();
+            this._state.value = States.Aborted();
 
             this._done.length = 0;
             this._fails.length = 0;
             this._updates.length = 0;
             this._completes.length = 0;
         };
+        Deferred.productElement = function (index) {
+            if (index === 0) {
+                return this.get;
+            }
+            throw new jock.errors.RangeError();
+        };
 
         return function () {
             var instance = Object.create(Deferred);
 
-            instance._state = States.Pending();
+            instance._state = {
+                value: States.Pending()
+            };
 
+            // TODO (Simon) These should be signals.
             instance._done = [];
             instance._fails = [];
             instance._updates = [];
