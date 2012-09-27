@@ -1,4 +1,4 @@
-describe("Promise", function () {
+describe("Deferred", function () {
 
     var Deferred = jock.future.Deferred;
 

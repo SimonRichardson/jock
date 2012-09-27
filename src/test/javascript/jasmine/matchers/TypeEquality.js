@@ -8,6 +8,8 @@ beforeEach(function(){
                 return true;
             } else if(expectedTypeOf === "object" && expected.isPrototypeOf(this.actual)) {
                 return true;
+            } else if(actualTypeOf === "object" && this.actual.isPrototypeOf(expected)) {
+                return true;
             }
 
             return false;

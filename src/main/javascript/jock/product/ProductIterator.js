@@ -7,7 +7,7 @@ jock.bundle("jock.product", {
             var index = 0;
             var arity = product.productArity;
 
-            var instance = Object.create(null, {
+            var instance = Object.create({}, {
                 hasNext:{
                     get:function () {
                         return index < arity;

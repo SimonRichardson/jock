@@ -2,7 +2,7 @@ jock.bundle("jock.future", {
     Promise:(function () {
         "use strict";
 
-        var Promise = Object.create(null);
+        var Promise = Object.create({});
 
         Promise.then = function (callback) {
             var deferred = this.get;

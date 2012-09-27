@@ -15,29 +15,28 @@ jock.bundle("jock.product", {
             return buffer;
         };
 
-        var Product = {
-            productElement:function (index) {
-                throw new jock.errors.AbstractMethodError();
-            },
-            equals:function (value) {
-                if (jock.utils.isType(value, jock.product.Product)) {
-                    if (this.productArity === value.productArity) {
-                        var index = this.productArity;
-                        while (--index > -1) {
-                            if (jock.utils.ne(this.productElement(index), value.productElement(index)))
-                                return false;
-                        }
-                        return true;
+        var Product = Object.create({});
+        Product.productElement = function (index) {
+            throw new jock.errors.AbstractMethodError();
+        };
+        Product.equals = function (value) {
+            if (jock.utils.isType(value, jock.product.Product)) {
+                if (this.productArity === value.productArity) {
+                    var index = this.productArity;
+                    while (--index > -1) {
+                        if (jock.utils.ne(this.productElement(index), value.productElement(index)))
+                            return false;
                     }
+                    return true;
                 }
-                return false;
-            },
-            toString:function () {
-                if (0 === this.productArity)
-                    return this.productPrefix;
-                else
-                    return this.productPrefix + "(" + makeString(this, ", ") + ")";
             }
+            return false;
+        };
+        Product.toString = function () {
+            if (0 === this.productArity)
+                return this.productPrefix;
+            else
+                return this.productPrefix + "(" + makeString(this, ", ") + ")";
         };
 
         Object.defineProperties(Product, {
