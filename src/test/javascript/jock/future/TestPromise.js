@@ -3,15 +3,15 @@ describe("Promise", function () {
     var Deferred = jock.future.Deferred;
 
     it("should generate a valid promise", function () {
-        var deferred = new Deferred();
-        var promise = deferred.promise();
+        var deferred = Deferred();
+        var promise = deferred.promise;
 
         expect(promise).not.toBeNull();
     });
 
     it("should adding then, should return the same promise", function () {
-        var deferred = new Deferred();
-        var promise = deferred.promise();
+        var deferred = Deferred();
+        var promise = deferred.promise;
 
         expect(promise.then(function (value) {
             fail();
@@ -19,8 +19,8 @@ describe("Promise", function () {
     });
 
     it("should adding but, should return the same promise", function () {
-        var deferred = new Deferred();
-        var promise = deferred.promise();
+        var deferred = Deferred();
+        var promise = deferred.promise;
 
         expect(promise.but(function (value) {
             fail();
@@ -29,9 +29,9 @@ describe("Promise", function () {
 
     it("should adding then, then calling resolve dispatch completed", function () {
         var dispatched = false;
-        var deferred = new Deferred();
+        var deferred = Deferred();
 
-        var promise = deferred.promise();
+        var promise = deferred.promise;
         promise.then(function (value) {
             dispatched = true;
         });
@@ -42,9 +42,9 @@ describe("Promise", function () {
 
     it("should adding then, then calling abort should not dispatch completed", function () {
         var dispatched = false;
-        var deferred = new Deferred();
+        var deferred = Deferred();
 
-        var promise = deferred.promise();
+        var promise = deferred.promise;
         promise.then(function (value) {
             fail();
         });
@@ -55,9 +55,9 @@ describe("Promise", function () {
 
     it("should adding then, then calling reject should not dispatch completed", function () {
         var dispatched = false;
-        var deferred = new Deferred();
+        var deferred = Deferred();
 
-        var promise = deferred.promise();
+        var promise = deferred.promise;
         promise.then(function (value) {
             fail();
         });
@@ -74,14 +74,14 @@ describe("Promise", function () {
         };
         Task.prototype = {
             run:function () {
-                var f = new Deferred();
+                var f = Deferred();
                 setTimeout(function () {
                     f.resolve(1);
                 }, 100);
-                return f.promise();
+                return f.promise;
             },
             run2:function (promise) {
-                var f = new Deferred();
+                var f = Deferred();
                 promise.then(function (value) {
                     setTimeout(function () {
                         f.resolve(2);
@@ -89,7 +89,7 @@ describe("Promise", function () {
                 }).but(function(error){
                     f.reject(error);
                 });
-                return f.promise();
+                return f.promise;
             }
         };
 
@@ -103,7 +103,7 @@ describe("Promise", function () {
             var promise0 = task.run();
             var promise1 = task.run2(promise0);
             promise1.then(function (value) {
-                taskValue = value.get();
+                taskValue = value.get;
             });
 
             waitsFor(function () {

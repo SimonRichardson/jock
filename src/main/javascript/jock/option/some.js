@@ -55,9 +55,9 @@ jock.bundle("jock.option", {
             return jock.option.some(f(this.get));
         };
         Some.productElement = function (index) {
-            if (index === 0)
+            if (index === 0) {
                 return this.get;
-
+            }
             throw new jock.errors.RangeError();
         };
 

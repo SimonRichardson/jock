@@ -4,13 +4,13 @@ describe("Product", function () {
     var product;
 
     beforeEach(function () {
-        product = new jock.product.Product();
+        product = Object.create(jock.product.Product);
     });
 
     it("should throw abstract method error when calling productArity", function () {
         expect(
             function () {
-                product.productArity();
+                product.productArity;
             }).toThrow(new jock.errors.AbstractMethodError());
     });
 
@@ -22,13 +22,13 @@ describe("Product", function () {
     });
 
     it("should calling productPrefix be equal to empty string", function () {
-        expect(product.productPrefix()).toEqual("");
+        expect(product.productPrefix).toEqual("");
     });
 
     it("should throw abstract method error when calling getIterator", function () {
         expect(
             function () {
-                product.getIterator();
+                product.iterator;
             }).toThrow(new jock.errors.AbstractMethodError());
     });
 

@@ -2,17 +2,13 @@ jock.bundle("jock.future", {
     Promise:(function () {
         "use strict";
 
-        var Impl = function Promise(deferred) {
-            this._deferred = deferred;
-        };
-
-        var Methods = {
+        var Promise = {
             then:function (callback) {
-                var deferred = this._deferred;
-                jock.utils.match(deferred.getState(), {
+                var deferred = this.get;
+                jock.utils.match(deferred.state, {
                     Pending:function () {
-                        if (deferred.completes.indexOf(callback) < 0) {
-                            deferred.completes.push(callback);
+                        if (deferred._completes.indexOf(callback) < 0) {
+                            deferred._completes.push(callback);
                         }
                     },
                     Resolved:function (callback) {
@@ -24,11 +20,11 @@ jock.bundle("jock.future", {
                 return this;
             },
             but:function (callback) {
-                var deferred = this._deferred;
-                jock.utils.match(deferred.getState(), {
+                var deferred = this.get;
+                jock.utils.match(deferred.state, {
                     Pending:function () {
-                        if (deferred.fails.indexOf(callback) < 0) {
-                            deferred.fails.push(callback);
+                        if (deferred._fails.indexOf(callback) < 0) {
+                            deferred._fails.push(callback);
                         }
                     },
                     Rejected:function (value) {
@@ -40,11 +36,11 @@ jock.bundle("jock.future", {
                 return this;
             },
             done:function (callback) {
-                var deferred = this._deferred;
-                jock.utils.match(deferred.getState(), {
+                var deferred = this.get;
+                jock.utils.match(deferred.state, {
                     Pending:function () {
-                        if (deferred.done.indexOf(callback) < 0) {
-                            deferred.done.push(callback);
+                        if (deferred._done.indexOf(callback) < 0) {
+                            deferred._done.push(callback);
                         }
                     },
                     Resolved:function (value) {
@@ -61,6 +57,16 @@ jock.bundle("jock.future", {
             }
         };
 
-        return jock.extend(Impl, Methods);
+        return function(deferred){
+            var instance = Object.create(Promise, {
+                get: {
+                    get: function() {
+                        return deferred;
+                    }
+                },
+                configurable: false
+            });
+            return Object.freeze(instance);
+        };
     })()
 });

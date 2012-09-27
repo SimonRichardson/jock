@@ -44,18 +44,20 @@ jock.bundle("jock.product", {
             productArity:{
                 get:function () {
                     throw new jock.errors.AbstractMethodError();
-                }
+                },
+                configurable:false
             },
             productPrefix:{
                 get:function () {
                     return "";
-                }
+                },
+                configurable:false
             },
             iterator:{
                 get:function () {
-                    var instance = Object.create(jock.product.ProductIterator).init(this);
-                    return Object.freeze(instance);
-                }
+                    return jock.product.ProductIterator(this);
+                },
+                configurable:false
             }
         });
 

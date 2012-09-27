@@ -34,7 +34,7 @@ jock.bundle("jock.future", {
 
                     // If the type is a But then assign a but to it
                     jock.utils.match(type, {
-                        Then: function (){
+                        Then:function () {
                             promise.then(function (value) {
                                 values[index] = jock.option.toOption(value);
                                 checkResult.call(scope, callback, values, total);
@@ -90,93 +90,112 @@ jock.bundle("jock.future", {
             });
         };
 
-        var Impl = function Join(head, tail) {
-            if (typeof head !== "undefined") {
-                head = jock.utils.verifiedType(head, jock.future.Deferred);
-            }
-
-            this._head = jock.option.toOption(head);
-            this._tail = jock.option.toOption(tail);
-        };
-
-        var Methods = {
-            attempt:function () {
-                var callback = function (result) {
-                    return function(){
-                        return result;
+        var Join = Object.create(jock.product.Product, {
+            attempt:{
+                get:function () {
+                    var callback = function (result) {
+                        return function () {
+                            return result;
+                        };
                     };
-                };
 
-                var result = jock.utils.when(this._head, {
-                    some:callback(true),
-                    none:callback(false)
-                });
-
-                var tail = this._tail;
-                while (tail.isDefined()) {
-                    var join = tail.get();
-
-                    result = jock.utils.when(join._head, {
+                    var result = jock.utils.when(this._head, {
                         some:callback(true),
                         none:callback(false)
                     });
 
-                    if(!result) {
-                        break;
+                    var tail = this._tail;
+                    while (tail.isDefined()) {
+                        var join = tail.get();
+
+                        result = jock.utils.when(join._head, {
+                            some:callback(true),
+                            none:callback(false)
+                        });
+
+                        if (!result) {
+                            break;
+                        }
+
+                        tail = join._tail;
                     }
 
-                    tail = join._tail;
+                    return jock.either.toEither(result, this.get());
                 }
-
-                return jock.either.toEither(result, this.get());
             },
-            get:function () {
-                var values = [];
-                var someCallback = function (promise) {
-                    values.push(promise.get());
-                };
+            get:{
+                get:function () {
+                    var values = [];
+                    var someCallback = function (promise) {
+                        values.push(promise.get());
+                    };
 
-                jock.utils.when(this._head, {
-                    some:someCallback,
-                    none:jock.utils.identity
-                });
-
-                var tail = this._tail;
-                while (tail.isDefined()) {
-                    var join = tail.get();
-
-                    jock.utils.when(join._head, {
+                    jock.utils.when(this._head, {
                         some:someCallback,
                         none:jock.utils.identity
                     });
 
-                    tail = join._tail;
-                }
+                    var tail = this._tail;
+                    while (tail.isDefined()) {
+                        var join = tail.get();
 
-                if (values.length === 0) {
-                    return jock.option.none();
-                } else {
-                    var tuple = jock.tuple.toTuple.apply(this, values.reverse());
-                    return jock.option.some(tuple);
+                        jock.utils.when(join._head, {
+                            some:someCallback,
+                            none:jock.utils.identity
+                        });
+
+                        tail = join._tail;
+                    }
+
+                    if (values.length === 0) {
+                        return jock.option.none();
+                    } else {
+                        var tuple = jock.tuple.toTuple.apply(this, values.reverse());
+                        return jock.option.some(tuple);
+                    }
                 }
-            },
-            add:function (value) {
-                return new Impl(value, this);
-            },
-            then:function (callback) {
-                addCallback(CallbackTypes.Then(), this, callback);
-                return this;
-            },
-            but:function (callback) {
-                addCallback(CallbackTypes.But(), this, callback);
-                return this;
-            },
-            done:function (callback) {
-                addCallback(CallbackTypes.Done(), this, callback);
-                return this;
             }
+        });
+
+        Join.add = function (value) {
+            var instance = Object.create(Join);
+
+            if (typeof head !== "undefined") {
+                head = jock.utils.verifiedType(head, jock.future.Deferred);
+            }
+
+            instance._head = jock.option.toOption(head);
+            instance._tail = jock.option.toOption(tail);
+
+            return Object.freeze(instance);
+        };
+        Join.then = function (callback) {
+            addCallback(CallbackTypes.Then(), this, callback);
+            return this;
+        };
+        Join.but = function (callback) {
+            addCallback(CallbackTypes.But(), this, callback);
+            return this;
+        };
+        Join.done = function (callback) {
+            addCallback(CallbackTypes.Done(), this, callback);
+            return this;
         };
 
-        return jock.extend(Impl, Methods);
+        Join.productElement = function (index) {
+            if (index === 0) {
+                return this.get;
+            }
+            throw new jock.errors.RangeError();
+        };
+
+        return function () {
+            var instance = Object.create(Join);
+
+            instance._head = jock.option.none();
+            instance._tail = jock.option.none();
+
+            return Object.freeze(instance);
+        };
     })()
 });
