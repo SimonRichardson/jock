@@ -160,12 +160,12 @@ jock.bundle("jock.future", {
         Join.add = function (value) {
             var instance = Object.create(Join);
 
-            if (typeof head !== "undefined") {
-                head = jock.utils.verifiedType(head, jock.future.Deferred);
+            if (typeof value !== "undefined") {
+                value = jock.utils.verifiedType(value, jock.future.Deferred);
             }
 
-            instance._head = jock.option.toOption(head);
-            instance._tail = jock.option.toOption(tail);
+            instance._head = jock.option.toOption(value);
+            instance._tail = jock.option.toOption(this);
 
             return Object.freeze(instance);
         };

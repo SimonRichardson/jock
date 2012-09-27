@@ -11,8 +11,8 @@ jock.bundle("jock.future", {
                             deferred._completes.push(callback);
                         }
                     },
-                    Resolved:function (callback) {
-                        func(callback);
+                    Resolved:function (value) {
+                        callback(value);
                     },
                     Default:function () {
                     }

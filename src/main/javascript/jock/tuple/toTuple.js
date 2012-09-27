@@ -51,7 +51,7 @@ jock.bundle("jock.tuple", {
                         properties["_" + (index + 1)] = {
                             get:closure(value),
                             configurable:false
-                        }
+                        };
                     });
                     Object.defineProperties(instance, properties);
 

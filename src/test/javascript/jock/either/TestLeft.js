@@ -7,6 +7,6 @@ describe("Left", function() {
     });
 
     it("should be left", function () {
-        expect(none().isLeft).toBeTruthy();
+        expect(left().isLeft).toBeTruthy();
     });
 });
