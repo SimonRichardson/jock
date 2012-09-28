@@ -25,7 +25,7 @@ jock.bundle("jock.aop", {
                     validate(source, name, override);
 
                     var origin = source[name];
-                    source[name] = function(){
+                    source[name] = function () {
                         var args = Array.prototype.slice.call(arguments);
                         override.apply(scope, args);
                         return origin.apply(scope, args);
@@ -36,7 +36,7 @@ jock.bundle("jock.aop", {
                     validate(source, name, override);
 
                     var origin = source[name];
-                    source[name] = function(){
+                    source[name] = function () {
                         var args = Array.prototype.slice.call(arguments);
                         origin.apply(scope, args);
                         return override.apply(scope, args);
@@ -47,9 +47,9 @@ jock.bundle("jock.aop", {
                     validate(source, name, override);
 
                     var origin = source[name];
-                    source[name] = function(){
+                    source[name] = function () {
                         var args = Array.prototype.slice.call(arguments);
-                        return override.apply(scope, [function(){
+                        return override.apply(scope, [function () {
                             origin.apply(scope, args);
                         }].concat(args));
                     };
@@ -59,7 +59,7 @@ jock.bundle("jock.aop", {
                     validate(source, name, override);
 
                     var origin = source[name];
-                    source[name] = function(){
+                    source[name] = function () {
                         var args = Array.prototype.slice.call(arguments);
                         return override.apply(scope, args);
                     };
@@ -67,65 +67,73 @@ jock.bundle("jock.aop", {
                 }
             });
 
-            if(typeof value === "undefined")
+            if (typeof value === "undefined")
                 throw new jock.aop.errors.AspectError("Unable to bind method");
         }
 
-        var Impl = function Aspect(source) {
+        // TODO (Simon) : Fix the code duplication bellow.
+
+        var Aspect = Object.create({});
+        Aspect.after = function (methods) {
+            if (!methods)
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i))
+                    solve(Aspects.After(i, this.get, methods[i], this));
+            }
+            return this;
+        };
+        Aspect.before = function (methods) {
+            if (!methods) {
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+            }
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i)) {
+                    solve(Aspects.Before(i, this.get, methods[i], this));
+                }
+            }
+            return this;
+        };
+        Aspect.around = function (methods) {
+            if (!methods) {
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+            }
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i)) {
+                    solve(Aspects.Around(i, this.get, methods[i], this));
+                }
+            }
+            return this;
+        };
+        Aspect.prevent = function (methods) {
+            if (!methods) {
+                throw new jock.errors.ArgumentError("Methods can not be null/undefined");
+            }
+
+            for (var i in methods) {
+                if (methods.hasOwnProperty(i)) {
+                    solve(Aspects.Prevent(i, this.get, methods[i], this));
+                }
+            }
+            return this;
+        };
+
+        return function (source) {
             if (!source)
                 throw new jock.errors.ArgumentError("Source can not be null/undefined");
 
-            this._source = source;
+            var instance = Object.create(Aspect, {
+                get:{
+                    get:function () {
+                        return source;
+                    },
+                    configurable:false
+                }
+            });
+            return Object.freeze(instance);
         };
-
-        // TODO (Simon) : Fix the code duplication bellow.
-
-        var Methods = {
-            get:function () {
-                return this._source;
-            },
-            after:function (methods) {
-                if (!methods)
-                    throw new jock.errors.ArgumentError("Methods can not be null/undefined");
-
-                for (var i in methods) {
-                    if (methods.hasOwnProperty(i))
-                        solve(Aspects.After(i, this._source, methods[i], this));
-                }
-                return this;
-            },
-            before:function (methods) {
-                if (!methods)
-                    throw new jock.errors.ArgumentError("Methods can not be null/undefined");
-
-                for (var i in methods) {
-                    if (methods.hasOwnProperty(i))
-                        solve(Aspects.Before(i, this._source, methods[i], this));
-                }
-                return this;
-            },
-            around:function (methods) {
-                if (!methods)
-                    throw new jock.errors.ArgumentError("Methods can not be null/undefined");
-
-                for (var i in methods) {
-                    if (methods.hasOwnProperty(i))
-                        solve(Aspects.Around(i, this._source, methods[i], this));
-                }
-                return this;
-            },
-            prevent:function (methods) {
-                if (!methods)
-                    throw new jock.errors.ArgumentError("Methods can not be null/undefined");
-
-                for (var i in methods) {
-                    if (methods.hasOwnProperty(i))
-                        solve(Aspects.Prevent(i, this._source, methods[i], this));
-                }
-                return this;
-            }
-        };
-
-        return jock.extend(Impl, Methods);
     })()
 });

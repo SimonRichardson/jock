@@ -1,39 +1,6 @@
 var jock = {
     VERSION:"0.0.2",
     scope:this,
-    extend:function (type, methods) {
-        "use strict";
-
-        for (var i in methods)
-            type.prototype[i] = methods[i];
-
-        return type;
-    },
-    mixin:function (impl, trait) {
-        "use strict";
-
-        if (!impl.prototype.is)
-            impl.prototype.is = [];
-
-        if (impl.prototype.is.indexOf(trait) < 0)
-            impl.prototype.is.push(trait);
-
-        function closure(method) {
-            return function () {
-                return method.apply(this, arguments);
-            };
-        }
-
-        // Note (Simon) We need to copy ALL known properties including parent properties.
-        for (var name in trait.prototype) {
-            var method = trait.prototype[name];
-            if (name === "constructor" || name === "name")
-                continue;
-
-            impl.prototype[name] = closure(method);
-        }
-        return impl;
-    },
     bundle:function (ns, objects) {
         "use strict";
 
