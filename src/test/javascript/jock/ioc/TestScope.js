@@ -5,7 +5,7 @@ describe("Scope", function () {
         scope;
 
     beforeEach(function () {
-        scope = new Scope();
+        scope = Scope();
     });
 
     it("should calling asSingleton throw an AbstractMethodError", function () {

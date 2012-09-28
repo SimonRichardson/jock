@@ -35,8 +35,16 @@ jock.bundle("jock.ioc", {
             if (!value) throw new jock.errors.ArgumentError("Value can not be null/undefined");
             if (!this._initialized) throw new jock.ioc.errors.BindingError("Modules have to be created using Injector.");
 
-            var Ctor = value,
-                binding = findByBinding(this._bindings, value);
+            var create = function (Value) {
+                if (typeof Value === "function") {
+                    return new Value();
+                } else if (typeof Value === "object") {
+                    return Object.freeze(Object.create(Value));
+                }
+                throw new jock.errors.TypeError();
+            };
+
+            var binding = findByBinding(this._bindings, value);
             try {
                 this._injector.pushScope(this);
                 return jock.utils.when(binding, {
@@ -47,12 +55,12 @@ jock.bundle("jock.ioc", {
                                 return instanceValue;
                             },
                             none:function () {
-                                return new Ctor();
+                                return create(value);
                             }
                         });
                     },
                     none:function () {
-                        return new Ctor();
+                        return create(value);
                     }
                 });
             } finally {
@@ -60,10 +68,10 @@ jock.bundle("jock.ioc", {
             }
         };
         AbstractModule.binds = function (value) {
-            return findByBinding(this._bindings, value).isDefined();
+            return findByBinding(this._bindings, value).isDefined;
         };
 
-        return function(injector){
+        return function (injector) {
             var instance = Object.create(AbstractModule);
 
             instance._initialized = false;

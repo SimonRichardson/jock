@@ -5,7 +5,7 @@ describe("AbstractModule", function () {
         abstractModule;
 
     beforeEach(function () {
-        abstractModule = new AbstractModule();
+        abstractModule = AbstractModule();
     });
 
     it("should calling initialize throw AbstractMethodError", function () {

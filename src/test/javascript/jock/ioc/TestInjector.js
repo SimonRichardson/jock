@@ -14,7 +14,7 @@ describe("Injector", function () {
     MockModule.prototype.configure = function(){};
 
     beforeEach(function () {
-        injector = new Injector();
+        injector = Injector();
     });
 
     it("should calling initialize with null should throw a TypeError", function () {
@@ -70,7 +70,7 @@ describe("Injector", function () {
         var module = new MockModule();
         injector.initialize(module);
 
-        expect(injector.currentScope().isEmpty()).toBeTruthy();
+        expect(injector.currentScope().isEmpty).toBeTruthy();
     });
 
     it("should calling popScope with 1 valid module should return Option", function () {
@@ -84,7 +84,7 @@ describe("Injector", function () {
         var module = new MockModule();
         injector.pushScope(module);
         injector.popScope();
-        expect(injector.currentScope().isEmpty()).toBeTruthy();
+        expect(injector.currentScope().isEmpty).toBeTruthy();
     });
 
     it("should calling popScope with 2 valid modules should return Option", function () {
@@ -100,7 +100,7 @@ describe("Injector", function () {
         injector.pushScope(module);
         injector.pushScope(module);
         injector.popScope();
-        expect(injector.currentScope().isDefined()).toBeTruthy();
+        expect(injector.currentScope().isDefined).toBeTruthy();
     });
 
     it("should calling popScope with 2 valid modules should return first module", function () {
@@ -109,12 +109,12 @@ describe("Injector", function () {
         injector.pushScope(module0);
         injector.pushScope(module1);
         injector.popScope();
-        expect(injector.currentScope().get() == module0).toBeTruthy();
+        expect(injector.currentScope().get == module0).toBeTruthy();
     });
 
     it("should calling clearAll with nothing should not have a defined scope", function () {
         injector.clearAll();
-        expect(injector.currentScope().isEmpty()).toBeTruthy();
+        expect(injector.currentScope().isEmpty).toBeTruthy();
     });
 
     it("should calling clearAll should not have a defined scope", function () {
@@ -124,6 +124,6 @@ describe("Injector", function () {
         injector.pushScope(module1);
         injector.popScope();
         injector.clearAll();
-        expect(injector.currentScope().isEmpty()).toBeTruthy();
+        expect(injector.currentScope().isEmpty).toBeTruthy();
     });
 });

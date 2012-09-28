@@ -2,13 +2,10 @@ jock.bundle("jock.ioc", {
     inject:function (type, injector) {
         if (!type) throw new jock.errors.ArgumentError("Given type must not be null.");
 
-        var InjectionPoint = jock.ioc.InjectionPoint,
-            when = jock.utils.when;
-
         var defaultInjector = injector || jock.ioc.Injectors.DEFAULT;
-        var result = when(defaultInjector.currentScope(), {
+        var result = jock.utils.when(defaultInjector.currentScope(), {
             none:function () {
-                return when(defaultInjector.scopeOf(type), {
+                return jock.utils.when(defaultInjector.scopeOf(type), {
                     none:function () {
                         throw new jock.ioc.errors.BindingError();
                     },
@@ -22,6 +19,6 @@ jock.bundle("jock.ioc", {
             }
         });
 
-        return new InjectionPoint(result);
+        return jock.ioc.InjectionPoint(result);
     }
 });

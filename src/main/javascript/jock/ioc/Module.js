@@ -2,19 +2,18 @@ jock.bundle("jock.ioc", {
     Module:(function () {
         "use strict";
 
-        var Methods = {
-            initialize:function () {
-                throw new jock.errors.AbstractMethodError();
-            },
-            getInstance:function (value) {
-                throw new jock.errors.AbstractMethodError();
-            },
-            binds:function (value) {
-                throw new jock.errors.AbstractMethodError();
-            }
+        var Module = Object.create({});
+
+        Module.initialize = function () {
+            throw new jock.errors.AbstractMethodError();
+        };
+        Module.getInstance = function (value) {
+            throw new jock.errors.AbstractMethodError();
+        };
+        Module.binds = function (value) {
+            throw new jock.errors.AbstractMethodError();
         };
 
-        return jock.extend(function Module() {
-        }, Methods);
+        return Module;
     })()
 });

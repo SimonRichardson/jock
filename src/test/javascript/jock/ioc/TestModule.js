@@ -5,7 +5,7 @@ describe("Module", function () {
         module;
 
     beforeEach(function () {
-        module = new Module();
+        module = Object.create(Module);
     });
 
     it("should calling initialize throw an AbstractMethodError", function () {

@@ -2,13 +2,14 @@ jock.bundle("jock.ioc", {
     Scope:(function () {
         "use strict";
 
-        var Methods = {
-            asSingleton:function () {
-                throw new jock.errors.AbstractMethodError();
-            }
+        var Scope = Object.create({});
+
+        Scope.asSingleton = function () {
+            throw new jock.errors.AbstractMethodError();
         };
 
-        return jock.extend(function Scope() {
-        }, Methods);
+        return function(){
+            return Object.create(Scope);
+        }
     })()
 });
